@@ -9,9 +9,9 @@ namespace EnglishCenterManagement.MappingProfiles
     {
         public DefaultMapping()
         {
-            CreateMap<RegisterDto, UserProfile>();
-            CreateMap<RegisterDto, Credential>();
-            CreateMap<Role, RoleDto>();
+            CreateMap<RegisterDto, UserInfoModel>();
+            CreateMap<RegisterDto, CredentialModel>();
+            CreateMap<RoleModel, RoleDto>();
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace EnglishCenterManagement.Models
 {
-    public class UserProfile
+    public class UserInfoModel
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
@@ -15,8 +15,9 @@ namespace EnglishCenterManagement.Models
         public DateTime? DateOfBirth { get; set; }
 
         // Relationship
-        public ICollection<Role> Roles { get; set; }
-        public Avatar? Avatar { get; set; }
-        public Credential Credential { get; set; }
+        public ICollection<RoleModel> Roles { get; set; }
+        public AvatarModel? Avatar { get; set; }
+        public CredentialModel Credential { get; set; }
+        public TokenModel Token { get; set; }
     }
 }

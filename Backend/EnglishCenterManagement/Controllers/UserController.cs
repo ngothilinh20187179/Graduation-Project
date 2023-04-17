@@ -9,6 +9,10 @@ namespace EnglishCenterManagement.Controllers
     [ApiController]
     public class UserController : Controller
     {
+        // change infomation
+        // change pwd
+        //
+
         //For admin Only
         //[HttpGet]
         //[Route("Admins")]

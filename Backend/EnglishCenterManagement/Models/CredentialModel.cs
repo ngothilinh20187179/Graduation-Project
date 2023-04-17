@@ -2,13 +2,13 @@
 
 namespace EnglishCenterManagement.Models
 {
-    public class Credential
+    public class CredentialModel
     {
         public int Id { get; set; }
         public string LoginName { get; set; }
         public string Password { get; set; }
 
-        // Relationship
-        public UserProfile User { get; set; }
+        // Relationship 1User - 1Credential
+        public UserInfoModel User { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace EnglishCenterManagement.Repository
         {
             _context = context;
         }
-        public ICollection<Role> GetMyRoles()
+        public ICollection<RoleModel> GetMyRoles()
         {
             return _context.Roles.Where(c => c.UserId == 7).ToList();
         }

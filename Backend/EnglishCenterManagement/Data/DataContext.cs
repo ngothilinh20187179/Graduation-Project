@@ -6,25 +6,32 @@ namespace EnglishCenterManagement.Data
     public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
-        public DbSet<UserProfile> Users { get; set; }
-        public DbSet<Credential> Credentials { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<Avatar> Avatars { get; set; }
+        public DbSet<UserInfoModel> Users { get; set; }
+        public DbSet<TokenModel> TokenModel { get; set; }
+        public DbSet<CredentialModel> Credentials { get; set; }
+        public DbSet<RoleModel> Roles { get; set; }
+        public DbSet<AvatarModel> Avatars { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // 1-1 relationship User-Avatar
-            modelBuilder.Entity<UserProfile>()
+            modelBuilder.Entity<UserInfoModel>()
                 .HasOne(x => x.Avatar)
                 .WithOne(x => x.User)
-                .HasForeignKey<Avatar>(x => x.Id);
+                .HasForeignKey<AvatarModel>(x => x.Id);
 
             // 1-1 relationship User-Credential
-            modelBuilder.Entity<UserProfile>()
+            modelBuilder.Entity<UserInfoModel>()
                 .HasOne(x => x.Credential)
                 .WithOne(x => x.User)
-                .HasForeignKey<Credential>(x => x.Id)
+                .HasForeignKey<CredentialModel>(x => x.Id)
                 .IsRequired();
+            
+            // 1-1 relationship User-Token
+            modelBuilder.Entity<UserInfoModel>()
+                .HasOne(x => x.Token)
+                .WithOne(x => x.User)
+                .HasForeignKey<TokenModel>(x => x.UserId);
         }
     }
 }

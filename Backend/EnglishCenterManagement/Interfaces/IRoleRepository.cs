@@ -4,7 +4,7 @@ namespace EnglishCenterManagement.Interfaces
 {
     public interface IRoleRepository
     {
-        ICollection<Role> GetMyRoles();
+        ICollection<RoleModel> GetMyRoles();
 
     }
 }

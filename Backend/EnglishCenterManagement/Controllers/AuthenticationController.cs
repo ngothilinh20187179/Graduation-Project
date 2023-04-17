@@ -52,9 +52,9 @@ namespace EnglishCenterManagement.Controllers
             }
 
             // add info to database
-            var userProfile = _mapper.Map<UserProfile>(newUser);
+            var userProfile = _mapper.Map<UserInfoModel>(newUser);
             _authenRepository.CreateUserProfile(userProfile);
-            var credential = _mapper.Map<Credential>(newUser);
+            var credential = _mapper.Map<CredentialModel>(newUser);
             credential.Id = userProfile.Id;
             credential.Password = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
             _authenRepository.CreateCredential(credential);

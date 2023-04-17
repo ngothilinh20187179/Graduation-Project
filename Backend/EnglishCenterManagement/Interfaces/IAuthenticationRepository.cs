@@ -6,10 +6,10 @@ namespace EnglishCenterManagement.Interfaces
     public interface IAuthenticationRepository
     {
         string GenerateToken(LoginDto user);
-        Credential GetCredentialByLoginName(string loginName);
+        CredentialModel GetCredentialByLoginName(string loginName);
         bool CheckUserNameExist(string userName);
-        bool CreateUserProfile(UserProfile user);
-        bool CreateCredential(Credential credential);
+        bool CreateUserProfile(UserInfoModel user);
+        bool CreateCredential(CredentialModel credential);
         bool SaveChange();
     }
 }

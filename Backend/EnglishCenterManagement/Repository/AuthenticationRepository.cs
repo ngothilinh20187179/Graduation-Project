@@ -23,19 +23,19 @@ namespace EnglishCenterManagement.Repository
             return _context.Credentials.Any(c => c.LoginName == userName);
         }
 
-        public bool CreateCredential(Credential credential)
+        public bool CreateCredential(CredentialModel credential)
         {
             _context.Add(credential);
             return SaveChange();
         }
 
-        public bool CreateUserProfile(UserProfile user)
+        public bool CreateUserProfile(UserInfoModel user)
         {
             _context.Add(user);
             return SaveChange();
         }
 
-        public Credential GetCredentialByLoginName(string loginName)
+        public CredentialModel GetCredentialByLoginName(string loginName)
         {
             return _context.Credentials.Where(p => p.LoginName == loginName).FirstOrDefault();
         }
