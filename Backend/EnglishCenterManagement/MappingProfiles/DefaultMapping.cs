@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using EnglishCenterManagement.Dtos;
 using EnglishCenterManagement.Models;
-using System.Diagnostics.Metrics;
 
 namespace EnglishCenterManagement.MappingProfiles
 {
@@ -10,7 +9,7 @@ namespace EnglishCenterManagement.MappingProfiles
         public DefaultMapping()
         {
             CreateMap<RegisterDto, UserInfoModel>();
-            CreateMap<RegisterDto, CredentialModel>();
+            CreateMap<RefreshTokenDto, RefreshTokenModel>();
             CreateMap<RoleModel, RoleDto>();
         }
     }
