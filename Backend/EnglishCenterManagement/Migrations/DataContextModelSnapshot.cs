@@ -22,7 +22,7 @@ namespace EnglishCenterManagement.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.Avatar", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Models.AvatarModel", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -40,25 +40,27 @@ namespace EnglishCenterManagement.Migrations
                     b.ToTable("Avatars");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.Credential", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Models.RefreshTokenModel", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<string>("LoginName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("ExpiredAt")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Password")
+                    b.Property<DateTime>("IssuedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RefreshToken")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Credentials");
+                    b.ToTable("Tokens");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.Role", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Models.RoleModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -82,7 +84,7 @@ namespace EnglishCenterManagement.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.UserProfile", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Models.UserInfoModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -113,6 +115,14 @@ namespace EnglishCenterManagement.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("LoginName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -122,31 +132,31 @@ namespace EnglishCenterManagement.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.Avatar", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Models.AvatarModel", b =>
                 {
-                    b.HasOne("EnglishCenterManagement.Models.UserProfile", "User")
+                    b.HasOne("EnglishCenterManagement.Models.UserInfoModel", "User")
                         .WithOne("Avatar")
-                        .HasForeignKey("EnglishCenterManagement.Models.Avatar", "Id")
+                        .HasForeignKey("EnglishCenterManagement.Models.AvatarModel", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.Credential", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Models.RefreshTokenModel", b =>
                 {
-                    b.HasOne("EnglishCenterManagement.Models.UserProfile", "User")
-                        .WithOne("Credential")
-                        .HasForeignKey("EnglishCenterManagement.Models.Credential", "Id")
+                    b.HasOne("EnglishCenterManagement.Models.UserInfoModel", "User")
+                        .WithOne("Token")
+                        .HasForeignKey("EnglishCenterManagement.Models.RefreshTokenModel", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.Role", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Models.RoleModel", b =>
                 {
-                    b.HasOne("EnglishCenterManagement.Models.UserProfile", "User")
+                    b.HasOne("EnglishCenterManagement.Models.UserInfoModel", "User")
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -155,14 +165,14 @@ namespace EnglishCenterManagement.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.UserProfile", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Models.UserInfoModel", b =>
                 {
                     b.Navigation("Avatar");
 
-                    b.Navigation("Credential")
-                        .IsRequired();
-
                     b.Navigation("Roles");
+
+                    b.Navigation("Token")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
