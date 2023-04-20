@@ -11,6 +11,8 @@ namespace EnglishCenterManagement.MappingProfiles
             CreateMap<RegisterDto, UserInfoModel>();
             CreateMap<RefreshTokenDto, RefreshTokenModel>();
             CreateMap<RoleModel, RoleDto>();
+            CreateMap<ChangePasswordDto, UserInfoModel>();
+            CreateMap<UserInfoDto, UserInfoModel>();
         }
     }
 }
