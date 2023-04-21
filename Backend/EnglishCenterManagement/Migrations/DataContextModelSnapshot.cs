@@ -60,30 +60,6 @@ namespace EnglishCenterManagement.Migrations
                     b.ToTable("Tokens");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.RoleModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Roles");
-                });
-
             modelBuilder.Entity("EnglishCenterManagement.Models.UserInfoModel", b =>
                 {
                     b.Property<int>("Id")
@@ -127,6 +103,9 @@ namespace EnglishCenterManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("Role")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
@@ -154,25 +133,11 @@ namespace EnglishCenterManagement.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.RoleModel", b =>
-                {
-                    b.HasOne("EnglishCenterManagement.Models.UserInfoModel", "User")
-                        .WithMany("Roles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("EnglishCenterManagement.Models.UserInfoModel", b =>
                 {
                     b.Navigation("Avatar");
 
-                    b.Navigation("Roles");
-
-                    b.Navigation("Token")
-                        .IsRequired();
+                    b.Navigation("Token");
                 });
 #pragma warning restore 612, 618
         }

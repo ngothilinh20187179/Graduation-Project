@@ -8,7 +8,6 @@ namespace EnglishCenterManagement.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         public DbSet<UserInfoModel> Users { get; set; }
         public DbSet<RefreshTokenModel> Tokens { get; set; }
-        public DbSet<RoleModel> Roles { get; set; }
         public DbSet<AvatarModel> Avatars { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

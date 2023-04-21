@@ -50,6 +50,11 @@ namespace EnglishCenterManagement.Repository
             _context.Update(user);
             return SaveChange();
         }
+        public bool DeleteUser(UserInfoModel user)
+        {
+            _context.Remove(user);
+            return SaveChange();
+        }
         public bool SaveChange()
         {
             return _context.SaveChanges() > 0;

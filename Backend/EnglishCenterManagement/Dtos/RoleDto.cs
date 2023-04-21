@@ -4,8 +4,6 @@ namespace EnglishCenterManagement.Dtos
 {
     public class RoleDto
     {
-        public int Id { get; set; }
-        public RoleType Type { get; set; }
-        public string? Description { get; set; }
+        public RoleType Role { get; set; }
     }
 }

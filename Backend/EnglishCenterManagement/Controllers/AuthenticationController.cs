@@ -130,12 +130,15 @@ namespace EnglishCenterManagement.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, userLogin.LoginName),
-                new Claim("UserId", user.Id.ToString())
+                new Claim("UserId", user.Id.ToString()),
             };
-            var roleClaims = _dataContext.Roles
-                .Where(r => r.UserId == user.Id)
-                .Select(x => new Claim(ClaimTypes.Role, x.Type.ToString()));
+            var roleClaims = _dataContext.Users.Where(r => r.Id == user.Id).Select(x => new Claim(ClaimTypes.Role, x.Role.ToString()));
             claims.AddRange(roleClaims);
+            // when 1 user has many roles
+            //var roleClaims = _dataContext.Roles
+            //    .Where(r => r.UserId == user.Id)
+            //    .Select(x => new Claim(ClaimTypes.Role, x.Type.ToString()));
+            //claims.AddRange(roleClaims);
             var accessToken = _authenRepository.GenerateAccessToken(claims);
 
             // generate refresh token

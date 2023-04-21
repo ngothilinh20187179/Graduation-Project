@@ -22,7 +22,6 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // . Life cycle DI: AddSingleton(), AddTransient(), AddScoped()
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
 // . Add authorization each api
 builder.Services.AddSwaggerGen(c =>

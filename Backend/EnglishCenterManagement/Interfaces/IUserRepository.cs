@@ -14,6 +14,7 @@ namespace EnglishCenterManagement.Interfaces
         UserInfoModel GetUserHasSameLoginName(int userId, string loginName);
         bool CreateUserProfile(UserInfoModel user);
         bool UpdateUserProfile(UserInfoModel user);
+        bool DeleteUser(UserInfoModel user);
         bool SaveChange();
     }
 }

@@ -2,6 +2,6 @@
 {
     public enum RoleType
     {
-        Student, Teacher, Staff, Admin
+        RestrictedRole, Student, Teacher, Staff, Admin
     }
 }

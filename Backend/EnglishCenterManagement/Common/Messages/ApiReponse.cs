@@ -37,6 +37,12 @@
             [615] = "Email is invalid",
             [616] = "Email already exists",
             [617] = "Gender is invalid",
+            [618] = "Id mismatch",
+            [619] = "Role type is invalid",
+            [620] = "You don't have permission to delete yourself",
+            [621] = "You don't have permission to change your role",
+
+            [1000] = "You don't have permission to access"
         };
     }
 }
