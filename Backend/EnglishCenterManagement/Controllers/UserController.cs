@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EnglishCenterManagement.Common.Helpers;
+using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Dtos;
 using EnglishCenterManagement.Interfaces;
 using EnglishCenterManagement.Models;
@@ -26,10 +27,10 @@ namespace EnglishCenterManagement.Controllers
 
         // GET: /profile-me
         [HttpGet("myprofile")]
-        [Authorize]
+        //[Authorize]
         public ActionResult<UserInfoDto> GetMyProfile()
         {
-            return Ok();
+            return Ok(new ApiReponse(1000));
         }
 
         // GET: /profile/5
@@ -61,15 +62,15 @@ namespace EnglishCenterManagement.Controllers
             // Check login name exist except current user's login name (get user by name and userid != current userId)
             if (_userRepository.GetUserHasSameLoginName(user.Id, updatedProfile.LoginName) != null)
             {
-                return Conflict("UserName exists");
+                return Conflict(new ApiReponse(607));
             }
 
-            ValidateUserInfoUtils validateUserInfoUtils = new ValidateUserInfoUtils();
+            Validation validateUserInfoUtils = new Validation();
 
             // Valid Phonenumber
             if (!validateUserInfoUtils.IsValidPhoneNumber(updatedProfile.PhoneNumber))
             {
-                return BadRequest("PhoneNumber Invalid");
+                return BadRequest(new ApiReponse(614));
             }
 
             // Check email exists except current user's email (get user by email and userid != current userId)
@@ -77,11 +78,11 @@ namespace EnglishCenterManagement.Controllers
             {
                 if (!validateUserInfoUtils.IsValidEmail(updatedProfile.Email))
                 {
-                    return BadRequest("Invalid Email");
+                    return BadRequest(new ApiReponse(615));
                 }
                 if (_userRepository.GetUserHasSameEmail(user.Id, updatedProfile.Email) != null)
                 {
-                    return Conflict("Email exists");
+                    return Conflict(new ApiReponse(616));
                 }
             }
 
@@ -114,23 +115,23 @@ namespace EnglishCenterManagement.Controllers
             bool checkPassword = BCrypt.Net.BCrypt.Verify(passwordDto.OldPassword, user.Password);
             if (!checkPassword)
             {
-                return BadRequest("Wrong Password");
+                return BadRequest(new ApiReponse(610));
             }
             //Check password old = new ?
             if (passwordDto.Password.Equals(passwordDto.OldPassword))
             {
-                return BadRequest("Password and old password cannot be the same");
+                return BadRequest(new ApiReponse(613));
             }
             // Valid new password
-            ValidateUserInfoUtils validateUserInfoUtils = new ValidateUserInfoUtils();
+            Validation validateUserInfoUtils = new Validation();
             if (!validateUserInfoUtils.IsValidPassword(passwordDto.Password))
             {
-                return BadRequest("Password Invalid: Minimum eight characters, at least one uppercase & lowercase letter and one number");
+                return BadRequest(new ApiReponse(611));
             }
             // Check new password = confirm password ?
             if (!passwordDto.Password.Equals(passwordDto.ConfirmPassword))
             {
-                return BadRequest("Password and confirm password does not match");
+                return BadRequest(new ApiReponse(612));
             }
             // Store db
             var hashedPwd = BCrypt.Net.BCrypt.HashPassword(passwordDto.Password);

@@ -8,6 +8,8 @@ using System.Security.Claims;
 using EnglishCenterManagement.Data;
 using System.IdentityModel.Tokens.Jwt;
 using EnglishCenterManagement.Common.Helpers;
+using EnglishCenterManagement.Common.Messages;
+using EnglishCenterManagement.Common.Models;
 
 namespace EnglishCenterManagement.Controllers
 {
@@ -45,28 +47,34 @@ namespace EnglishCenterManagement.Controllers
             // check login name = pwd ?
             if (newUser.Password == newUser.LoginName)
             {
-                return BadRequest("Password and username cannot be the same");
+                return BadRequest(new ApiReponse(609));
             }
 
             // check login name
             bool checkUserExist = _userRepository.CheckUserNameExist(newUser.LoginName);
             if (checkUserExist)
             {
-                return Conflict("UserName exists");
+                return Conflict(new ApiReponse(607));
             }
 
-            ValidateUserInfoUtils validateUserInfoUtils = new ValidateUserInfoUtils();
+            Validation validateUserInfoUtils = new Validation();
 
             // check phone number
             if (!validateUserInfoUtils.IsValidPhoneNumber(newUser.PhoneNumber))
             {
-                return BadRequest("PhoneNumber Invalid");
+                return BadRequest(new ApiReponse(614));
             }
 
             // check pwd: Minimum eight characters, at least one uppercase & lowercase letter and one number
             if (!validateUserInfoUtils.IsValidPassword(newUser.Password))
             {
-                return BadRequest("Password Invalid: Minimum eight characters, at least one uppercase & lowercase letter and one number");
+                return BadRequest(new ApiReponse(610));
+            }
+
+            // check gender
+            if (!(newUser.Gender == Gender.Male | newUser.Gender == Gender.Female | newUser.Gender == null))
+            {
+                return BadRequest(new ApiReponse(617));
             }
 
             // check email
@@ -74,12 +82,12 @@ namespace EnglishCenterManagement.Controllers
             {
                 if (!validateUserInfoUtils.IsValidEmail(newUser.Email))
                 {
-                    return BadRequest("Email Invalid");
+                    return BadRequest(new ApiReponse(615));
                 }
                 bool checkEmailExist = _userRepository.CheckEmailExists(newUser.Email);
                 if (checkEmailExist)
                 {
-                    return Conflict("Email exists");
+                    return Conflict(new ApiReponse(616));
                 }
             }
 
@@ -101,21 +109,21 @@ namespace EnglishCenterManagement.Controllers
         {
             if (userLogin == null)
             {
-                return BadRequest("Invalid client request");
+                return BadRequest(new ApiReponse(600));
             }
 
-            // check username exist and get user by loginname
+            // get user by loginname
             var user = _userRepository.GetUserByLoginName(userLogin.LoginName);
             if (user == null)
             {
-                return Conflict("UserName not exists");
+                return NotFound(new ApiReponse(606));
             }
 
             // check pwd 
             bool checkPassword = BCrypt.Net.BCrypt.Verify(userLogin.Password, user.Password);
             if (!checkPassword)
             {
-                return BadRequest("Wrong Password");
+                return BadRequest(new ApiReponse(610));
             }
 
             // generate token
@@ -148,11 +156,11 @@ namespace EnglishCenterManagement.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            return Ok(new TokenDto
+            return Ok(new ApiReponse(new TokenDto
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshToken
-            });
+            }));
         }
 
         // POST: /refreshToken
@@ -162,45 +170,45 @@ namespace EnglishCenterManagement.Controllers
         {
             if (currentToken == null)
             {
-                return BadRequest("Invalid client request");
+                return BadRequest(new ApiReponse(600));
             }
 
             //Check AccessToken valid format
             var principal = _authenRepository.GetPrincipalFromToken(currentToken.AccessToken);
             if (principal == null)
             {
-                return BadRequest("Invalid access token");
+                return BadRequest(new ApiReponse(601));
             }
 
             // Check user exists
             var user = _userRepository.GetUserByLoginName(principal.Identity.Name);
             if (user == null)
             {
-                return BadRequest("Invalid client request");
+                return BadRequest(new ApiReponse(601));
             }
 
             // Check AccessToken expire, neu chua het han thi ko cho refresh
             var expClaim = principal.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value;
             if (expClaim == null)
             {
-                return BadRequest("Invalid client request");
+                return BadRequest(new ApiReponse(601));
             }
             ConvertDateUtils utils = new ConvertDateUtils();
             DateTime expAccessToken = utils.ConvertUnixTimeToDateTime(long.Parse(expClaim));
             if (expAccessToken > DateTime.Now)
             {
-                return BadRequest("Access token has not yet expired");
+                return BadRequest(new ApiReponse(602));
             }
 
             // Check Refresh Token va expired cua Refresh Token
             var token = _authenRepository.GetTokenById(user.Id);
             if (!token.RefreshToken.Equals(currentToken.RefreshToken))
             {
-                return Unauthorized("Invalid Refresh Token."); // => Ma Refresh Token ko khop voi database
+                return Unauthorized(new ApiReponse(604)); ; // => Ma Refresh Token ko khop voi database
             }
             if (token.ExpiredAt < DateTime.Now)
             {
-                return Unauthorized("Refresh Token expired."); // => Phai dang nhap lai
+                return Unauthorized(new ApiReponse(605)); // => Phai dang nhap lai
             }
 
             // Update Token
@@ -218,11 +226,11 @@ namespace EnglishCenterManagement.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
             
-            return Ok(new TokenDto
+            return Ok(new ApiReponse(new TokenDto
             {
                 AccessToken = newAccessToken,
                 RefreshToken = newRefreshToken
-            });
+            }));
         }
     }
 }

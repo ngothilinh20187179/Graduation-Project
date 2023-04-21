@@ -2,9 +2,9 @@
 
 namespace EnglishCenterManagement.Common.Helpers
 {
-    public class ValidateUserInfoUtils
+    public class Validation
     {
-        public ValidateUserInfoUtils() { }
+        public Validation() { }
         public bool IsValidPhoneNumber(string phoneNumber)
         {
             Regex regexPhoneNumber = new Regex("^[0-9]+$");
