@@ -72,7 +72,7 @@ namespace EnglishCenterManagement.Controllers
             }
 
             // check gender
-            if (!(newUser.Gender == Gender.Male | newUser.Gender == Gender.Female | newUser.Gender == null))
+            if (!(newUser.Gender == GenderType.Male | newUser.Gender == GenderType.Female | newUser.Gender == null))
             {
                 return BadRequest(new ApiReponse(617));
             }

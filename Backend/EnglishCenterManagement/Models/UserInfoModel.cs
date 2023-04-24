@@ -12,7 +12,7 @@ namespace EnglishCenterManagement.Models
         public string PhoneNumber { get; set; } = string.Empty;
 
         public string? Email { get; set; }
-        public Gender? Gender { get; set; }
+        public GenderType? Gender { get; set; }
         public string? Location { get; set; } 
         public DateTime? DateOfBirth { get; set; }
 
@@ -23,5 +23,8 @@ namespace EnglishCenterManagement.Models
         // Relationship
         public AvatarModel? Avatar { get; set; }
         public RefreshTokenModel? Token { get; set; }
+        public StudentModel? Student { get; set; }
+        public TeacherModel? Teacher { get; set; }
+        public StaffModel? Staff { get; set; }
     }
 }

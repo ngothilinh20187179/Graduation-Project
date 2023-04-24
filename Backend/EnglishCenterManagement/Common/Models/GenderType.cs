@@ -1,6 +1,6 @@
 ﻿namespace EnglishCenterManagement.Common.Models
 {
-    public enum Gender
+    public enum GenderType
     {
         Male, Female
     }

@@ -139,6 +139,8 @@ namespace EnglishCenterManagement.Controllers
             return Ok(new ApiReponse(userRoleMap));
         }
 
+        // Change role -> anh huong toi cac bang student teacher, ... ?
+        // TODO: Sua lai => set role cho nhung user register (dang co role = RestrictedRole)
         // PUT: /control-access/5
         [HttpPut("control-access/{id}")]
         [Authorize(Roles = nameof(RoleType.Admin))]
