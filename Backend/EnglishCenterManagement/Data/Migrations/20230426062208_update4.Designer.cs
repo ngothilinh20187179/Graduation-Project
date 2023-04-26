@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EnglishCenterManagement.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230424100059_Update2")]
-    partial class Update2
+    [Migration("20230426062208_update4")]
+    partial class update4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace EnglishCenterManagement.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.AvatarModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.AvatarModel", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -43,7 +43,7 @@ namespace EnglishCenterManagement.Migrations
                     b.ToTable("Avatars");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.ClassModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.ClassModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -57,15 +57,15 @@ namespace EnglishCenterManagement.Migrations
                     b.Property<DateTime>("ClassStartDate")
                         .HasColumnType("date");
 
-                    b.Property<int>("ClassStatus")
-                        .HasColumnType("int");
-
                     b.Property<string>("ClassTitle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Credit")
                         .HasColumnType("float");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Number")
                         .HasColumnType("int");
@@ -91,7 +91,7 @@ namespace EnglishCenterManagement.Migrations
                     b.ToTable("Classes");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.RefreshTokenModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.RefreshTokenModel", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -111,7 +111,7 @@ namespace EnglishCenterManagement.Migrations
                     b.ToTable("Tokens");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.RoomModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.RoomModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -121,6 +121,9 @@ namespace EnglishCenterManagement.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RoomStatus")
@@ -134,7 +137,7 @@ namespace EnglishCenterManagement.Migrations
                     b.ToTable("Rooms");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.StaffModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StaffModel", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -144,10 +147,9 @@ namespace EnglishCenterManagement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("GraduationTime")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Note")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -155,7 +157,7 @@ namespace EnglishCenterManagement.Migrations
                     b.ToTable("Staffs");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.StudentClassModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StudentClassModel", b =>
                 {
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
@@ -163,8 +165,8 @@ namespace EnglishCenterManagement.Migrations
                     b.Property<int>("ClassId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StatusStudentOfClass")
-                        .HasColumnType("int");
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("StudentId", "ClassId");
 
@@ -173,10 +175,13 @@ namespace EnglishCenterManagement.Migrations
                     b.ToTable("StudentClasses");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.StudentModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StudentModel", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ParentPhoneNumber")
                         .HasColumnType("nvarchar(max)");
@@ -189,13 +194,16 @@ namespace EnglishCenterManagement.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.SubjectModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.SubjectModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SubjectDescription")
                         .IsRequired()
@@ -213,13 +221,16 @@ namespace EnglishCenterManagement.Migrations
                     b.ToTable("Subjects");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.TeacherClassModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.TeacherClassModel", b =>
                 {
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
                     b.Property<int>("ClassId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TeacherId", "ClassId");
 
@@ -228,7 +239,7 @@ namespace EnglishCenterManagement.Migrations
                     b.ToTable("TeacherClasses");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.TeacherModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.TeacherModel", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -238,10 +249,9 @@ namespace EnglishCenterManagement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("GraduationTime")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Note")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -249,7 +259,7 @@ namespace EnglishCenterManagement.Migrations
                     b.ToTable("Teachers");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.UserInfoModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.UserInfoModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -261,7 +271,7 @@ namespace EnglishCenterManagement.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -300,24 +310,24 @@ namespace EnglishCenterManagement.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.AvatarModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.AvatarModel", b =>
                 {
-                    b.HasOne("EnglishCenterManagement.Models.UserInfoModel", "User")
+                    b.HasOne("EnglishCenterManagement.Entities.Models.UserInfoModel", "User")
                         .WithOne("Avatar")
-                        .HasForeignKey("EnglishCenterManagement.Models.AvatarModel", "Id")
+                        .HasForeignKey("EnglishCenterManagement.Entities.Models.AvatarModel", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.ClassModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.ClassModel", b =>
                 {
-                    b.HasOne("EnglishCenterManagement.Models.RoomModel", "Room")
+                    b.HasOne("EnglishCenterManagement.Entities.Models.RoomModel", "Room")
                         .WithMany("Classes")
                         .HasForeignKey("RoomId");
 
-                    b.HasOne("EnglishCenterManagement.Models.SubjectModel", "Subject")
+                    b.HasOne("EnglishCenterManagement.Entities.Models.SubjectModel", "Subject")
                         .WithMany("Classes")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -328,37 +338,37 @@ namespace EnglishCenterManagement.Migrations
                     b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.RefreshTokenModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.RefreshTokenModel", b =>
                 {
-                    b.HasOne("EnglishCenterManagement.Models.UserInfoModel", "User")
+                    b.HasOne("EnglishCenterManagement.Entities.Models.UserInfoModel", "User")
                         .WithOne("Token")
-                        .HasForeignKey("EnglishCenterManagement.Models.RefreshTokenModel", "Id")
+                        .HasForeignKey("EnglishCenterManagement.Entities.Models.RefreshTokenModel", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.StaffModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StaffModel", b =>
                 {
-                    b.HasOne("EnglishCenterManagement.Models.UserInfoModel", "User")
+                    b.HasOne("EnglishCenterManagement.Entities.Models.UserInfoModel", "User")
                         .WithOne("Staff")
-                        .HasForeignKey("EnglishCenterManagement.Models.StaffModel", "Id")
+                        .HasForeignKey("EnglishCenterManagement.Entities.Models.StaffModel", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.StudentClassModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StudentClassModel", b =>
                 {
-                    b.HasOne("EnglishCenterManagement.Models.ClassModel", "Class")
+                    b.HasOne("EnglishCenterManagement.Entities.Models.ClassModel", "Class")
                         .WithMany("StudentClasses")
                         .HasForeignKey("ClassId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EnglishCenterManagement.Models.StudentModel", "Student")
+                    b.HasOne("EnglishCenterManagement.Entities.Models.StudentModel", "Student")
                         .WithMany("StudentClasses")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -369,26 +379,26 @@ namespace EnglishCenterManagement.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.StudentModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StudentModel", b =>
                 {
-                    b.HasOne("EnglishCenterManagement.Models.UserInfoModel", "User")
+                    b.HasOne("EnglishCenterManagement.Entities.Models.UserInfoModel", "User")
                         .WithOne("Student")
-                        .HasForeignKey("EnglishCenterManagement.Models.StudentModel", "Id")
+                        .HasForeignKey("EnglishCenterManagement.Entities.Models.StudentModel", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.TeacherClassModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.TeacherClassModel", b =>
                 {
-                    b.HasOne("EnglishCenterManagement.Models.ClassModel", "Class")
+                    b.HasOne("EnglishCenterManagement.Entities.Models.ClassModel", "Class")
                         .WithMany("TeacherClasses")
                         .HasForeignKey("ClassId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EnglishCenterManagement.Models.TeacherModel", "Teacher")
+                    b.HasOne("EnglishCenterManagement.Entities.Models.TeacherModel", "Teacher")
                         .WithMany("TeacherClasses")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -399,45 +409,45 @@ namespace EnglishCenterManagement.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.TeacherModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.TeacherModel", b =>
                 {
-                    b.HasOne("EnglishCenterManagement.Models.UserInfoModel", "User")
+                    b.HasOne("EnglishCenterManagement.Entities.Models.UserInfoModel", "User")
                         .WithOne("Teacher")
-                        .HasForeignKey("EnglishCenterManagement.Models.TeacherModel", "Id")
+                        .HasForeignKey("EnglishCenterManagement.Entities.Models.TeacherModel", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.ClassModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.ClassModel", b =>
                 {
                     b.Navigation("StudentClasses");
 
                     b.Navigation("TeacherClasses");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.RoomModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.RoomModel", b =>
                 {
                     b.Navigation("Classes");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.StudentModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StudentModel", b =>
                 {
                     b.Navigation("StudentClasses");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.SubjectModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.SubjectModel", b =>
                 {
                     b.Navigation("Classes");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.TeacherModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.TeacherModel", b =>
                 {
                     b.Navigation("TeacherClasses");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Models.UserInfoModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.UserInfoModel", b =>
                 {
                     b.Navigation("Avatar");
 

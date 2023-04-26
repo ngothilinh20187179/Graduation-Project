@@ -1,5 +1,5 @@
 ﻿using EnglishCenterManagement.Common.Helpers;
-using EnglishCenterManagement.Models;
+using EnglishCenterManagement.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EnglishCenterManagement.Data

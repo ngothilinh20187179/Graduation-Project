@@ -1,6 +1,8 @@
-﻿using EnglishCenterManagement.Data;
+﻿using EnglishCenterManagement.Common.Response;
+using EnglishCenterManagement.Data;
+using EnglishCenterManagement.Entities.Enumerations;
+using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
-using EnglishCenterManagement.Models;
 
 namespace EnglishCenterManagement.Repository
 {
@@ -24,6 +26,11 @@ namespace EnglishCenterManagement.Repository
         {
             return _context.Tokens.Any(c => c.Id == token.Id);
         }
+        public bool CheckAvatarExists(int id)
+        {
+            return _context.Avatars.Any(c => c.Id == id);
+        }
+
         public UserInfoModel GetUserByLoginName(string loginName)
         {
             return _context.Users.Where(p => p.LoginName == loginName).FirstOrDefault();
@@ -40,6 +47,7 @@ namespace EnglishCenterManagement.Repository
         {
             return _context.Users.Where(p => p.LoginName == loginName && p.Id != userId).FirstOrDefault();
         }
+
         public bool CreateUserProfile(UserInfoModel user)
         {
             _context.Add(user);
@@ -50,11 +58,59 @@ namespace EnglishCenterManagement.Repository
             _context.Update(user);
             return SaveChange();
         }
+
+        public AvatarModel GetUserAvatar(int id)
+        {
+            return _context.Avatars.Where(a => a.Id == id).FirstOrDefault();
+        }
+        public bool AddAvatar(AvatarModel avatar)
+        {
+            _context.Add(avatar);
+            return SaveChange();
+        }
+        public bool UpdateAvatar(AvatarModel avatar)
+        {
+            _context.Update(avatar);
+            return SaveChange();
+        }
+        public bool DeleteAvatar(AvatarModel avatar)
+        {
+            _context.Remove(avatar);
+            return SaveChange();
+        }
+
         public bool DeleteUser(UserInfoModel user)
         {
             _context.Remove(user);
             return SaveChange();
         }
+        public PagedResponse GetAllUsers(string? search, RoleType? role, int page, int pageSize)
+        {
+            var allUsers = _context.Users.AsQueryable();
+            var totalUsers = _context.Users.Count();
+
+            #region Filtering
+            if (!String.IsNullOrEmpty(search))
+            {
+                allUsers = allUsers.Where(u => u.FirstName.Contains(search));
+            }
+            if (role.HasValue)
+            {
+                allUsers = allUsers.Where(u => u.Role == role);
+            }
+            #endregion
+
+            #region Sorting
+            allUsers = allUsers.OrderByDescending(u => u.Created);
+            #endregion
+
+            #region Paginated
+            var data = allUsers.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            #endregion
+
+            return new PagedResponse(data, totalUsers, page, pageSize);
+        }
+
         public bool SaveChange()
         {
             return _context.SaveChanges() > 0;

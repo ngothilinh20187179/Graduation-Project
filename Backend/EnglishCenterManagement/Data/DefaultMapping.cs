@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using EnglishCenterManagement.Dtos;
-using EnglishCenterManagement.Models;
+using EnglishCenterManagement.Entities.Models;
 
-namespace EnglishCenterManagement.MappingProfiles
+namespace EnglishCenterManagement.Data
 {
     public class DefaultMapping : Profile
     {
@@ -11,11 +11,12 @@ namespace EnglishCenterManagement.MappingProfiles
             CreateMap<RegisterDto, UserInfoModel>();
             CreateMap<RefreshTokenDto, RefreshTokenModel>();
             CreateMap<ChangePasswordDto, UserInfoModel>();
-            CreateMap<MyProfileDto, UserInfoModel>();
-            CreateMap<UserInfoModel, MyProfileDto>();
+            CreateMap<BasicUserInfoDto, UserInfoModel>();
+            CreateMap<UserInfoModel, BasicUserInfoDto>();
             CreateMap<UserInfoModel, UserProfileDto>();
             CreateMap<RoleDto, UserInfoModel>();
             CreateMap<UserInfoModel, RoleDto>();
+            CreateMap<UserInfoModel, UserProfileHasAvatarDto>();
         }
     }
 }

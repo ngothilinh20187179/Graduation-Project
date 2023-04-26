@@ -1,9 +1,10 @@
-﻿namespace EnglishCenterManagement.Models
+﻿namespace EnglishCenterManagement.Entities.Models
 {
     public class TeacherClassModel
     {
         public int ClassId { get; set; }
         public int TeacherId { get; set; }
+        public string? Note { get; set; }
 
         // Relationship
         public ClassModel Class { get; set; }
