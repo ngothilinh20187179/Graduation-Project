@@ -81,6 +81,7 @@ namespace EnglishCenterManagement.Controllers
                 return BadRequest(new ApiReponse(619));
             }
 
+            // TODO: update role UserTable va add user vao bang tuong ung
             var updatedUserRole = _mapper.Map(updateRole, getUserById);
             if (!_userRepository.UpdateUserProfile(updatedUserRole))
             {

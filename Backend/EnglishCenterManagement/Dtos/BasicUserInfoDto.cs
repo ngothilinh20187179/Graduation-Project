@@ -2,7 +2,7 @@
 
 namespace EnglishCenterManagement.Dtos
 {
-    public class MyProfileDto
+    public class BasicUserInfoDto
     {
         public string LoginName { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty;

@@ -5,6 +5,7 @@ namespace EnglishCenterManagement.Entities.Models
     public class UserInfoModel
     {
         public int Id { get; set; }
+        public string Password { get; set; } = string.Empty;
 
         public string LoginName { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty;
@@ -17,7 +18,6 @@ namespace EnglishCenterManagement.Entities.Models
         public DateTime? DateOfBirth { get; set; }
 
         public RoleType Role { get; set; } = RoleType.RestrictedRole;
-        public string Password { get; set; } = string.Empty;
         public DateTime Created { get; set; } = DateTime.Now;
 
         // Relationship

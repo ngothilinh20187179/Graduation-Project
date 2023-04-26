@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
+using EnglishCenterManagement.Common.Constants;
 using EnglishCenterManagement.Common.Helpers;
 using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Dtos;
+using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Security.Claims;
 
 namespace EnglishCenterManagement.Controllers
@@ -25,11 +28,35 @@ namespace EnglishCenterManagement.Controllers
             _userRepository = userRepository;
         }
 
-        // TODO GET: /my-avatar
+        // DELETE: /remove-myavatar
+        [HttpDelete("remove-myavatar")]
+        [Authorize]
+        public ActionResult DeleteAvatar()
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return BadRequest();
+            }
 
-        // TODO DELETE: /delete-avatar
+            var avatar = _userRepository.GetUserAvatar(user.Id);
+            if (avatar == null)
+            {
+                return BadRequest(new ApiReponse(625));
+            }
 
-        // TODO PUT: /change-avatar
+            if (!_userRepository.DeleteAvatar(avatar))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return NoContent();
+        }
+
+        // PUT: /change-avatar
+        // TODO: limit formfile 
+        // Hiện đang lôi nếu > 30.000.000 bytes (< 30.000.000 bytes và > 1.048.576 bytes mới trả về lỗi ở API)
+        // Failed to read the request form. Request body too large. The max request body size is 30.000.000 bytes.
         [HttpPut("change-avatar")]
         [Authorize]
         public ActionResult UpdateAvatar(IFormFile formFile)
@@ -40,20 +67,57 @@ namespace EnglishCenterManagement.Controllers
                 return BadRequest();
             }
 
+            // Check size image > 1MB = 1024KB = 1048576 bytes ?
+            if (formFile.Length > 1048576)
+            {
+                return BadRequest(new ApiReponse(624));
+            }
+
+            // check extension is image extension ?
+            var extension = Path.GetExtension(formFile.FileName).ToLowerInvariant();
+            var mediaType = FormFileContants.Extension.GetValueOrDefault(extension);
+            if (mediaType == null)
+            {
+                return BadRequest(new ApiReponse(623));
+            }
+
+            // image -> text
+            using var memoryStream = new MemoryStream();
+            formFile.CopyToAsync(memoryStream);
+            var data = memoryStream.ToArray();
+
+            // exists => update
+            // not exists => post
+            var avatar = new AvatarModel
+            {
+                MediaType = mediaType,
+                Data = data,
+                Id = user.Id
+            };
+
+            bool uploadImage = _userRepository.CheckAvatarExists(user.Id) ? 
+                _userRepository.UpdateAvatar(avatar) : 
+                _userRepository.AddAvatar(avatar);
+
+            if (!uploadImage)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
             return NoContent();
         }
 
         // GET: /myprofile
         [HttpGet("myprofile")]
         [Authorize]
-        public ActionResult<MyProfileDto> GetMyProfile()
+        public ActionResult<UserProfileHasAvatarDto> GetMyProfile()
         {
             var user = GetUserByClaim();
             if (user == null)
             {
                 return BadRequest();
             }
-            var userProfileMap = _mapper.Map<MyProfileDto>(user);
+            var userProfileMap = _mapper.Map<UserProfileHasAvatarDto>(user);
 
             return Ok(new ApiReponse(userProfileMap));
         }
@@ -61,7 +125,7 @@ namespace EnglishCenterManagement.Controllers
         // PUT: /change-information
         [HttpPut("change-information")]
         [Authorize]
-        public ActionResult ChangeInformation([FromBody] MyProfileDto updatedProfile)
+        public ActionResult ChangeInformation([FromBody] BasicUserInfoDto updatedProfile)
         {
             // Get User by Claims
             var user = GetUserByClaim();

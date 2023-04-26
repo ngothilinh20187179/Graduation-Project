@@ -10,14 +10,24 @@ namespace EnglishCenterManagement.Interfaces
         bool CheckUserNameExist(string userName);
         bool CheckEmailExists(string email);
         bool CheckTokenExist(RefreshTokenModel token);
+        bool CheckAvatarExists(int id);
+
         UserInfoModel GetUserByLoginName(string loginName);
         UserInfoModel GetUserByUserId(int userId);
         UserInfoModel GetUserHasSameEmail(int userId, string email);
         UserInfoModel GetUserHasSameLoginName(int userId, string loginName);
+
         bool CreateUserProfile(UserInfoModel user);
         bool UpdateUserProfile(UserInfoModel user);
+
+        AvatarModel GetUserAvatar(int id);
+        bool AddAvatar(AvatarModel avatar);
+        bool UpdateAvatar(AvatarModel avatar);
+        bool DeleteAvatar(AvatarModel avatar);
+
         bool DeleteUser(UserInfoModel user);
         PagedResponse GetAllUsers(string? search, RoleType? role, int page, int pageSize);
+
         bool SaveChange();
     }
 }

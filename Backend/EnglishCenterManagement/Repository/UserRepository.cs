@@ -1,10 +1,8 @@
-﻿using EnglishCenterManagement.Common.Helpers;
-using EnglishCenterManagement.Common.Response;
+﻿using EnglishCenterManagement.Common.Response;
 using EnglishCenterManagement.Data;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace EnglishCenterManagement.Repository
 {
@@ -28,6 +26,11 @@ namespace EnglishCenterManagement.Repository
         {
             return _context.Tokens.Any(c => c.Id == token.Id);
         }
+        public bool CheckAvatarExists(int id)
+        {
+            return _context.Avatars.Any(c => c.Id == id);
+        }
+
         public UserInfoModel GetUserByLoginName(string loginName)
         {
             return _context.Users.Where(p => p.LoginName == loginName).FirstOrDefault();
@@ -44,6 +47,7 @@ namespace EnglishCenterManagement.Repository
         {
             return _context.Users.Where(p => p.LoginName == loginName && p.Id != userId).FirstOrDefault();
         }
+
         public bool CreateUserProfile(UserInfoModel user)
         {
             _context.Add(user);
@@ -54,12 +58,32 @@ namespace EnglishCenterManagement.Repository
             _context.Update(user);
             return SaveChange();
         }
+
+        public AvatarModel GetUserAvatar(int id)
+        {
+            return _context.Avatars.Where(a => a.Id == id).FirstOrDefault();
+        }
+        public bool AddAvatar(AvatarModel avatar)
+        {
+            _context.Add(avatar);
+            return SaveChange();
+        }
+        public bool UpdateAvatar(AvatarModel avatar)
+        {
+            _context.Update(avatar);
+            return SaveChange();
+        }
+        public bool DeleteAvatar(AvatarModel avatar)
+        {
+            _context.Remove(avatar);
+            return SaveChange();
+        }
+
         public bool DeleteUser(UserInfoModel user)
         {
             _context.Remove(user);
             return SaveChange();
         }
-
         public PagedResponse GetAllUsers(string? search, RoleType? role, int page, int pageSize)
         {
             var allUsers = _context.Users.AsQueryable();
