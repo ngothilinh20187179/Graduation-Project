@@ -1,6 +1,10 @@
-﻿using EnglishCenterManagement.Data;
+﻿using EnglishCenterManagement.Common.Helpers;
+using EnglishCenterManagement.Common.Response;
+using EnglishCenterManagement.Data;
+using EnglishCenterManagement.Entities.Enumerations;
+using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
-using EnglishCenterManagement.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EnglishCenterManagement.Repository
 {
@@ -55,6 +59,34 @@ namespace EnglishCenterManagement.Repository
             _context.Remove(user);
             return SaveChange();
         }
+
+        public PagedResponse GetAllUsers(string? search, RoleType? role, int page, int pageSize)
+        {
+            var allUsers = _context.Users.AsQueryable();
+            var totalUsers = _context.Users.Count();
+
+            #region Filtering
+            if (!String.IsNullOrEmpty(search))
+            {
+                allUsers = allUsers.Where(u => u.FirstName.Contains(search));
+            }
+            if (role.HasValue)
+            {
+                allUsers = allUsers.Where(u => u.Role == role);
+            }
+            #endregion
+
+            #region Sorting
+            allUsers = allUsers.OrderByDescending(u => u.Created);
+            #endregion
+
+            #region Paginated
+            var data = allUsers.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            #endregion
+
+            return new PagedResponse(data, totalUsers, page, pageSize);
+        }
+
         public bool SaveChange()
         {
             return _context.SaveChanges() > 0;

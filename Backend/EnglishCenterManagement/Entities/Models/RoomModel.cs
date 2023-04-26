@@ -1,6 +1,6 @@
-﻿using EnglishCenterManagement.Common.Models;
+﻿using EnglishCenterManagement.Entities.Enumerations;
 
-namespace EnglishCenterManagement.Models
+namespace EnglishCenterManagement.Entities.Models
 {
     public class RoomModel
     {
@@ -8,6 +8,7 @@ namespace EnglishCenterManagement.Models
         public string Name { get; set; } = string.Empty;
         public int? Size { get; set; }
         public RoomStatusType RoomStatus { get; set; }
+        public string? Note { get; set; }
 
         // Relationship
         public ICollection<ClassModel>? Classes { get; set; }

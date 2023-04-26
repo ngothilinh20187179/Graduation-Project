@@ -1,4 +1,6 @@
-﻿using EnglishCenterManagement.Models;
+﻿using EnglishCenterManagement.Common.Response;
+using EnglishCenterManagement.Entities.Enumerations;
+using EnglishCenterManagement.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EnglishCenterManagement.Interfaces
@@ -15,6 +17,7 @@ namespace EnglishCenterManagement.Interfaces
         bool CreateUserProfile(UserInfoModel user);
         bool UpdateUserProfile(UserInfoModel user);
         bool DeleteUser(UserInfoModel user);
+        PagedResponse GetAllUsers(string? search, RoleType? role, int page, int pageSize);
         bool SaveChange();
     }
 }

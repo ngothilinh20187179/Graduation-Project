@@ -1,4 +1,4 @@
-﻿using EnglishCenterManagement.Common.Models;
+﻿using EnglishCenterManagement.Entities.Enumerations;
 
 namespace EnglishCenterManagement.Dtos
 {
@@ -16,6 +16,5 @@ namespace EnglishCenterManagement.Dtos
 
         public DateTime Created { get; set; } = DateTime.Now;
         public RoleType Role { get; set; }
-
     }
 }

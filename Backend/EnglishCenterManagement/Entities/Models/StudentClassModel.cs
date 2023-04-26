@@ -1,12 +1,13 @@
-﻿using EnglishCenterManagement.Common.Models;
+﻿using EnglishCenterManagement.Entities.Enumerations;
 
-namespace EnglishCenterManagement.Models
+namespace EnglishCenterManagement.Entities.Models
 {
     public class StudentClassModel
     {
         public int StudentId { get; set; }
         public int ClassId { get; set; }
-        public StudentClassStatusType StatusStudentOfClass { get; set; }
+        public bool PaidTuition = false;
+        public string? Note { get; set; }
 
         // Relationship
         public StudentModel Student { get; set; }

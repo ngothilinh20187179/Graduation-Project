@@ -1,4 +1,4 @@
-﻿namespace EnglishCenterManagement.Models
+﻿namespace EnglishCenterManagement.Entities.Models
 {
     public class RefreshTokenModel
     {

@@ -1,6 +1,6 @@
 ﻿using EnglishCenterManagement.Data;
+using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
-using EnglishCenterManagement.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

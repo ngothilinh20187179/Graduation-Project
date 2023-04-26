@@ -1,4 +1,4 @@
-﻿using EnglishCenterManagement.Common.Models;
+﻿using EnglishCenterManagement.Entities.Enumerations;
 
 namespace EnglishCenterManagement.Dtos
 {

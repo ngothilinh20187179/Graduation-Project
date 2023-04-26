@@ -1,6 +1,6 @@
-﻿using EnglishCenterManagement.Common.Models;
+﻿using EnglishCenterManagement.Entities.Enumerations;
 
-namespace EnglishCenterManagement.Models
+namespace EnglishCenterManagement.Entities.Models
 {
     public class UserInfoModel
     {
@@ -13,7 +13,7 @@ namespace EnglishCenterManagement.Models
 
         public string? Email { get; set; }
         public GenderType? Gender { get; set; }
-        public string? Location { get; set; } 
+        public string? Location { get; set; }
         public DateTime? DateOfBirth { get; set; }
 
         public RoleType Role { get; set; } = RoleType.RestrictedRole;

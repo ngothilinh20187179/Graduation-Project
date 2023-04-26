@@ -1,4 +1,4 @@
-﻿namespace EnglishCenterManagement.Common.Models
+﻿namespace EnglishCenterManagement.Entities.Enumerations
 {
     public enum SubjectStatusType
     {

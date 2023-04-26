@@ -1,4 +1,4 @@
-﻿using EnglishCenterManagement.Models;
+﻿using EnglishCenterManagement.Entities.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 

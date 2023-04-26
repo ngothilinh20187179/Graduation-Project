@@ -1,4 +1,4 @@
-﻿namespace EnglishCenterManagement.Models
+﻿namespace EnglishCenterManagement.Entities.Models
 {
     public class AvatarModel
     {
@@ -7,6 +7,6 @@
         public byte[] Data { get; set; }
 
         // Relationship 1User - 1Avatar
-        public UserInfoModel User { get; set; } 
+        public UserInfoModel User { get; set; }
     }
 }
