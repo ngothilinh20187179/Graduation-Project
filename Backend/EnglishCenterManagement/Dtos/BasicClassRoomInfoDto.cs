@@ -2,7 +2,7 @@
 
 namespace EnglishCenterManagement.Dtos
 {
-    public class ClassBasicInfoDto
+    public class BasicClassRoomInfoDto
     {
         public int Id { get; set; }
         public string ClassTitle { get; set; } = string.Empty;

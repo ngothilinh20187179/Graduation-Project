@@ -17,7 +17,7 @@ namespace EnglishCenterManagement.Data
             CreateMap<UserInfoModel, RoleDto>();
             CreateMap<UserInfoModel, UserProfileHasAvatarDto>();
             CreateMap<SubjectModel, SubjectDto>();
-            CreateMap<ClassModel, ClassBasicInfoDto>();
+            CreateMap<ClassModel, BasicClassRoomInfoDto>();
             CreateMap<RoomModel, RoomDto>();
         }
     }
