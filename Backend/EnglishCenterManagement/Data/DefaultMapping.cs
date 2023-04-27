@@ -13,10 +13,12 @@ namespace EnglishCenterManagement.Data
             CreateMap<ChangePasswordDto, UserInfoModel>();
             CreateMap<BasicUserInfoDto, UserInfoModel>();
             CreateMap<UserInfoModel, BasicUserInfoDto>();
-            CreateMap<UserInfoModel, UserProfileDto>();
             CreateMap<RoleDto, UserInfoModel>();
             CreateMap<UserInfoModel, RoleDto>();
             CreateMap<UserInfoModel, UserProfileHasAvatarDto>();
+            CreateMap<SubjectModel, SubjectDto>();
+            CreateMap<ClassModel, ClassBasicInfoDto>();
+            CreateMap<RoomModel, RoomDto>();
         }
     }
 }

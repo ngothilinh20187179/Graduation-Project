@@ -2,13 +2,13 @@
 using EnglishCenterManagement.Common.Constants;
 using EnglishCenterManagement.Common.Helpers;
 using EnglishCenterManagement.Common.Messages;
+using EnglishCenterManagement.Common.Response;
 using EnglishCenterManagement.Dtos;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Security.Claims;
 
 namespace EnglishCenterManagement.Controllers
@@ -28,34 +28,23 @@ namespace EnglishCenterManagement.Controllers
             _userRepository = userRepository;
         }
 
-        // DELETE: /remove-myavatar
-        [HttpDelete("remove-myavatar")]
+        // GET: /myprofile
+        [HttpGet("myprofile")]
         [Authorize]
-        public ActionResult DeleteAvatar()
+        public ActionResult<UserProfileHasAvatarDto> GetMyProfile()
         {
             var user = GetUserByClaim();
             if (user == null)
             {
-                return BadRequest();
+                return Unauthorized();
             }
+            var userProfileMap = _mapper.Map<UserProfileHasAvatarDto>(user);
 
-            var avatar = _userRepository.GetUserAvatar(user.Id);
-            if (avatar == null)
-            {
-                return BadRequest(new ApiReponse(625));
-            }
-
-            if (!_userRepository.DeleteAvatar(avatar))
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-
-            return NoContent();
+            return Ok(new ApiReponse(userProfileMap));
         }
 
         // PUT: /change-avatar
-        // TODO: limit formfile 
-        // Hiện đang lôi nếu > 30.000.000 bytes (< 30.000.000 bytes và > 1.048.576 bytes mới trả về lỗi ở API)
+        // TODO: limit formfile before call api
         // Failed to read the request form. Request body too large. The max request body size is 30.000.000 bytes.
         [HttpPut("change-avatar")]
         [Authorize]
@@ -64,7 +53,7 @@ namespace EnglishCenterManagement.Controllers
             var user = GetUserByClaim();
             if (user == null)
             {
-                return BadRequest();
+                return Unauthorized();
             }
 
             // Check size image > 1MB = 1024KB = 1048576 bytes ?
@@ -107,19 +96,29 @@ namespace EnglishCenterManagement.Controllers
             return NoContent();
         }
 
-        // GET: /myprofile
-        [HttpGet("myprofile")]
+        // DELETE: /remove-myavatar
+        [HttpDelete("remove-myavatar")]
         [Authorize]
-        public ActionResult<UserProfileHasAvatarDto> GetMyProfile()
+        public ActionResult DeleteAvatar()
         {
             var user = GetUserByClaim();
             if (user == null)
             {
-                return BadRequest();
+                return Unauthorized();
             }
-            var userProfileMap = _mapper.Map<UserProfileHasAvatarDto>(user);
 
-            return Ok(new ApiReponse(userProfileMap));
+            var avatar = _userRepository.GetUserAvatar(user.Id);
+            if (avatar == null)
+            {
+                return BadRequest(new ApiReponse(625));
+            }
+
+            if (!_userRepository.DeleteAvatar(avatar))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return NoContent();
         }
 
         // PUT: /change-information
@@ -131,7 +130,7 @@ namespace EnglishCenterManagement.Controllers
             var user = GetUserByClaim();
             if (user == null)
             {
-                return BadRequest();
+                return Unauthorized();
             }
 
             // 
@@ -185,7 +184,7 @@ namespace EnglishCenterManagement.Controllers
             var user = GetUserByClaim();
             if (user == null)
             {
-                return BadRequest();
+                return Unauthorized();
             }
             //
             if (passwordDto == null)
@@ -218,6 +217,156 @@ namespace EnglishCenterManagement.Controllers
             var hashedPwd = BCrypt.Net.BCrypt.HashPassword(passwordDto.Password);
             user.Password = hashedPwd;
             if (!_userRepository.UpdateUserProfile(user))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        // GET: /users
+        [HttpGet("users")]
+        [Authorize(Roles = nameof(RoleType.Admin))]
+        public ActionResult<PagedResponse> GetAllUsers(string? search, RoleType? role, int page = 1, int pageSize = 20)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize > 20 ? 20 : pageSize;
+
+            var listUsers = _userRepository.GetAllUsers(search, role, page, pageSize);
+            var mappedListUsers = _mapper.Map<List<UserProfileHasAvatarDto>>(listUsers.Data);
+            listUsers.Data = mappedListUsers;
+
+            return Ok(listUsers);
+        }
+
+        // GET: /user/5
+        // TODO: Check role user/5 (ví dụ là student thì sẽ hiển thị thông tin thêm về student)
+        [HttpGet("user/{id}")]
+        [Authorize(Roles = nameof(RoleType.Admin))]
+        public ActionResult<UserProfileHasAvatarDto> GetUserProfile(int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            var getUserById = _userRepository.GetUserByUserId(id);
+            if (getUserById == null)
+            {
+                return NotFound(new ApiReponse(606));
+            }
+            var userProfileMap = _mapper.Map<UserProfileHasAvatarDto>(getUserById);
+
+            return Ok(new ApiReponse(userProfileMap));
+        }
+
+        // PUT: /control-access/5
+        [HttpPut("allow-access/{id}")]
+        [Authorize(Roles = nameof(RoleType.Admin))]
+        public ActionResult SetRoleForNewRegister(int id, [FromBody] RoleDto updateRole)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            if (user.Id == id)
+            {
+                return BadRequest(new ApiReponse(621));
+            }
+
+            var getUserById = _userRepository.GetUserByUserId(id);
+            if (getUserById == null)
+            {
+                return NotFound(new ApiReponse(606));
+            }
+
+            // Change role -> anh huong toi cac bang student, teacher, staff,... ?
+            // => set role cho user register (co role = RestrictedRole)
+            if (getUserById.Role != RoleType.RestrictedRole)
+            {
+                return Conflict(new ApiReponse(622));
+            }
+
+            if (!Enum.IsDefined(typeof(RoleType), updateRole.Role))
+            {
+                return BadRequest(new ApiReponse(619));
+            }
+
+            // TODO: update role UserTable va add user vao bang tuong ung
+            var updatedUserRole = _mapper.Map(updateRole, getUserById);
+            if (!_userRepository.UpdateUserProfile(updatedUserRole))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        // GET: /user-role/5
+        [HttpGet("user-role/{id}")]
+        [Authorize(Roles = nameof(RoleType.Admin))]
+        public ActionResult<RoleDto> GetUserRole(int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            if (user.Id == id)
+            {
+                return Ok(new ApiReponse(new RoleDto
+                {
+                    Role = user.Role
+                }));
+            }
+
+            var getUserById = _userRepository.GetUserByUserId(id);
+            if (getUserById == null)
+            {
+                return NotFound(new ApiReponse(606));
+            }
+
+            var userRoleMap = _mapper.Map<RoleDto>(getUserById);
+
+            return Ok(new ApiReponse(userRoleMap));
+        }
+
+        // DELETE: /delete-user/5
+        [HttpDelete("delete-user/{id}")]
+        [Authorize(Roles = nameof(RoleType.Admin))]
+        public ActionResult DeleteUser(int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            if (user.Id == id)
+            {
+                return BadRequest(new ApiReponse(620));
+            }
+
+            var deletedUser = _userRepository.GetUserByUserId(id);
+            if (deletedUser == null)
+            {
+                return NotFound(new ApiReponse(606));
+            }
+
+            // TODO: conditions
+            // TODO: xóa đc admin, staff; nếu user là (student, teacher) tham gia vao class nao do (=> Thay vi delete co the set status cho user do)
+            // TODO: check user exist, get role (vd role = student => check table StudentClass xem co studentId hay ko)
+
+            if (!_userRepository.DeleteUser(deletedUser))
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
