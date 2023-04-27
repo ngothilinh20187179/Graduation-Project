@@ -85,15 +85,18 @@ namespace EnglishCenterManagement.Controllers
             pageSize = pageSize > 20 ? 20 : pageSize;
 
             var listClasses = _schoolRepository.GetAllClasses(search, page, pageSize);
-            var mappedListClasses = _mapper.Map<List<ClassBasicInfoDto>>(listClasses.Data);
+            var mappedListClasses = _mapper.Map<List<BasicClassRoomInfoDto>>(listClasses.Data);
             listClasses.Data = mappedListClasses;
 
             return Ok(listClasses);
         }
 
         // GET: /students
-        // GET: /teachers
+        // Note: Bên admin đã có API get all users by role nên ko cần get all teachers và get all students nữa
+        [Authorize(Roles = nameof(RoleType.Staff))]
 
+        // GET: /teachers
+        [Authorize(Roles = nameof(RoleType.Staff))]
 
         // GET: /class-detail/5
         // admin, staff: class info - subject - room - teachers - students
