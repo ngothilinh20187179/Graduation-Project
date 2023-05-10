@@ -1,6 +1,7 @@
 ﻿using EnglishCenterManagement.Common.Helpers;
 using EnglishCenterManagement.Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace EnglishCenterManagement.Data
 {
@@ -87,6 +88,16 @@ namespace EnglishCenterManagement.Data
                     .HasOne(p => p.Class)
                     .WithMany(pc => pc.TeacherClasses)
                     .HasForeignKey(c => c.ClassId);
+
+            // 1-n Subject-Class
+            modelBuilder.Entity<ClassModel>()
+                .HasOne(x => x.Subject)
+                .WithMany(x => x.Classes);
+
+            // 1-n Room-Class
+            modelBuilder.Entity<ClassModel>()
+                .HasOne(x => x.Room)
+                .WithMany(x => x.Classes);
         }
     }
 }

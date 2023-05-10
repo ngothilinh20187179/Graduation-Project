@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Common.Response;
-using EnglishCenterManagement.Dtos;
+using EnglishCenterManagement.Dtos.SchoolDto;
+using EnglishCenterManagement.Dtos.UserInfoDto;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
@@ -72,7 +74,7 @@ namespace EnglishCenterManagement.Controllers
 
         // GET: /classes
         [HttpGet("classes")]
-        [Authorize(Roles = "Admin, Staff")]
+        [Authorize]
         public ActionResult<PagedResponse> GetAllClasses(string? search, int page = 1, int pageSize = 20)
         {
             var user = GetUserByClaim();
@@ -92,17 +94,70 @@ namespace EnglishCenterManagement.Controllers
         }
 
         // GET: /students
-        // Note: Bên admin đã có API get all users by role nên ko cần get all teachers và get all students nữa
+        // Note: Bên admin đã có API get all users by role nên admin ko cần get all teachers và get all students nữa
+        [HttpGet("students")]
         [Authorize(Roles = nameof(RoleType.Staff))]
+        public ActionResult<PagedResponse> GetAllStudents(string? search, int page = 1, int pageSize = 20)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize > 20 ? 20 : pageSize;
+
+            var listStudents = _schoolRepository.GetAllStudents(search, page, pageSize);
+            var mappedListStudents = _mapper.Map<List<BasicStudentTeacherInfoDto>>(listStudents.Data);
+            listStudents.Data = mappedListStudents;
+
+            return Ok(listStudents);
+        }
 
         // GET: /teachers
+        [HttpGet("teachers")]
         [Authorize(Roles = nameof(RoleType.Staff))]
+        public ActionResult<PagedResponse> GetAllTeachers(string? search, int page = 1, int pageSize = 20)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize > 20 ? 20 : pageSize;
+
+            var listTeachers = _schoolRepository.GetAllTeachers(search, page, pageSize);
+            var mappedListTeachers = _mapper.Map<List<BasicStudentTeacherInfoDto>>(listTeachers.Data);
+            listTeachers.Data = mappedListTeachers;
+
+            return Ok(listTeachers);
+        }
 
         // GET: /class-detail/5
-        // admin, staff: class info - subject - room - teachers - students
-        // student, teacher: class info - subject - room - teachers - students (chỉ nếu học lớp đó)
-        // student, teacher: class info (nếu ko học lớp đó)
+        [HttpGet("classes/{id}")]
+        [Authorize]
+        public ActionResult<ClassRoomDetailDto> GetClassById(int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
 
+            var getClassById = _schoolRepository.GetClassById(id);
+            if (getClassById == null)
+            {
+                return NotFound(new ApiReponse(626));
+            }
+
+            var mappedClassDetailInfo = _mapper.Map<ClassRoomDetailDto>(getClassById);
+            return Ok(new ApiReponse(mappedClassDetailInfo));
+        }
+
+        // GET teachers and students in class
 
 
         private UserInfoModel? GetUserByClaim()

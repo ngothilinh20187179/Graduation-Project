@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
-using EnglishCenterManagement.Dtos;
+using EnglishCenterManagement.Dtos.AuthenticationDtos;
+using EnglishCenterManagement.Dtos.SchoolDto;
+using EnglishCenterManagement.Dtos.UserInfoDto;
 using EnglishCenterManagement.Entities.Models;
 
 namespace EnglishCenterManagement.Data
@@ -11,14 +13,23 @@ namespace EnglishCenterManagement.Data
             CreateMap<RegisterDto, UserInfoModel>();
             CreateMap<RefreshTokenDto, RefreshTokenModel>();
             CreateMap<ChangePasswordDto, UserInfoModel>();
+            CreateMap<AvatarModel, AvatarDto>();
+
             CreateMap<BasicUserInfoDto, UserInfoModel>();
             CreateMap<UserInfoModel, BasicUserInfoDto>();
+
             CreateMap<RoleDto, UserInfoModel>();
             CreateMap<UserInfoModel, RoleDto>();
+
+            CreateMap<UserInfoModel, BasicStudentTeacherInfoDto>();
+
             CreateMap<UserInfoModel, UserProfileHasAvatarDto>();
-            CreateMap<SubjectModel, SubjectDto>();
-            CreateMap<ClassModel, BasicClassRoomInfoDto>();
+
             CreateMap<RoomModel, RoomDto>();
+            CreateMap<SubjectModel, SubjectDto>();
+
+            CreateMap<ClassModel, BasicClassRoomInfoDto>();
+            CreateMap<ClassModel, ClassRoomDetailDto>();
         }
     }
 }

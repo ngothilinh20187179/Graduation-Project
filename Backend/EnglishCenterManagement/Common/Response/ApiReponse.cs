@@ -45,6 +45,7 @@
             [623] = "Not an image or invalid image",
             [624] = "The file is too large (>1MB)",
             [625] = "Avatar not exists",
+            [626] = "Class not exists",
 
             [1000] = "You don't have permission to access"
         };

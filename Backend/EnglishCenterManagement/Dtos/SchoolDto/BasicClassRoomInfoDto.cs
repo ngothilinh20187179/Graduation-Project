@@ -1,6 +1,4 @@
-﻿using EnglishCenterManagement.Entities.Models;
-
-namespace EnglishCenterManagement.Dtos
+﻿namespace EnglishCenterManagement.Dtos.SchoolDto
 {
     public class BasicClassRoomInfoDto
     {
@@ -10,8 +8,5 @@ namespace EnglishCenterManagement.Dtos
         public DateOnly ClassEndDate { get; set; }
         public TimeOnly? PeriodStart { get; set; }
         public TimeOnly? PeriodEnd { get; set; }
-        public double Credit { get; set; }
-        public int Number { get; set; }
-        public string? Note { get; set; }
     }
 }

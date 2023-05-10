@@ -1,6 +1,7 @@
 ﻿using EnglishCenterManagement.Common.Response;
 using EnglishCenterManagement.Data;
 using EnglishCenterManagement.Entities.Enumerations;
+using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
 
 namespace EnglishCenterManagement.Repository
@@ -25,7 +26,7 @@ namespace EnglishCenterManagement.Repository
             #endregion
 
             #region Sorting
-            allClasses = allClasses.OrderByDescending(u => u.ClassTitle);
+            allClasses = allClasses.OrderByDescending(u => u.ClassStartDate);
             #endregion
 
             #region Paginated
@@ -34,6 +35,11 @@ namespace EnglishCenterManagement.Repository
             #endregion
 
             return new PagedResponse(data, totalClasses, page, pageSize);
+        }
+
+        public ClassModel GetClassById(int id)
+        {
+            return _context.Classes.Where(c => c.Id == id).FirstOrDefault();
         }
 
         public PagedResponse GetAllRooms(string? search, RoomStatusType? roomStatus, int page, int pageSize)
@@ -89,5 +95,54 @@ namespace EnglishCenterManagement.Repository
 
             return new PagedResponse(data, totalSubjects, page, pageSize);
         }
+
+        public PagedResponse GetAllStudents(string? search, int page, int pageSize)
+        {
+            var allStudentIds = _context.Students.Select(x => x.Id).ToList();
+            var allStudents = _context.Users.Where(x => allStudentIds.Contains(x.Id)).AsQueryable();
+
+            #region Filtering
+            if (!String.IsNullOrEmpty(search))
+            {
+                allStudents = allStudents.Where(x => x.FirstName.Contains(search));
+            }
+            #endregion
+
+            #region Sorting
+            allStudents = allStudents.OrderByDescending(x => x.LastName);
+            #endregion
+
+            #region Paginated
+            var data = allStudents.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var totalStudents = allStudents.Count();
+            #endregion
+
+            return new PagedResponse(data, totalStudents, page, pageSize);
+        }
+
+        public PagedResponse GetAllTeachers(string? search, int page, int pageSize)
+        {
+            var allTeacherIds = _context.Teachers.Select(x => x.Id).ToList();
+            var allTeachers = _context.Users.Where(x => allTeacherIds.Contains(x.Id)).AsQueryable();
+
+            #region Filtering
+            if (!String.IsNullOrEmpty(search))
+            {
+                allTeachers = allTeachers.Where(x => x.FirstName.Contains(search));
+            }
+            #endregion
+
+            #region Sorting
+            allTeachers = allTeachers.OrderByDescending(x => x.LastName);
+            #endregion
+
+            #region Paginated
+            var data = allTeachers.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var totalStudents = allTeachers.Count();
+            #endregion
+
+            return new PagedResponse(data, totalStudents, page, pageSize);
+        }
+
     }
 }

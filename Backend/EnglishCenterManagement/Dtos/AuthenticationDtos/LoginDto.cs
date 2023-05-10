@@ -1,4 +1,4 @@
-﻿namespace EnglishCenterManagement.Dtos
+﻿namespace EnglishCenterManagement.Dtos.AuthenticationDtos
 {
     public class LoginDto
     {

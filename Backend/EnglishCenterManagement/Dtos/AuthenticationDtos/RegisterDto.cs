@@ -1,6 +1,6 @@
-﻿using EnglishCenterManagement.Entities.Enumerations;
+﻿using EnglishCenterManagement.Dtos.UserInfoDto;
 
-namespace EnglishCenterManagement.Dtos
+namespace EnglishCenterManagement.Dtos.AuthenticationDtos
 {
     public class RegisterDto : BasicUserInfoDto
     {

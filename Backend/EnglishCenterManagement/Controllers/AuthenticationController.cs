@@ -1,5 +1,4 @@
-﻿using EnglishCenterManagement.Dtos;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EnglishCenterManagement.Interfaces;
 using AutoMapper;
@@ -10,6 +9,7 @@ using EnglishCenterManagement.Common.Helpers;
 using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Entities.Enumerations;
+using EnglishCenterManagement.Dtos.AuthenticationDtos;
 
 namespace EnglishCenterManagement.Controllers
 {

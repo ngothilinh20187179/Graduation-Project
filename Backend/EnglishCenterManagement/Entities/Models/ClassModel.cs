@@ -7,7 +7,7 @@ namespace EnglishCenterManagement.Entities.Models
         public int Id { get; set; }
         public string ClassTitle { get; set; } = string.Empty;
 
-        //
+        // thiếu lịch học (thứ ?)
         public DateOnly ClassStartDate { get; set; }
         public DateOnly ClassEndDate { get; set; }
         public TimeOnly? PeriodStart { get; set; }
