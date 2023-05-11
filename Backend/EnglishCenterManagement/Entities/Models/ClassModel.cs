@@ -17,9 +17,14 @@ namespace EnglishCenterManagement.Entities.Models
         public int Number { get; set; }
         public string? Note { get; set; }
 
+
         // Relationship
+        public int SubjectId { get; set; }
         public SubjectModel Subject { get; set; }
+
+        public int RoomId { get; set; }
         public RoomModel? Room { get; set; }
+
         public ICollection<StudentClassModel>? StudentClasses { get; set; }
         public ICollection<TeacherClassModel>? TeacherClasses { get; set; }
     }

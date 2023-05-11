@@ -73,7 +73,7 @@ namespace EnglishCenterManagement.Migrations
                     b.Property<TimeSpan?>("PeriodStart")
                         .HasColumnType("time");
 
-                    b.Property<int?>("RoomId")
+                    b.Property<int>("RoomId")
                         .HasColumnType("int");
 
                     b.Property<int>("SubjectId")
@@ -322,7 +322,9 @@ namespace EnglishCenterManagement.Migrations
                 {
                     b.HasOne("EnglishCenterManagement.Entities.Models.RoomModel", "Room")
                         .WithMany("Classes")
-                        .HasForeignKey("RoomId");
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("EnglishCenterManagement.Entities.Models.SubjectModel", "Subject")
                         .WithMany("Classes")

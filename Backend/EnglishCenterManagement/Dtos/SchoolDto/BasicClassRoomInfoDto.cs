@@ -8,5 +8,8 @@
         public DateOnly ClassEndDate { get; set; }
         public TimeOnly? PeriodStart { get; set; }
         public TimeOnly? PeriodEnd { get; set; }
+        public double Credit { get; set; }
+        public int Number { get; set; }
+        public string? Note { get; set; }
     }
 }

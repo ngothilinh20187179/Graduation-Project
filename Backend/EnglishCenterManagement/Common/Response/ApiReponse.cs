@@ -46,6 +46,14 @@
             [624] = "The file is too large (>1MB)",
             [625] = "Avatar not exists",
             [626] = "Class not exists",
+            [627] = "Subject already exists",
+            [628] = "Suject status is invalid",
+            [629] = "Subject not exists",
+            [630] = "Subject has used by class",
+            [631] = "Room already exists",
+            [632] = "Room status is invalid",
+            [633] = "Room not exists",
+            [634] = "Room has used by class",
 
             [1000] = "You don't have permission to access"
         };

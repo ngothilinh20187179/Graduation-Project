@@ -7,7 +7,7 @@ namespace EnglishCenterManagement.Entities.Models
         public int Id { get; set; }
         public string SubjectName { get; set; } = string.Empty;
         public string SubjectDescription { get; set; } = string.Empty;
-        public SubjectStatusType SubjectStatus { get; set; }
+        public SubjectStatusType SubjectStatus { get; set; } = SubjectStatusType.Open;
         public string? Note { get; set; }
 
         // Relationship 1Subject - nClass

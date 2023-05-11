@@ -92,12 +92,15 @@ namespace EnglishCenterManagement.Data
             // 1-n Subject-Class
             modelBuilder.Entity<ClassModel>()
                 .HasOne(x => x.Subject)
-                .WithMany(x => x.Classes);
+                .WithMany(x => x.Classes)
+                .HasForeignKey(x => x.SubjectId)
+                .IsRequired();
 
             // 1-n Room-Class
             modelBuilder.Entity<ClassModel>()
                 .HasOne(x => x.Room)
-                .WithMany(x => x.Classes);
+                .WithMany(x => x.Classes)
+                .HasForeignKey(x => x.RoomId);
         }
     }
 }

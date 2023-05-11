@@ -28,27 +28,62 @@ namespace EnglishCenterManagement.Controllers
             _userRepository = userRepository;
         }
 
-        // GET: /myprofile
-        [HttpGet("myprofile")]
-        [Authorize]
-        public ActionResult<UserProfileHasAvatarDto> GetMyProfile()
+        // GET: /users
+        [HttpGet("users")]
+        [Authorize(Roles = nameof(RoleType.Admin))]
+        public ActionResult<PagedResponse> GetAllUsers(string? search, RoleType? role, int page = 1, int pageSize = 20)
         {
             var user = GetUserByClaim();
             if (user == null)
             {
                 return Unauthorized();
             }
-            var userProfileMap = _mapper.Map<UserProfileHasAvatarDto>(user);
+
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize > 20 ? 20 : pageSize;
+
+            var listUsers = _userRepository.GetAllUsers(search, role, page, pageSize);
+            var mappedListUsers = _mapper.Map<List<BasicUserInfoDto>>(listUsers.Data);
+            mappedListUsers.ForEach((item) =>
+            {
+                var avatar = _userRepository.GetUserAvatar(item.Id);
+                item.Avatar = _mapper.Map<AvatarDto>(avatar);
+            });
+            listUsers.Data = mappedListUsers;
+
+            return Ok(listUsers);
+        }
+
+        // GET: /user/5
+        // TODO: Check role user/5 (ví dụ là student thì sẽ hiển thị thông tin thêm về student)
+        [HttpGet("user/{id}")]
+        [Authorize(Roles = nameof(RoleType.Admin))]
+        public ActionResult<UserProfileDetailDto> GetUserProfile(int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            var getUserById = _userRepository.GetUserByUserId(id);
+            if (getUserById == null)
+            {
+                return NotFound(new ApiReponse(606));
+            }
+            var userProfileMap = _mapper.Map<UserProfileDetailDto>(getUserById);
+
+            var avatar = _userRepository.GetUserAvatar(id);
+            var mappedAvatar = _mapper.Map<AvatarDto>(avatar);
+
+            userProfileMap.Avatar = mappedAvatar;
 
             return Ok(new ApiReponse(userProfileMap));
         }
 
-        // PUT: /change-avatar
-        // TODO: limit formfile before call api
-        // Failed to read the request form. Request body too large. The max request body size is 30.000.000 bytes.
-        [HttpPut("change-avatar")]
-        [Authorize]
-        public ActionResult UpdateAvatar(IFormFile formFile)
+        // GET: /user-role/5
+        [HttpGet("user-role/{id}")]
+        [Authorize(Roles = nameof(RoleType.Admin))]
+        public ActionResult<RoleDto> GetUserRole(int id)
         {
             var user = GetUserByClaim();
             if (user == null)
@@ -56,50 +91,29 @@ namespace EnglishCenterManagement.Controllers
                 return Unauthorized();
             }
 
-            // Check size image > 1MB = 1024KB = 1048576 bytes ?
-            if (formFile.Length > 1048576)
+            if (user.Id == id)
             {
-                return BadRequest(new ApiReponse(624));
+                return Ok(new ApiReponse(new RoleDto
+                {
+                    Role = user.Role
+                }));
             }
 
-            // check extension is image extension ?
-            var extension = Path.GetExtension(formFile.FileName).ToLowerInvariant();
-            var mediaType = FormFileContants.Extension.GetValueOrDefault(extension);
-            if (mediaType == null)
+            var getUserById = _userRepository.GetUserByUserId(id);
+            if (getUserById == null)
             {
-                return BadRequest(new ApiReponse(623));
+                return NotFound(new ApiReponse(606));
             }
 
-            // image -> text
-            using var memoryStream = new MemoryStream();
-            formFile.CopyToAsync(memoryStream);
-            var data = memoryStream.ToArray();
+            var userRoleMap = _mapper.Map<RoleDto>(getUserById);
 
-            // exists => update
-            // not exists => post
-            var avatar = new AvatarModel
-            {
-                MediaType = mediaType,
-                Data = data,
-                Id = user.Id
-            };
-
-            bool uploadImage = _userRepository.CheckAvatarExists(user.Id) ? 
-                _userRepository.UpdateAvatar(avatar) : 
-                _userRepository.AddAvatar(avatar);
-
-            if (!uploadImage)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-
-            return NoContent();
+            return Ok(new ApiReponse(userRoleMap));
         }
 
-        // DELETE: /remove-myavatar
-        [HttpDelete("remove-myavatar")]
-        [Authorize]
-        public ActionResult DeleteAvatar()
+        // PUT: /control-access/5
+        [HttpPut("allow-access/{id}")]
+        [Authorize(Roles = nameof(RoleType.Admin))]
+        public ActionResult SetRoleForNewRegister(int id, [FromBody] RoleDto updateRole)
         {
             var user = GetUserByClaim();
             if (user == null)
@@ -107,24 +121,97 @@ namespace EnglishCenterManagement.Controllers
                 return Unauthorized();
             }
 
-            var avatar = _userRepository.GetUserAvatar(user.Id);
-            if (avatar == null)
+            if (user.Id == id)
             {
-                return BadRequest(new ApiReponse(625));
+                return BadRequest(new ApiReponse(621));
             }
 
-            if (!_userRepository.DeleteAvatar(avatar))
+            var getUserById = _userRepository.GetUserByUserId(id);
+            if (getUserById == null)
+            {
+                return NotFound(new ApiReponse(606));
+            }
+
+            // Change role -> anh huong toi cac bang student, teacher, staff,... ?
+            // => set role cho user register (co role = RestrictedRole)
+            if (getUserById.Role != RoleType.RestrictedRole)
+            {
+                return Conflict(new ApiReponse(622));
+            }
+
+            if (!Enum.IsDefined(typeof(RoleType), updateRole.Role))
+            {
+                return BadRequest(new ApiReponse(619));
+            }
+
+            // TODO: update role UserTable va add user vao bang tuong ung
+            var updatedUserRole = _mapper.Map(updateRole, getUserById);
+            if (!_userRepository.UpdateUserProfile(updatedUserRole))
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            return NoContent();
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        // DELETE: /delete-user/5
+        [HttpDelete("delete-user/{id}")]
+        [Authorize(Roles = nameof(RoleType.Admin))]
+        public ActionResult DeleteUser(int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            if (user.Id == id)
+            {
+                return BadRequest(new ApiReponse(620));
+            }
+
+            var deletedUser = _userRepository.GetUserByUserId(id);
+            if (deletedUser == null)
+            {
+                return NotFound(new ApiReponse(606));
+            }
+
+            // TODO: conditions
+            // TODO: xóa đc admin, staff; nếu user là (student, teacher) tham gia vao class nao do (=> Thay vi delete co the set status cho user do)
+            // TODO: check user exist, get role (vd role = student => check table StudentClass xem co studentId hay ko)
+
+            if (!_userRepository.DeleteUser(deletedUser))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        // GET: /myprofile
+        [HttpGet("myprofile")]
+        [Authorize]
+        public ActionResult<UserProfileDetailDto> GetMyProfile()
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            var userProfileMap = _mapper.Map<UserProfileDetailDto>(user);
+
+            var avatar = _userRepository.GetUserAvatar(user.Id);
+            var mappedAvatar = _mapper.Map<AvatarDto>(avatar);
+
+            userProfileMap.Avatar = mappedAvatar;
+
+            return Ok(new ApiReponse(userProfileMap));
         }
 
         // PUT: /change-information
         [HttpPut("change-information")]
         [Authorize]
-        public ActionResult ChangeInformation([FromBody] BasicUserInfoDto updatedProfile)
+        public ActionResult ChangeInformation([FromBody] UserInfoDto updatedProfile)
         {
             // Get User by Claims
             var user = GetUserByClaim();
@@ -223,11 +310,12 @@ namespace EnglishCenterManagement.Controllers
 
             return StatusCode(StatusCodes.Status204NoContent);
         }
-
-        // GET: /users
-        [HttpGet("users")]
-        [Authorize(Roles = nameof(RoleType.Admin))]
-        public ActionResult<PagedResponse> GetAllUsers(string? search, RoleType? role, int page = 1, int pageSize = 20)
+        
+        // PUT: /change-avatar
+        // The max request body size is 30.000.000 bytes.
+        [HttpPut("change-avatar")]
+        [Authorize]
+        public ActionResult UpdateAvatar(IFormFile formFile)
         {
             var user = GetUserByClaim();
             if (user == null)
@@ -235,85 +323,50 @@ namespace EnglishCenterManagement.Controllers
                 return Unauthorized();
             }
 
-            page = page < 1 ? 1 : page;
-            pageSize = pageSize > 20 ? 20 : pageSize;
-
-            var listUsers = _userRepository.GetAllUsers(search, role, page, pageSize);
-            var mappedListUsers = _mapper.Map<List<UserProfileHasAvatarDto>>(listUsers.Data);
-            listUsers.Data = mappedListUsers;
-
-            return Ok(listUsers);
-        }
-
-        // GET: /user/5
-        // TODO: Check role user/5 (ví dụ là student thì sẽ hiển thị thông tin thêm về student)
-        [HttpGet("user/{id}")]
-        [Authorize(Roles = nameof(RoleType.Admin))]
-        public ActionResult<UserProfileHasAvatarDto> GetUserProfile(int id)
-        {
-            var user = GetUserByClaim();
-            if (user == null)
+            // Check size image > 1MB = 1024KB = 1048576 bytes ?
+            if (formFile.Length > 1048576)
             {
-                return Unauthorized();
-            }
-            var getUserById = _userRepository.GetUserByUserId(id);
-            if (getUserById == null)
-            {
-                return NotFound(new ApiReponse(606));
-            }
-            var userProfileMap = _mapper.Map<UserProfileHasAvatarDto>(getUserById);
-
-            return Ok(new ApiReponse(userProfileMap));
-        }
-
-        // PUT: /control-access/5
-        [HttpPut("allow-access/{id}")]
-        [Authorize(Roles = nameof(RoleType.Admin))]
-        public ActionResult SetRoleForNewRegister(int id, [FromBody] RoleDto updateRole)
-        {
-            var user = GetUserByClaim();
-            if (user == null)
-            {
-                return Unauthorized();
+                return BadRequest(new ApiReponse(624));
             }
 
-            if (user.Id == id)
+            // check extension is image extension ?
+            var extension = Path.GetExtension(formFile.FileName).ToLowerInvariant();
+            var mediaType = FormFileContants.Extension.GetValueOrDefault(extension);
+            if (mediaType == null)
             {
-                return BadRequest(new ApiReponse(621));
+                return BadRequest(new ApiReponse(623));
             }
 
-            var getUserById = _userRepository.GetUserByUserId(id);
-            if (getUserById == null)
-            {
-                return NotFound(new ApiReponse(606));
-            }
+            // image -> text
+            using var memoryStream = new MemoryStream();
+            formFile.CopyToAsync(memoryStream);
+            var data = memoryStream.ToArray();
 
-            // Change role -> anh huong toi cac bang student, teacher, staff,... ?
-            // => set role cho user register (co role = RestrictedRole)
-            if (getUserById.Role != RoleType.RestrictedRole)
+            // exists => update
+            // not exists => post
+            var avatar = new AvatarModel
             {
-                return Conflict(new ApiReponse(622));
-            }
+                MediaType = mediaType,
+                Data = data,
+                Id = user.Id
+            };
 
-            if (!Enum.IsDefined(typeof(RoleType), updateRole.Role))
-            {
-                return BadRequest(new ApiReponse(619));
-            }
+            bool uploadImage = _userRepository.CheckAvatarExists(user.Id) ?
+                _userRepository.UpdateAvatar(avatar) :
+                _userRepository.AddAvatar(avatar);
 
-            // TODO: update role UserTable va add user vao bang tuong ung
-            var updatedUserRole = _mapper.Map(updateRole, getUserById);
-            if (!_userRepository.UpdateUserProfile(updatedUserRole))
+            if (!uploadImage)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            return StatusCode(StatusCodes.Status204NoContent);
+            return NoContent();
         }
 
-        // GET: /user-role/5
-        [HttpGet("user-role/{id}")]
-        [Authorize(Roles = nameof(RoleType.Admin))]
-        public ActionResult<RoleDto> GetUserRole(int id)
+        // DELETE: /remove-myavatar
+        [HttpDelete("remove-myavatar")]
+        [Authorize]
+        public ActionResult DeleteAvatar()
         {
             var user = GetUserByClaim();
             if (user == null)
@@ -321,57 +374,18 @@ namespace EnglishCenterManagement.Controllers
                 return Unauthorized();
             }
 
-            if (user.Id == id)
+            var avatar = _userRepository.GetUserAvatar(user.Id);
+            if (avatar == null)
             {
-                return Ok(new ApiReponse(new RoleDto
-                {
-                    Role = user.Role
-                }));
+                return BadRequest(new ApiReponse(625));
             }
 
-            var getUserById = _userRepository.GetUserByUserId(id);
-            if (getUserById == null)
-            {
-                return NotFound(new ApiReponse(606));
-            }
-
-            var userRoleMap = _mapper.Map<RoleDto>(getUserById);
-
-            return Ok(new ApiReponse(userRoleMap));
-        }
-
-        // DELETE: /delete-user/5
-        [HttpDelete("delete-user/{id}")]
-        [Authorize(Roles = nameof(RoleType.Admin))]
-        public ActionResult DeleteUser(int id)
-        {
-            var user = GetUserByClaim();
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-
-            if (user.Id == id)
-            {
-                return BadRequest(new ApiReponse(620));
-            }
-
-            var deletedUser = _userRepository.GetUserByUserId(id);
-            if (deletedUser == null)
-            {
-                return NotFound(new ApiReponse(606));
-            }
-
-            // TODO: conditions
-            // TODO: xóa đc admin, staff; nếu user là (student, teacher) tham gia vao class nao do (=> Thay vi delete co the set status cho user do)
-            // TODO: check user exist, get role (vd role = student => check table StudentClass xem co studentId hay ko)
-
-            if (!_userRepository.DeleteUser(deletedUser))
+            if (!_userRepository.DeleteAvatar(avatar))
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            return StatusCode(StatusCodes.Status204NoContent);
+            return NoContent();
         }
 
         private UserInfoModel? GetUserByClaim()

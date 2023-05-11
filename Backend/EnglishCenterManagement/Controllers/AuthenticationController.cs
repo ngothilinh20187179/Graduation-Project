@@ -41,7 +41,7 @@ namespace EnglishCenterManagement.Controllers
         {
             if (newUser == null)
             {
-                return BadRequest();
+                return BadRequest(new ApiReponse(600));
             }
 
             // check login name = pwd ?
@@ -90,6 +90,8 @@ namespace EnglishCenterManagement.Controllers
                     return Conflict(new ApiReponse(616));
                 }
             }
+
+            // TODO: check date of birth
 
             // add info to database
             newUser.Password = BCrypt.Net.BCrypt.HashPassword(newUser.Password);

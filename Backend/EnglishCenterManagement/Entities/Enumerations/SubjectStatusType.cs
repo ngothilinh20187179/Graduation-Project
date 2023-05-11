@@ -2,6 +2,6 @@
 {
     public enum SubjectStatusType
     {
-        Stop, Open
+        Close, Open
     }
 }

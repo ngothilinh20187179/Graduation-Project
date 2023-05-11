@@ -2,7 +2,7 @@
 
 namespace EnglishCenterManagement.Dtos.UserInfoDto
 {
-    public class UserProfileHasAvatarDto : BasicUserInfoDto
+    public class UserProfileDetailDto : UserInfoDto
     {
         public DateTime Created { get; set; }
         public RoleType Role { get; set; }

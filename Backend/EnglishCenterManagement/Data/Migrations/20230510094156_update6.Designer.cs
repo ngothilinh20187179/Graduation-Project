@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EnglishCenterManagement.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230426062208_update4")]
-    partial class update4
+    [Migration("20230510094156_update6")]
+    partial class update6
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,7 +76,7 @@ namespace EnglishCenterManagement.Migrations
                     b.Property<TimeSpan?>("PeriodStart")
                         .HasColumnType("time");
 
-                    b.Property<int?>("RoomId")
+                    b.Property<int>("RoomId")
                         .HasColumnType("int");
 
                     b.Property<int>("SubjectId")
@@ -325,7 +325,9 @@ namespace EnglishCenterManagement.Migrations
                 {
                     b.HasOne("EnglishCenterManagement.Entities.Models.RoomModel", "Room")
                         .WithMany("Classes")
-                        .HasForeignKey("RoomId");
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("EnglishCenterManagement.Entities.Models.SubjectModel", "Subject")
                         .WithMany("Classes")

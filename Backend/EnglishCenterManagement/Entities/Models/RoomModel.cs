@@ -7,7 +7,7 @@ namespace EnglishCenterManagement.Entities.Models
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public int? Size { get; set; }
-        public RoomStatusType RoomStatus { get; set; }
+        public RoomStatusType RoomStatus { get; set; } = RoomStatusType.CanUse;
         public string? Note { get; set; }
 
         // Relationship
