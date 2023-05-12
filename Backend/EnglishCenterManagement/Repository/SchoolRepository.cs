@@ -22,7 +22,7 @@ namespace EnglishCenterManagement.Repository
             #region Filtering
             if (!String.IsNullOrEmpty(search))
             {
-                allClasses = allClasses.Where(u => u.ClassTitle.Contains(search));
+                allClasses = allClasses.Where(u => u.ClassName.Contains(search));
             }
             #endregion
 
@@ -33,6 +33,28 @@ namespace EnglishCenterManagement.Repository
             #region Paginated
             var data = allClasses.Skip((page - 1) * pageSize).Take(pageSize).ToList();
             var totalClasses = allClasses.Count();
+            #endregion
+
+            return new PagedResponse(data, totalClasses, page, pageSize);
+        }
+        public PagedResponse GetAllClassesBySubject(string? search, int subjectId, int page, int pageSize)
+        {
+            var allClassesBySubjectId = _context.Classes.Where(x => x.SubjectId == subjectId).AsQueryable();
+
+            #region Filtering
+            if (!String.IsNullOrEmpty(search))
+            {
+                allClassesBySubjectId = allClassesBySubjectId.Where(u => u.ClassName.Contains(search));
+            }
+            #endregion
+
+            #region Sorting
+            allClassesBySubjectId = allClassesBySubjectId.OrderByDescending(u => u.ClassStartDate);
+            #endregion
+
+            #region Paginated
+            var data = allClassesBySubjectId.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var totalClasses = allClassesBySubjectId.Count();
             #endregion
 
             return new PagedResponse(data, totalClasses, page, pageSize);
@@ -72,6 +94,24 @@ namespace EnglishCenterManagement.Repository
         public RoomModel GetRoomById (int id)
         {
             return _context.Rooms.Where(x => x.Id == id).FirstOrDefault();
+        }
+        public bool CheckRoomExists(string name)
+        {
+            return _context.Rooms.Any(x => x.Name == name);
+        }
+        public bool CheckRoomExists(int id, string name)
+        {
+            return _context.Rooms.Any(x => x.Name == name && x.Id != id);
+        }
+        public bool CreateRoom(RoomModel room)
+        {
+            _context.Add(room);
+            return SaveChange();
+        }
+        public bool UpdateRoom(RoomModel room)
+        {
+            _context.Update(room);
+            return SaveChange();
         }
         public bool DeleteRoom(RoomModel room)
         {
@@ -113,6 +153,10 @@ namespace EnglishCenterManagement.Repository
         public bool CheckSubjectExists(string name)
         {
             return _context.Subjects.Any(x => x.SubjectName == name);
+        }
+        public bool CheckSubjectExists(int id, string name)
+        {
+            return _context.Subjects.Any(x => x.SubjectName == name && x.Id != id);
         }
         public bool CreateSubject(SubjectModel subject)
         {
@@ -221,9 +265,13 @@ namespace EnglishCenterManagement.Repository
         {
             return _context.Classes.Any(x => x.SubjectId == id);
         }
-        public bool CheckRoomExistsInClass(int id)
+        public bool IsUsedRoom(int id)
         {
-            return _context.Classes.Any(x => x.RoomId == id);
+            return _context.ClassSchedules.Any(x => x.RoomId == id);
+        }
+        public ICollection<ClassScheduleModel> GetAllSchedulesOfClass(int id)
+        {
+            return _context.ClassSchedules.Where(x => x.ClassId == id).ToList();
         }
         public bool SaveChange()
         {

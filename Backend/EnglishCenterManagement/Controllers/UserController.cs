@@ -40,7 +40,7 @@ namespace EnglishCenterManagement.Controllers
             }
 
             page = page < 1 ? 1 : page;
-            pageSize = pageSize > 20 ? 20 : pageSize;
+            pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
 
             var listUsers = _userRepository.GetAllUsers(search, role, page, pageSize);
             var mappedListUsers = _mapper.Map<List<BasicUserInfoDto>>(listUsers.Data);
@@ -55,7 +55,7 @@ namespace EnglishCenterManagement.Controllers
         }
 
         // GET: /user/5
-        // TODO: Check role user/5 (ví dụ là student thì sẽ hiển thị thông tin thêm về student)
+        // TODO: Check role user/5 (ví dụ là student thì sẽ hiển thị thông tin thêm về student...)
         [HttpGet("user/{id}")]
         [Authorize(Roles = nameof(RoleType.Admin))]
         public ActionResult<UserProfileDetailDto> GetUserProfile(int id)
@@ -111,6 +111,7 @@ namespace EnglishCenterManagement.Controllers
         }
 
         // PUT: /control-access/5
+        // TODO
         [HttpPut("allow-access/{id}")]
         [Authorize(Roles = nameof(RoleType.Admin))]
         public ActionResult SetRoleForNewRegister(int id, [FromBody] RoleDto updateRole)
@@ -155,6 +156,7 @@ namespace EnglishCenterManagement.Controllers
         }
 
         // DELETE: /delete-user/5
+        // TODO
         [HttpDelete("delete-user/{id}")]
         [Authorize(Roles = nameof(RoleType.Admin))]
         public ActionResult DeleteUser(int id)

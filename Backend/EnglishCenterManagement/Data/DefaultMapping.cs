@@ -10,27 +10,26 @@ namespace EnglishCenterManagement.Data
     {
         public DefaultMapping()
         {
-            CreateMap<RegisterDto, UserInfoModel>();
             CreateMap<RefreshTokenDto, RefreshTokenModel>();
             CreateMap<ChangePasswordDto, UserInfoModel>();
             CreateMap<AvatarModel, AvatarDto>();
 
+            CreateMap<RegisterDto, UserInfoModel>();
             CreateMap<UserInfoDto, UserInfoModel>();
             CreateMap<UserInfoModel, UserInfoDto>();
-
             CreateMap<RoleDto, UserInfoModel>();
             CreateMap<UserInfoModel, RoleDto>();
-
             CreateMap<UserInfoModel, BasicUserInfoDto>();
             CreateMap<UserInfoModel, UserProfileDetailDto>();
 
             CreateMap<RoomModel, RoomDto>();
-            CreateMap<CreateUpdateRoomDto, RoomDto>();
+            CreateMap<CreateUpdateRoomDto, RoomModel>();
             CreateMap<SubjectModel, SubjectDto>();
             CreateMap<CreateUpdateSubjectDto, SubjectModel>();
 
             CreateMap<ClassModel, BasicClassRoomInfoDto>();
             CreateMap<ClassModel, ClassRoomDetailDto>();
+            CreateMap<ClassScheduleModel, ClassScheduleDto>();
         }
     }
 }

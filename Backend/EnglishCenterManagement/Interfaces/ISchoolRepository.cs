@@ -8,12 +8,14 @@ namespace EnglishCenterManagement.Interfaces
     {
         // class
         PagedResponse GetAllClasses(string? search, int page, int pageSize);
+        PagedResponse GetAllClassesBySubject(string? search, int subjectId, int page, int pageSize);
         ClassModel GetClassById(int id);
 
         // subject
         PagedResponse GetAllSubjects(string? search, SubjectStatusType? subjectStatus, int page, int pageSize);
         SubjectModel GetSubjectById(int id);
         bool CheckSubjectExists(string name);
+        bool CheckSubjectExists(int id, string name);
         bool CreateSubject(SubjectModel subject);
         bool UpdateSubject(SubjectModel subject);
         bool DeleteSubject(SubjectModel subject);
@@ -21,6 +23,10 @@ namespace EnglishCenterManagement.Interfaces
         // room
         PagedResponse GetAllRooms(string? search, RoomStatusType? roomStatus, int page, int pageSize);
         RoomModel GetRoomById(int id);
+        bool CheckRoomExists(string name);
+        bool CheckRoomExists(int id, string name);
+        bool CreateRoom(RoomModel room);
+        bool UpdateRoom(RoomModel room);
         bool DeleteRoom(RoomModel room);
 
         // student
@@ -35,6 +41,7 @@ namespace EnglishCenterManagement.Interfaces
         bool CheckStudentClassExists(int classId, int studentId);
         bool CheckTeacherClassExists(int classId, int teacherId);
         bool CheckSubjectExistsInClass(int id);
-        bool CheckRoomExistsInClass(int id);
+        bool IsUsedRoom(int id);
+        ICollection<ClassScheduleModel> GetAllSchedulesOfClass(int id);
     }
 }

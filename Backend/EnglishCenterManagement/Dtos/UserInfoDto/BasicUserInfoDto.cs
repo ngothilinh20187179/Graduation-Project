@@ -10,7 +10,7 @@ namespace EnglishCenterManagement.Dtos.UserInfoDto
         public string PhoneNumber { get; set; } = string.Empty;
 
         public GenderType? Gender { get; set; }
-        public DateTime? DateOfBirth { get; set; }
+        public DateOnly? DateOfBirth { get; set; }
         public AvatarDto? Avatar { get; set; }
     }
 }

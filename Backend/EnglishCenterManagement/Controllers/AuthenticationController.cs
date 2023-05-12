@@ -35,6 +35,7 @@ namespace EnglishCenterManagement.Controllers
         }
 
         // POST: /register
+        // TODO: check date of birth > current
         [HttpPost("register")]
         [AllowAnonymous]
         public ActionResult Register([FromBody] RegisterDto newUser)
@@ -90,8 +91,6 @@ namespace EnglishCenterManagement.Controllers
                     return Conflict(new ApiReponse(616));
                 }
             }
-
-            // TODO: check date of birth
 
             // add info to database
             newUser.Password = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
@@ -237,5 +236,7 @@ namespace EnglishCenterManagement.Controllers
                 RefreshToken = newRefreshToken
             }));
         }
+
+        // TODO: POST: /logout
     }
 }

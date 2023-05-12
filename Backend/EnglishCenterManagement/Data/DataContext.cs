@@ -14,6 +14,7 @@ namespace EnglishCenterManagement.Data
 
         public DbSet<SubjectModel> Subjects { get; set; }
         public DbSet<ClassModel> Classes { get; set; }
+        public DbSet<ClassScheduleModel> ClassSchedules { get; set; }
         public DbSet<RoomModel> Rooms { get; set; }
         public DbSet<StaffModel> Staffs { get; set; }
         public DbSet<StudentModel> Students { get; set; }
@@ -88,19 +89,6 @@ namespace EnglishCenterManagement.Data
                     .HasOne(p => p.Class)
                     .WithMany(pc => pc.TeacherClasses)
                     .HasForeignKey(c => c.ClassId);
-
-            // 1-n Subject-Class
-            modelBuilder.Entity<ClassModel>()
-                .HasOne(x => x.Subject)
-                .WithMany(x => x.Classes)
-                .HasForeignKey(x => x.SubjectId)
-                .IsRequired();
-
-            // 1-n Room-Class
-            modelBuilder.Entity<ClassModel>()
-                .HasOne(x => x.Room)
-                .WithMany(x => x.Classes)
-                .HasForeignKey(x => x.RoomId);
         }
     }
 }

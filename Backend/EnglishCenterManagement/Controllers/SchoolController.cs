@@ -32,17 +32,10 @@ namespace EnglishCenterManagement.Controllers
 
         // GET: /subjects
         [HttpGet("subjects")]
-        [Authorize(Roles = "Admin, Staff")]
         public ActionResult<PagedResponse> GetAllSubjects(string? search, SubjectStatusType? subjectStatus, int page = 1, int pageSize = 20)
         {
-            var user = GetUserByClaim();
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-
             page = page < 1 ? 1 : page;
-            pageSize = pageSize > 20 ? 20 : pageSize;
+            pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
 
             var listSubjects = _schoolRepository.GetAllSubjects(search, subjectStatus, page, pageSize);
             var mappedListSubjects = _mapper.Map<List<SubjectDto>>(listSubjects.Data);
@@ -80,7 +73,6 @@ namespace EnglishCenterManagement.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-
             return StatusCode(StatusCodes.Status201Created);
         }
 
@@ -103,6 +95,11 @@ namespace EnglishCenterManagement.Controllers
                 return NotFound(new ApiReponse(629));
             }
 
+            if (_schoolRepository.CheckSubjectExists(id, updatedSubject.SubjectName))
+            {
+                return Conflict(new ApiReponse(627));
+            }
+
             if (!(Enum.IsDefined(typeof(SubjectStatusType), updatedSubject.SubjectStatus)))
             {
                 return BadRequest(new ApiReponse(628));
@@ -114,7 +111,7 @@ namespace EnglishCenterManagement.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            return StatusCode(StatusCodes.Status201Created);
+            return StatusCode(StatusCodes.Status204NoContent);
         }
 
         // DELETE: /remove-subject
@@ -160,7 +157,7 @@ namespace EnglishCenterManagement.Controllers
             }
 
             page = page < 1 ? 1 : page;
-            pageSize = pageSize > 20 ? 20 : pageSize;
+            pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
 
             var listRooms = _schoolRepository.GetAllRooms(search, roomStatus, page, pageSize);
             var mappedListRooms = _mapper.Map<List<RoomDto>>(listRooms.Data);
@@ -170,8 +167,67 @@ namespace EnglishCenterManagement.Controllers
         }
 
         // POST: /create-room
+        [HttpPost("create-room")]
+        [Authorize(Roles = "Admin, Staff")]
+        public ActionResult CreateRoom([FromBody]CreateUpdateRoomDto newRoom)
+        {
+            if (newRoom == null) return BadRequest(new ApiReponse(600));
+
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            if (_schoolRepository.CheckRoomExists(newRoom.Name))
+            {
+                return Conflict(new ApiReponse(631));
+            }
+
+            if (!(Enum.IsDefined(typeof(RoomStatusType), newRoom.RoomStatus)))
+            {
+                return BadRequest(new ApiReponse(632));
+            }
+
+            var mappedRoom = _mapper.Map<RoomModel>(newRoom);
+            if (!_schoolRepository.CreateRoom(mappedRoom))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            return StatusCode(StatusCodes.Status201Created);
+        }
 
         // PUT: /update-room
+        [HttpPut("update-room/{id}")]
+        [Authorize(Roles = "Admin, Staff")]
+        public ActionResult UpdateRoom(int id, [FromBody]CreateUpdateRoomDto updatedRoom)
+        {
+            if (updatedRoom == null) return BadRequest(new ApiReponse(600));
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            var getRoomById = _schoolRepository.GetRoomById(id);
+            if (getRoomById == null)
+            {
+                return NotFound(new ApiReponse(633));
+            }
+            if (_schoolRepository.CheckRoomExists(id, updatedRoom.Name))
+            {
+                return Conflict(new ApiReponse(631));
+            }
+            if (!(Enum.IsDefined(typeof(RoomStatusType), updatedRoom.RoomStatus)))
+            {
+                return BadRequest(new ApiReponse(632));
+            }
+            var mappedRoom = _mapper.Map(updatedRoom, getRoomById);
+            if (!_schoolRepository.UpdateRoom(mappedRoom))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
 
         // DELETE: /remove-room
         [HttpDelete("remove-room/{id}")]
@@ -190,8 +246,7 @@ namespace EnglishCenterManagement.Controllers
                 return NotFound(new ApiReponse(633));
             }
 
-            // Note: Chỉ xóa được khi Room chưa được reference tới bất kỳ Class nào
-            if (_schoolRepository.CheckRoomExistsInClass(id))
+            if (_schoolRepository.IsUsedRoom(id))
             {
                 return BadRequest(new ApiReponse(634));
             }
@@ -204,74 +259,12 @@ namespace EnglishCenterManagement.Controllers
             return NoContent();
         }
 
-        // GET: /students
-        // Note: Bên admin đã có API get all users by role nên admin ko cần get all teachers và get all students nữa
-        [HttpGet("students")]
-        [Authorize(Roles = nameof(RoleType.Staff))]
-        public ActionResult<PagedResponse> GetAllStudents(string? search, int page = 1, int pageSize = 20)
-        {
-            var user = GetUserByClaim();
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-
-            page = page < 1 ? 1 : page;
-            pageSize = pageSize > 20 ? 20 : pageSize;
-
-            var listStudents = _schoolRepository.GetAllStudents(search, page, pageSize);
-            var mappedListStudents = _mapper.Map<List<BasicUserInfoDto>>(listStudents.Data);
-            mappedListStudents.ForEach((item) =>
-            {
-                var avatar = _userRepository.GetUserAvatar(item.Id);
-                item.Avatar = _mapper.Map<AvatarDto>(avatar);
-            });
-            listStudents.Data = mappedListStudents;
-
-            return Ok(listStudents);
-        }
-
-        // GET: /teachers
-        [HttpGet("teachers")]
-        [Authorize(Roles = nameof(RoleType.Staff))]
-        public ActionResult<PagedResponse> GetAllTeachers(string? search, int page = 1, int pageSize = 20)
-        {
-            var user = GetUserByClaim();
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-
-            page = page < 1 ? 1 : page;
-            pageSize = pageSize > 20 ? 20 : pageSize;
-
-            var listTeachers = _schoolRepository.GetAllTeachers(search, page, pageSize);
-            var mappedListTeachers = _mapper.Map<List<BasicUserInfoDto>>(listTeachers.Data);
-            mappedListTeachers.ForEach((item) =>
-            {
-                var avatar = _userRepository.GetUserAvatar(item.Id);
-                item.Avatar = _mapper.Map<AvatarDto>(avatar);
-            });
-            listTeachers.Data = mappedListTeachers;
-
-            return Ok(listTeachers);
-        }
-
-
-        // TODO: sua lai DateTime ??? cua Class
         // GET: /classes
         [HttpGet("classes")]
-        [Authorize]
         public ActionResult<PagedResponse> GetAllClasses(string? search, int page = 1, int pageSize = 20)
         {
-            var user = GetUserByClaim();
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-
             page = page < 1 ? 1 : page;
-            pageSize = pageSize > 20 ? 20 : pageSize;
+            pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
 
             var listClasses = _schoolRepository.GetAllClasses(search, page, pageSize);
             var mappedListClasses = _mapper.Map<List<BasicClassRoomInfoDto>>(listClasses.Data);
@@ -304,10 +297,15 @@ namespace EnglishCenterManagement.Controllers
             var mappedSubject = _mapper.Map<SubjectDto>(getSubjectById);
             mappedClassDetailInfo.Subject = mappedSubject;
 
-            // Room of class
-            var getRoomById = _schoolRepository.GetRoomById(getClassById.RoomId);
-            var mappedRoomById = _mapper.Map<RoomDto>(getRoomById);
-            mappedClassDetailInfo.Room = mappedRoomById;
+            // Schedules
+            var getListSchedulesOfClass = _schoolRepository.GetAllSchedulesOfClass(id);
+            var mappedListSchedulesOfClass = _mapper.Map<List<ClassScheduleDto>>(getListSchedulesOfClass);
+            mappedListSchedulesOfClass.ForEach((item) =>
+            {
+                var room = _schoolRepository.GetRoomById(item.RoomId);
+                item.RoomName = room.Name;
+            });
+            mappedClassDetailInfo.ClassSchedules = mappedListSchedulesOfClass;
 
             // Teachers of class
             var getListTeachersInClass = _schoolRepository.GetAllTeachersInClass(id);
@@ -315,6 +313,52 @@ namespace EnglishCenterManagement.Controllers
             mappedClassDetailInfo.Teachers = mappedTeachersInClass;
 
             return Ok(new ApiReponse(mappedClassDetailInfo));
+        }
+
+        // GET: /subjects/5/classes
+        [HttpGet("subject/{subjectId}/classes")]
+        public ActionResult<PagedResponse> GetAllClassesBySubject(string? search, int subjectId, int page = 1, int pageSize = 20)
+        {
+            if (_schoolRepository.GetSubjectById(subjectId) == null)
+            {
+                return NotFound(new ApiReponse(629));
+            }
+
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
+
+            var listClassesBySubject = _schoolRepository.GetAllClassesBySubject(search, subjectId, page, pageSize);
+            var mappedListClasses = _mapper.Map<List<BasicClassRoomInfoDto>>(listClassesBySubject.Data);
+            listClassesBySubject.Data = mappedListClasses;
+
+            return Ok(listClassesBySubject);
+        }
+
+        // GET: /students
+        // Note: Bên admin đã có API get all users by role nên admin ko cần get all teachers và get all students nữa
+        [HttpGet("students")]
+        [Authorize(Roles = "Admin, Staff")]
+        public ActionResult<PagedResponse> GetAllStudents(string? search, int page = 1, int pageSize = 20)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
+
+            var listStudents = _schoolRepository.GetAllStudents(search, page, pageSize);
+            var mappedListStudents = _mapper.Map<List<BasicUserInfoDto>>(listStudents.Data);
+            mappedListStudents.ForEach((item) =>
+            {
+                var avatar = _userRepository.GetUserAvatar(item.Id);
+                item.Avatar = _mapper.Map<AvatarDto>(avatar);
+            });
+            listStudents.Data = mappedListStudents;
+
+            return Ok(listStudents);
         }
 
         // GET: /classes/5/students
@@ -335,8 +379,8 @@ namespace EnglishCenterManagement.Controllers
             }
 
             // Học sinh hoặc giáo viên ngoài lớp đó không xem được danh sách lớp
-            if (user.Role == RoleType.RestrictedRole || 
-                (user.Role == RoleType.Student && (!_schoolRepository.CheckStudentClassExists(id, user.Id))) || 
+            if (user.Role == RoleType.RestrictedRole ||
+                (user.Role == RoleType.Student && (!_schoolRepository.CheckStudentClassExists(id, user.Id))) ||
                 (user.Role == RoleType.Teacher && (!_schoolRepository.CheckTeacherClassExists(id, user.Id))))
             {
                 return Unauthorized(new ApiReponse(1000));
@@ -344,7 +388,7 @@ namespace EnglishCenterManagement.Controllers
 
             // Students of Class
             page = page < 1 ? 1 : page;
-            pageSize = pageSize > 20 ? 20 : pageSize;
+            pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
 
             var getListStudentsInClass = _schoolRepository.GetAllStudentsInClass(id, search, page, pageSize);
             var mappedStudentsInClass = _mapper.Map<List<BasicUserInfoDto>>(getListStudentsInClass.Data);
@@ -356,6 +400,32 @@ namespace EnglishCenterManagement.Controllers
             getListStudentsInClass.Data = mappedStudentsInClass;
 
             return Ok(new ApiReponse(getListStudentsInClass));
+        }
+        
+        // GET: /teachers
+        [HttpGet("teachers")]
+        [Authorize(Roles = "Admin, Staff")]
+        public ActionResult<PagedResponse> GetAllTeachers(string? search, int page = 1, int pageSize = 20)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
+
+            var listTeachers = _schoolRepository.GetAllTeachers(search, page, pageSize);
+            var mappedListTeachers = _mapper.Map<List<BasicUserInfoDto>>(listTeachers.Data);
+            mappedListTeachers.ForEach((item) =>
+            {
+                var avatar = _userRepository.GetUserAvatar(item.Id);
+                item.Avatar = _mapper.Map<AvatarDto>(avatar);
+            });
+            listTeachers.Data = mappedListTeachers;
+
+            return Ok(listTeachers);
         }
 
         private UserInfoModel? GetUserByClaim()

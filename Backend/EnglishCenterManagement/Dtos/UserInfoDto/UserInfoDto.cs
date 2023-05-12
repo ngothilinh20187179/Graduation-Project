@@ -13,6 +13,6 @@ namespace EnglishCenterManagement.Dtos.UserInfoDto
         public GenderType? Gender { get; set; }
         public string? Email { get; set; }
         public string? Location { get; set; }
-        public DateTime? DateOfBirth { get; set; }
+        public DateOnly? DateOfBirth { get; set; }
     }
 }

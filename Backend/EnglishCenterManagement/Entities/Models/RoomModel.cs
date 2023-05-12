@@ -11,6 +11,6 @@ namespace EnglishCenterManagement.Entities.Models
         public string? Note { get; set; }
 
         // Relationship
-        public ICollection<ClassModel>? Classes { get; set; }
+        public ICollection<ClassScheduleModel> ClassSchedules { get; set; }
     }
 }
