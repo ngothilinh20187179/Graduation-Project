@@ -1,5 +1,4 @@
-﻿using EnglishCenterManagement.Dtos;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EnglishCenterManagement.Interfaces;
 using AutoMapper;
@@ -10,6 +9,7 @@ using EnglishCenterManagement.Common.Helpers;
 using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Entities.Enumerations;
+using EnglishCenterManagement.Dtos.AuthenticationDtos;
 
 namespace EnglishCenterManagement.Controllers
 {
@@ -35,13 +35,14 @@ namespace EnglishCenterManagement.Controllers
         }
 
         // POST: /register
+        // TODO: check date of birth > current
         [HttpPost("register")]
         [AllowAnonymous]
         public ActionResult Register([FromBody] RegisterDto newUser)
         {
             if (newUser == null)
             {
-                return BadRequest();
+                return BadRequest(new ApiReponse(600));
             }
 
             // check login name = pwd ?
@@ -235,5 +236,7 @@ namespace EnglishCenterManagement.Controllers
                 RefreshToken = newRefreshToken
             }));
         }
+
+        // TODO: POST: /logout
     }
 }

@@ -15,7 +15,7 @@ namespace EnglishCenterManagement.Entities.Models
         public string? Email { get; set; }
         public GenderType? Gender { get; set; }
         public string? Location { get; set; }
-        public DateTime? DateOfBirth { get; set; }
+        public DateOnly? DateOfBirth { get; set; }
 
         public RoleType Role { get; set; } = RoleType.RestrictedRole;
         public DateTime Created { get; set; } = DateTime.Now;

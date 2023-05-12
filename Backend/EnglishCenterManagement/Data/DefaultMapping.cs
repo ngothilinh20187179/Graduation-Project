@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
-using EnglishCenterManagement.Dtos;
+using EnglishCenterManagement.Dtos.AuthenticationDtos;
+using EnglishCenterManagement.Dtos.SchoolDto;
+using EnglishCenterManagement.Dtos.UserInfoDto;
 using EnglishCenterManagement.Entities.Models;
 
 namespace EnglishCenterManagement.Data
@@ -8,15 +10,26 @@ namespace EnglishCenterManagement.Data
     {
         public DefaultMapping()
         {
-            CreateMap<RegisterDto, UserInfoModel>();
             CreateMap<RefreshTokenDto, RefreshTokenModel>();
             CreateMap<ChangePasswordDto, UserInfoModel>();
-            CreateMap<BasicUserInfoDto, UserInfoModel>();
-            CreateMap<UserInfoModel, BasicUserInfoDto>();
-            CreateMap<UserInfoModel, UserProfileDto>();
+            CreateMap<AvatarModel, AvatarDto>();
+
+            CreateMap<RegisterDto, UserInfoModel>();
+            CreateMap<UserInfoDto, UserInfoModel>();
+            CreateMap<UserInfoModel, UserInfoDto>();
             CreateMap<RoleDto, UserInfoModel>();
             CreateMap<UserInfoModel, RoleDto>();
-            CreateMap<UserInfoModel, UserProfileHasAvatarDto>();
+            CreateMap<UserInfoModel, BasicUserInfoDto>();
+            CreateMap<UserInfoModel, UserProfileDetailDto>();
+
+            CreateMap<RoomModel, RoomDto>();
+            CreateMap<CreateUpdateRoomDto, RoomModel>();
+            CreateMap<SubjectModel, SubjectDto>();
+            CreateMap<CreateUpdateSubjectDto, SubjectModel>();
+
+            CreateMap<ClassModel, BasicClassRoomInfoDto>();
+            CreateMap<ClassModel, ClassRoomDetailDto>();
+            CreateMap<ClassScheduleModel, ClassScheduleDto>();
         }
     }
 }

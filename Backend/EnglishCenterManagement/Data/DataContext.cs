@@ -1,6 +1,7 @@
 ﻿using EnglishCenterManagement.Common.Helpers;
 using EnglishCenterManagement.Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace EnglishCenterManagement.Data
 {
@@ -13,6 +14,7 @@ namespace EnglishCenterManagement.Data
 
         public DbSet<SubjectModel> Subjects { get; set; }
         public DbSet<ClassModel> Classes { get; set; }
+        public DbSet<ClassScheduleModel> ClassSchedules { get; set; }
         public DbSet<RoomModel> Rooms { get; set; }
         public DbSet<StaffModel> Staffs { get; set; }
         public DbSet<StudentModel> Students { get; set; }

@@ -87,7 +87,6 @@ namespace EnglishCenterManagement.Repository
         public PagedResponse GetAllUsers(string? search, RoleType? role, int page, int pageSize)
         {
             var allUsers = _context.Users.AsQueryable();
-            var totalUsers = _context.Users.Count();
 
             #region Filtering
             if (!String.IsNullOrEmpty(search))
@@ -106,6 +105,7 @@ namespace EnglishCenterManagement.Repository
 
             #region Paginated
             var data = allUsers.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var totalUsers = allUsers.Count();
             #endregion
 
             return new PagedResponse(data, totalUsers, page, pageSize);

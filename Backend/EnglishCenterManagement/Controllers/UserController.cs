@@ -2,13 +2,13 @@
 using EnglishCenterManagement.Common.Constants;
 using EnglishCenterManagement.Common.Helpers;
 using EnglishCenterManagement.Common.Messages;
-using EnglishCenterManagement.Dtos;
+using EnglishCenterManagement.Common.Response;
+using EnglishCenterManagement.Dtos.UserInfoDto;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Security.Claims;
 
 namespace EnglishCenterManagement.Controllers
@@ -28,96 +28,184 @@ namespace EnglishCenterManagement.Controllers
             _userRepository = userRepository;
         }
 
-        // DELETE: /remove-myavatar
-        [HttpDelete("remove-myavatar")]
-        [Authorize]
-        public ActionResult DeleteAvatar()
+        // GET: /users
+        [HttpGet("users")]
+        [Authorize(Roles = nameof(RoleType.Admin))]
+        public ActionResult<PagedResponse> GetAllUsers(string? search, RoleType? role, int page = 1, int pageSize = 20)
         {
             var user = GetUserByClaim();
             if (user == null)
             {
-                return BadRequest();
+                return Unauthorized();
             }
 
-            var avatar = _userRepository.GetUserAvatar(user.Id);
-            if (avatar == null)
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
+
+            var listUsers = _userRepository.GetAllUsers(search, role, page, pageSize);
+            var mappedListUsers = _mapper.Map<List<BasicUserInfoDto>>(listUsers.Data);
+            mappedListUsers.ForEach((item) =>
             {
-                return BadRequest(new ApiReponse(625));
-            }
+                var avatar = _userRepository.GetUserAvatar(item.Id);
+                item.Avatar = _mapper.Map<AvatarDto>(avatar);
+            });
+            listUsers.Data = mappedListUsers;
 
-            if (!_userRepository.DeleteAvatar(avatar))
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-
-            return NoContent();
+            return Ok(listUsers);
         }
 
-        // PUT: /change-avatar
-        // TODO: limit formfile 
-        // Hiện đang lôi nếu > 30.000.000 bytes (< 30.000.000 bytes và > 1.048.576 bytes mới trả về lỗi ở API)
-        // Failed to read the request form. Request body too large. The max request body size is 30.000.000 bytes.
-        [HttpPut("change-avatar")]
-        [Authorize]
-        public ActionResult UpdateAvatar(IFormFile formFile)
+        // GET: /user/5
+        // TODO: Check role user/5 (ví dụ là student thì sẽ hiển thị thông tin thêm về student...)
+        [HttpGet("user/{id}")]
+        [Authorize(Roles = nameof(RoleType.Admin))]
+        public ActionResult<UserProfileDetailDto> GetUserProfile(int id)
         {
             var user = GetUserByClaim();
             if (user == null)
             {
-                return BadRequest();
+                return Unauthorized();
+            }
+            var getUserById = _userRepository.GetUserByUserId(id);
+            if (getUserById == null)
+            {
+                return NotFound(new ApiReponse(606));
+            }
+            var userProfileMap = _mapper.Map<UserProfileDetailDto>(getUserById);
+
+            var avatar = _userRepository.GetUserAvatar(id);
+            var mappedAvatar = _mapper.Map<AvatarDto>(avatar);
+
+            userProfileMap.Avatar = mappedAvatar;
+
+            return Ok(new ApiReponse(userProfileMap));
+        }
+
+        // GET: /user-role/5
+        [HttpGet("user-role/{id}")]
+        [Authorize(Roles = nameof(RoleType.Admin))]
+        public ActionResult<RoleDto> GetUserRole(int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
             }
 
-            // Check size image > 1MB = 1024KB = 1048576 bytes ?
-            if (formFile.Length > 1048576)
+            if (user.Id == id)
             {
-                return BadRequest(new ApiReponse(624));
+                return Ok(new ApiReponse(new RoleDto
+                {
+                    Role = user.Role
+                }));
             }
 
-            // check extension is image extension ?
-            var extension = Path.GetExtension(formFile.FileName).ToLowerInvariant();
-            var mediaType = FormFileContants.Extension.GetValueOrDefault(extension);
-            if (mediaType == null)
+            var getUserById = _userRepository.GetUserByUserId(id);
+            if (getUserById == null)
             {
-                return BadRequest(new ApiReponse(623));
+                return NotFound(new ApiReponse(606));
             }
 
-            // image -> text
-            using var memoryStream = new MemoryStream();
-            formFile.CopyToAsync(memoryStream);
-            var data = memoryStream.ToArray();
+            var userRoleMap = _mapper.Map<RoleDto>(getUserById);
 
-            // exists => update
-            // not exists => post
-            var avatar = new AvatarModel
+            return Ok(new ApiReponse(userRoleMap));
+        }
+
+        // PUT: /control-access/5
+        // TODO
+        [HttpPut("allow-access/{id}")]
+        [Authorize(Roles = nameof(RoleType.Admin))]
+        public ActionResult SetRoleForNewRegister(int id, [FromBody] RoleDto updateRole)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
             {
-                MediaType = mediaType,
-                Data = data,
-                Id = user.Id
-            };
+                return Unauthorized();
+            }
 
-            bool uploadImage = _userRepository.CheckAvatarExists(user.Id) ? 
-                _userRepository.UpdateAvatar(avatar) : 
-                _userRepository.AddAvatar(avatar);
+            if (user.Id == id)
+            {
+                return BadRequest(new ApiReponse(621));
+            }
 
-            if (!uploadImage)
+            var getUserById = _userRepository.GetUserByUserId(id);
+            if (getUserById == null)
+            {
+                return NotFound(new ApiReponse(606));
+            }
+
+            // Change role -> anh huong toi cac bang student, teacher, staff,... ?
+            // => set role cho user register (co role = RestrictedRole)
+            if (getUserById.Role != RoleType.RestrictedRole)
+            {
+                return Conflict(new ApiReponse(622));
+            }
+
+            if (!Enum.IsDefined(typeof(RoleType), updateRole.Role))
+            {
+                return BadRequest(new ApiReponse(619));
+            }
+
+            // TODO: update role UserTable va add user vao bang tuong ung
+            var updatedUserRole = _mapper.Map(updateRole, getUserById);
+            if (!_userRepository.UpdateUserProfile(updatedUserRole))
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            return NoContent();
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        // DELETE: /delete-user/5
+        // TODO
+        [HttpDelete("delete-user/{id}")]
+        [Authorize(Roles = nameof(RoleType.Admin))]
+        public ActionResult DeleteUser(int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            if (user.Id == id)
+            {
+                return BadRequest(new ApiReponse(620));
+            }
+
+            var deletedUser = _userRepository.GetUserByUserId(id);
+            if (deletedUser == null)
+            {
+                return NotFound(new ApiReponse(606));
+            }
+
+            // TODO: conditions
+            // TODO: xóa đc admin, staff; nếu user là (student, teacher) tham gia vao class nao do (=> Thay vi delete co the set status cho user do)
+            // TODO: check user exist, get role (vd role = student => check table StudentClass xem co studentId hay ko)
+
+            if (!_userRepository.DeleteUser(deletedUser))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return StatusCode(StatusCodes.Status204NoContent);
         }
 
         // GET: /myprofile
         [HttpGet("myprofile")]
         [Authorize]
-        public ActionResult<UserProfileHasAvatarDto> GetMyProfile()
+        public ActionResult<UserProfileDetailDto> GetMyProfile()
         {
             var user = GetUserByClaim();
             if (user == null)
             {
-                return BadRequest();
+                return Unauthorized();
             }
-            var userProfileMap = _mapper.Map<UserProfileHasAvatarDto>(user);
+            var userProfileMap = _mapper.Map<UserProfileDetailDto>(user);
+
+            var avatar = _userRepository.GetUserAvatar(user.Id);
+            var mappedAvatar = _mapper.Map<AvatarDto>(avatar);
+
+            userProfileMap.Avatar = mappedAvatar;
 
             return Ok(new ApiReponse(userProfileMap));
         }
@@ -125,13 +213,13 @@ namespace EnglishCenterManagement.Controllers
         // PUT: /change-information
         [HttpPut("change-information")]
         [Authorize]
-        public ActionResult ChangeInformation([FromBody] BasicUserInfoDto updatedProfile)
+        public ActionResult ChangeInformation([FromBody] UserInfoDto updatedProfile)
         {
             // Get User by Claims
             var user = GetUserByClaim();
             if (user == null)
             {
-                return BadRequest();
+                return Unauthorized();
             }
 
             // 
@@ -185,7 +273,7 @@ namespace EnglishCenterManagement.Controllers
             var user = GetUserByClaim();
             if (user == null)
             {
-                return BadRequest();
+                return Unauthorized();
             }
             //
             if (passwordDto == null)
@@ -223,6 +311,83 @@ namespace EnglishCenterManagement.Controllers
             }
 
             return StatusCode(StatusCodes.Status204NoContent);
+        }
+        
+        // PUT: /change-avatar
+        // The max request body size is 30.000.000 bytes.
+        [HttpPut("change-avatar")]
+        [Authorize]
+        public ActionResult UpdateAvatar(IFormFile formFile)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            // Check size image > 1MB = 1024KB = 1048576 bytes ?
+            if (formFile.Length > 1048576)
+            {
+                return BadRequest(new ApiReponse(624));
+            }
+
+            // check extension is image extension ?
+            var extension = Path.GetExtension(formFile.FileName).ToLowerInvariant();
+            var mediaType = FormFileContants.Extension.GetValueOrDefault(extension);
+            if (mediaType == null)
+            {
+                return BadRequest(new ApiReponse(623));
+            }
+
+            // image -> text
+            using var memoryStream = new MemoryStream();
+            formFile.CopyToAsync(memoryStream);
+            var data = memoryStream.ToArray();
+
+            // exists => update
+            // not exists => post
+            var avatar = new AvatarModel
+            {
+                MediaType = mediaType,
+                Data = data,
+                Id = user.Id
+            };
+
+            bool uploadImage = _userRepository.CheckAvatarExists(user.Id) ?
+                _userRepository.UpdateAvatar(avatar) :
+                _userRepository.AddAvatar(avatar);
+
+            if (!uploadImage)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return NoContent();
+        }
+
+        // DELETE: /remove-myavatar
+        [HttpDelete("remove-myavatar")]
+        [Authorize]
+        public ActionResult DeleteAvatar()
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var avatar = _userRepository.GetUserAvatar(user.Id);
+            if (avatar == null)
+            {
+                return BadRequest(new ApiReponse(625));
+            }
+
+            if (!_userRepository.DeleteAvatar(avatar))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return NoContent();
         }
 
         private UserInfoModel? GetUserByClaim()
