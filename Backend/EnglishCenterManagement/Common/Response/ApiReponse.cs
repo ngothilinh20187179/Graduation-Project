@@ -22,7 +22,7 @@
             [600] = "Client request is invalid",
             [601] = "Access token is invalid",
             [602] = "Access token has not yet expired",
-            [603] = "",
+            [603] = "Token not exists",
             [604] = "Refresh token is invalid",
             [605] = "Refresh token expired",
             [606] = "User not exist",
@@ -54,7 +54,12 @@
             [632] = "Room status is invalid",
             [633] = "Room not exists",
             [634] = "Room has used by class",
+            [635] = "Student not exists",
+            [636] = "Teacher not exists",
+            [637] = "Date of birth is invalid",
+            [638] = "Staff not exists",
 
+            [999] = "Your account has been locked",
             [1000] = "You don't have permission to access"
         };
     }

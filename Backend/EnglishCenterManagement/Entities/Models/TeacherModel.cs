@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public string GraduateAt { get; set; } = string.Empty;
-        public DateTime GraduationTime { get; set; }
+        public DateOnly GraduationTime { get; set; }
         public string? Note { get; set; }
 
         // Relationship

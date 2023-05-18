@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EnglishCenterManagement.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230510094156_update6")]
-    partial class update6
+    [Migration("20230517062256_update8")]
+    partial class update8
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,15 +51,15 @@ namespace EnglishCenterManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("ClassEndDate")
+                    b.Property<DateTime?>("ClassEndDate")
                         .HasColumnType("date");
+
+                    b.Property<string>("ClassName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ClassStartDate")
                         .HasColumnType("date");
-
-                    b.Property<string>("ClassTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Credit")
                         .HasColumnType("float");
@@ -67,16 +67,10 @@ namespace EnglishCenterManagement.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Number")
+                    b.Property<int>("NumberOfSessions")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan?>("PeriodEnd")
-                        .HasColumnType("time");
-
-                    b.Property<TimeSpan?>("PeriodStart")
-                        .HasColumnType("time");
-
-                    b.Property<int>("RoomId")
+                    b.Property<int>("NumberOfStudents")
                         .HasColumnType("int");
 
                     b.Property<int>("SubjectId")
@@ -84,11 +78,41 @@ namespace EnglishCenterManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoomId");
-
                     b.HasIndex("SubjectId");
 
                     b.ToTable("Classes");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.ClassScheduleModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClassId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("PeriodEnd")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan>("PeriodStart")
+                        .HasColumnType("time");
+
+                    b.Property<int>("RoomId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClassId");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("ClassSchedules");
                 });
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.RefreshTokenModel", b =>
@@ -147,7 +171,7 @@ namespace EnglishCenterManagement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("GraduationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
@@ -249,7 +273,7 @@ namespace EnglishCenterManagement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("GraduationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
@@ -271,7 +295,7 @@ namespace EnglishCenterManagement.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -323,21 +347,32 @@ namespace EnglishCenterManagement.Migrations
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.ClassModel", b =>
                 {
-                    b.HasOne("EnglishCenterManagement.Entities.Models.RoomModel", "Room")
-                        .WithMany("Classes")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("EnglishCenterManagement.Entities.Models.SubjectModel", "Subject")
                         .WithMany("Classes")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Room");
-
                     b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.ClassScheduleModel", b =>
+                {
+                    b.HasOne("EnglishCenterManagement.Entities.Models.ClassModel", "Class")
+                        .WithMany("ClassSchedules")
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EnglishCenterManagement.Entities.Models.RoomModel", "Room")
+                        .WithMany("ClassSchedules")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Class");
+
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.RefreshTokenModel", b =>
@@ -424,6 +459,8 @@ namespace EnglishCenterManagement.Migrations
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.ClassModel", b =>
                 {
+                    b.Navigation("ClassSchedules");
+
                     b.Navigation("StudentClasses");
 
                     b.Navigation("TeacherClasses");
@@ -431,7 +468,7 @@ namespace EnglishCenterManagement.Migrations
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.RoomModel", b =>
                 {
-                    b.Navigation("Classes");
+                    b.Navigation("ClassSchedules");
                 });
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StudentModel", b =>

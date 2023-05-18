@@ -168,7 +168,7 @@ namespace EnglishCenterManagement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("GraduationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
@@ -270,7 +270,7 @@ namespace EnglishCenterManagement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("GraduationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
@@ -292,7 +292,7 @@ namespace EnglishCenterManagement.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -324,6 +324,9 @@ namespace EnglishCenterManagement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserStatus")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

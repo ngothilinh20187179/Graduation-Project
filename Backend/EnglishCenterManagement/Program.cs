@@ -23,6 +23,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
 builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
+builder.Services.AddScoped<IStaffRepository, StaffRepository>();
 
 // . Add authorization each api
 builder.Services.AddSwaggerGen(c =>

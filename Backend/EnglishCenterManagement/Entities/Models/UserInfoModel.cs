@@ -19,6 +19,7 @@ namespace EnglishCenterManagement.Entities.Models
 
         public RoleType Role { get; set; } = RoleType.RestrictedRole;
         public DateTime Created { get; set; } = DateTime.Now;
+        public UserStatus UserStatus { get; set; } = UserStatus.UnLock;
 
         // Relationship
         public AvatarModel? Avatar { get; set; }

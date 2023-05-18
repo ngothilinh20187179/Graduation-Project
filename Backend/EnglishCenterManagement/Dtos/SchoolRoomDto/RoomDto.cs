@@ -1,6 +1,6 @@
 ﻿using EnglishCenterManagement.Entities.Enumerations;
 
-namespace EnglishCenterManagement.Dtos.SchoolDto
+namespace EnglishCenterManagement.Dtos.SchoolRoomDto
 {
     public class RoomDto
     {
