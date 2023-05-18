@@ -10,6 +10,7 @@ using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Dtos.AuthenticationDtos;
+using System;
 
 namespace EnglishCenterManagement.Controllers
 {
@@ -34,8 +35,8 @@ namespace EnglishCenterManagement.Controllers
             _dataContext = dataContext;
         }
 
-        // POST: /register
-        // TODO: check date of birth > current
+        // POST: /register => role = 0 (chỉ phục vụ thu thập ttin)
+        // TODO: check birthday
         [HttpPost("register")]
         [AllowAnonymous]
         public ActionResult Register([FromBody] RegisterDto newUser)
@@ -92,6 +93,14 @@ namespace EnglishCenterManagement.Controllers
                 }
             }
 
+            //if (newUser.DateOfBirth != null)
+            //{
+            //    if ((DateTime.Now.Date).CompareTo(newUser.DateOfBirth) < 0)
+            //    {
+            //        return BadRequest(new ApiReponse(637));
+            //    }
+            //}
+
             // add info to database
             newUser.Password = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
             var userProfile = _mapper.Map<UserInfoModel>(newUser);
@@ -118,6 +127,12 @@ namespace EnglishCenterManagement.Controllers
             if (user == null)
             {
                 return NotFound(new ApiReponse(606));
+            }
+
+            // check status user
+            if (user.UserStatus == UserStatus.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
             }
 
             // check pwd 
@@ -191,6 +206,12 @@ namespace EnglishCenterManagement.Controllers
                 return BadRequest(new ApiReponse(601));
             }
 
+            // check status user
+            if (user.UserStatus == UserStatus.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
             // Check AccessToken expire, neu chua het han thi ko cho refresh
             var expClaim = principal.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value;
             if (expClaim == null)
@@ -237,6 +258,49 @@ namespace EnglishCenterManagement.Controllers
             }));
         }
 
-        // TODO: POST: /logout
+        // POST: /logout
+        [HttpPost("logout")]
+        [Authorize]
+        public ActionResult Logout()
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            // mới xóa refresh token còn vđ về access token
+
+            // Khi login sẽ cấp bộ access token và refresh token
+            // - access hết hạn sẽ gọi refesh, BE đối chiếu mã refresh trùng nhau thì cấp bộ access refresh token mới
+            // - nếu refresh token cx hết hạn thì phải đăng nhập lại 
+
+            // Khi logout thì bản chất là xóa refresh token của người dùng đó đi chứ ko thể revoke đc access token nên nếu:
+            // - logout trước khi access token hết hạn, bên client chỉ xóa bộ access vs refresh khỏi store bản chất chúng vẫn tồn tại và còn hạn nên
+            // vẫn có thể dùng access token đó để gọi API nếu lưu chúng chỗ khác -> lý do access token chỉ có thời gian ngắn
+            // (Bản chất của token là mã hóa thông tin, khi có request thì server sẽ giải mã nó nên ko revoke đc)
+            // -> chỉ tới khi access token hết hạn, client lấy mã refresh token để request thì mới ko đc
+
+            var token = _authenRepository.GetTokenById(user.Id);
+            if (token  == null)
+            {
+                return NotFound(new ApiReponse(603));
+            }
+
+            _authenRepository.DeleteCurrentToken(token);
+
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
+        private UserInfoModel? GetUserByClaim()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userId = identity?.Claims.FirstOrDefault(x => x.Type == "UserId")?.Value;
+            if (userId != null)
+            {
+                return _userRepository.GetUserByUserId(int.Parse(userId));
+            }
+            return null;
+        }
     }
 }

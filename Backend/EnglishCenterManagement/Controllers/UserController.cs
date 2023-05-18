@@ -38,7 +38,10 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-
+            if (user.UserStatus == UserStatus.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
             page = page < 1 ? 1 : page;
             pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
 
@@ -55,7 +58,6 @@ namespace EnglishCenterManagement.Controllers
         }
 
         // GET: /user/5
-        // TODO: Check role user/5 (ví dụ là student thì sẽ hiển thị thông tin thêm về student...)
         [HttpGet("user/{id}")]
         [Authorize(Roles = nameof(RoleType.Admin))]
         public ActionResult<UserProfileDetailDto> GetUserProfile(int id)
@@ -64,6 +66,10 @@ namespace EnglishCenterManagement.Controllers
             if (user == null)
             {
                 return Unauthorized();
+            }
+            if (user.UserStatus == UserStatus.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
             }
             var getUserById = _userRepository.GetUserByUserId(id);
             if (getUserById == null)
@@ -90,7 +96,10 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-
+            if (user.UserStatus == UserStatus.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
             if (user.Id == id)
             {
                 return Ok(new ApiReponse(new RoleDto
@@ -111,49 +120,56 @@ namespace EnglishCenterManagement.Controllers
         }
 
         // PUT: /control-access/5
-        // TODO
-        [HttpPut("allow-access/{id}")]
-        [Authorize(Roles = nameof(RoleType.Admin))]
-        public ActionResult SetRoleForNewRegister(int id, [FromBody] RoleDto updateRole)
-        {
-            var user = GetUserByClaim();
-            if (user == null)
-            {
-                return Unauthorized();
-            }
+        // TODO: solve problem => bỏ API control access (set role)
+        //[HttpPut("allow-access/{id}")]
+        //[Authorize(Roles = nameof(RoleType.Admin))]
+        //public ActionResult SetRoleForNewRegister(int id, [FromBody] RoleDto updateRole)
+        //{
+        //    var user = GetUserByClaim();
+        //    if (user == null)
+        //    {
+        //        return Unauthorized();
+        //    }
 
-            if (user.Id == id)
-            {
-                return BadRequest(new ApiReponse(621));
-            }
 
-            var getUserById = _userRepository.GetUserByUserId(id);
-            if (getUserById == null)
-            {
-                return NotFound(new ApiReponse(606));
-            }
+        //    if (user.Id == id)
+        //    {
+        //        return BadRequest(new ApiReponse(621));
+        //    }
 
-            // Change role -> anh huong toi cac bang student, teacher, staff,... ?
-            // => set role cho user register (co role = RestrictedRole)
-            if (getUserById.Role != RoleType.RestrictedRole)
-            {
-                return Conflict(new ApiReponse(622));
-            }
+        //    var getUserById = _userRepository.GetUserByUserId(id);
+        //    if (getUserById == null)
+        //    {
+        //        return NotFound(new ApiReponse(606));
+        //    }
 
-            if (!Enum.IsDefined(typeof(RoleType), updateRole.Role))
-            {
-                return BadRequest(new ApiReponse(619));
-            }
+        //    // Change role -> anh huong toi cac bang student, teacher, staff,... ?
+        //    // => set role cho user register (co role = RestrictedRole)
+        //    if (getUserById.Role != RoleType.RestrictedRole)
+        //    {
+        //        return Conflict(new ApiReponse(622));
+        //    }
 
-            // TODO: update role UserTable va add user vao bang tuong ung
-            var updatedUserRole = _mapper.Map(updateRole, getUserById);
-            if (!_userRepository.UpdateUserProfile(updatedUserRole))
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+        //    if (!Enum.IsDefined(typeof(RoleType), updateRole.Role))
+        //    {
+        //        return BadRequest(new ApiReponse(619));
+        //    }
 
-            return StatusCode(StatusCodes.Status204NoContent);
-        }
+        //    // TODO: update role UserTable va add user vao bang tuong ung
+        //    // Vấn đề: mỗi role có info riêng require
+        //    var updatedUserRole = _mapper.Map(updateRole, getUserById);
+        //    if (!_userRepository.UpdateUserProfile(updatedUserRole))
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError);
+        //    }
+
+        //    return StatusCode(StatusCodes.Status204NoContent);
+        //}
+
+        // TODO: PUT: /restricted-user/{id}
+        // Khóa/mở khóa tài khoản user
+        // Vấn đề khi khóa tk: access token vẫn còn hạn                                                                                             
+        [HttpPut("restricted-user/{id}")]
 
         // DELETE: /delete-user/5
         // TODO
@@ -166,7 +182,10 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-
+            if (user.UserStatus == UserStatus.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
             if (user.Id == id)
             {
                 return BadRequest(new ApiReponse(620));
@@ -200,6 +219,10 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
+            if (user.UserStatus == UserStatus.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
             var userProfileMap = _mapper.Map<UserProfileDetailDto>(user);
 
             var avatar = _userRepository.GetUserAvatar(user.Id);
@@ -221,7 +244,10 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-
+            if (user.UserStatus == UserStatus.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
             // 
             if (updatedProfile == null)
             {
@@ -275,7 +301,10 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            //
+            if (user.UserStatus == UserStatus.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
             if (passwordDto == null)
             {
                 return BadRequest();
@@ -324,7 +353,10 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-
+            if (user.UserStatus == UserStatus.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
             // Check size image > 1MB = 1024KB = 1048576 bytes ?
             if (formFile.Length > 1048576)
             {
@@ -375,7 +407,10 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-
+            if (user.UserStatus == UserStatus.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
             var avatar = _userRepository.GetUserAvatar(user.Id);
             if (avatar == null)
             {

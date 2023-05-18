@@ -1,7 +1,7 @@
-﻿using EnglishCenterManagement.Dtos.UserInfoDto;
-using EnglishCenterManagement.Entities.Models;
+﻿using EnglishCenterManagement.Dtos.SchoolRoomDto;
+using EnglishCenterManagement.Dtos.UserInfoDto;
 
-namespace EnglishCenterManagement.Dtos.SchoolDto
+namespace EnglishCenterManagement.Dtos.ClassRoomDto
 {
     public class ClassRoomDetailDto : BasicClassRoomInfoDto
     {

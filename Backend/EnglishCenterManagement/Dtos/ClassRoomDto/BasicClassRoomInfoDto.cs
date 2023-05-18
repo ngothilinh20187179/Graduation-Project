@@ -1,4 +1,4 @@
-﻿namespace EnglishCenterManagement.Dtos.SchoolDto
+﻿namespace EnglishCenterManagement.Dtos.ClassRoomDto
 {
     public class BasicClassRoomInfoDto
     {

@@ -63,6 +63,52 @@ namespace EnglishCenterManagement.Repository
         {
             return _context.Classes.Where(c => c.Id == id).FirstOrDefault();
         }
+        public PagedResponse GetAllClassesOfStudent(string? search, int id, int page, int pageSize)
+        {
+            var classIds = _context.StudentClasses.Where(x => x.StudentId == id).Select(x => x.ClassId).ToList();
+            var allClasses = _context.Classes.Where(x => classIds.Contains(x.Id)).AsQueryable();
+
+            #region Filtering
+            if (!String.IsNullOrEmpty(search))
+            {
+                allClasses = allClasses.Where(x => x.ClassName.Contains(search));
+            }
+            #endregion
+
+            #region Sorting
+            allClasses = allClasses.OrderByDescending(x => x.ClassStartDate);
+            #endregion
+
+            #region Paginated
+            var data = allClasses.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var totalClasses = allClasses.Count();
+            #endregion
+
+            return new PagedResponse(data, totalClasses, page, pageSize);
+        }
+        public PagedResponse GetAllClassesOfTeacher(string? search, int id, int page, int pageSize)
+        {
+            var classIds = _context.TeacherClasses.Where(x => x.TeacherId == id).Select(x => x.ClassId).ToList();
+            var allClasses = _context.Classes.Where(x => classIds.Contains(x.Id)).AsQueryable();
+
+            #region Filtering
+            if (!String.IsNullOrEmpty(search))
+            {
+                allClasses = allClasses.Where(x => x.ClassName.Contains(search));
+            }
+            #endregion
+
+            #region Sorting
+            allClasses = allClasses.OrderByDescending(x => x.ClassStartDate);
+            #endregion
+
+            #region Paginated
+            var data = allClasses.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var totalClasses = allClasses.Count();
+            #endregion
+
+            return new PagedResponse(data, totalClasses, page, pageSize);
+        }
 
         // room
         public PagedResponse GetAllRooms(string? search, RoomStatusType? roomStatus, int page, int pageSize)
@@ -175,6 +221,10 @@ namespace EnglishCenterManagement.Repository
         }
 
         // student
+        public StudentModel GetStudentById(int id)
+        {
+            return _context.Students.Where(x => x.Id == id).FirstOrDefault();
+        }
         public PagedResponse GetAllStudents(string? search, int page, int pageSize)
         {
             var allStudentIds = _context.Students.Select(x => x.Id).ToList();
@@ -221,7 +271,12 @@ namespace EnglishCenterManagement.Repository
 
             return new PagedResponse(data, totalStudents, page, pageSize);
         }
-        
+        public bool CreateStudentProfile(StudentModel student)
+        {
+            _context.Students.Add(student);
+            return SaveChange();
+        }
+
         // teacher
         public ICollection<UserInfoModel> GetAllTeachersInClass(int id)
         {
@@ -251,6 +306,15 @@ namespace EnglishCenterManagement.Repository
 
             return new PagedResponse(data, totalStudents, page, pageSize);
         }
+        public TeacherModel GetTeacherById(int id)
+        {
+            return _context.Teachers.Where(x => x.Id == id).FirstOrDefault();
+        }
+        public bool CreateTeacherProfile(TeacherModel teacher)
+        {
+            _context.Teachers.Add(teacher);
+            return SaveChange();
+        }
 
         // class - reference
         public bool CheckTeacherClassExists(int classId, int teacherId)
@@ -265,6 +329,11 @@ namespace EnglishCenterManagement.Repository
         {
             return _context.Classes.Any(x => x.SubjectId == id);
         }
+        public bool CheckTeacherStudentInSameClass (int teacherId, int studentId)
+        {
+            var teacherClassIds = _context.TeacherClasses.Where(x => x.TeacherId == teacherId).Select(x => x.ClassId).ToList();
+            return _context.StudentClasses.Any(x => teacherClassIds.Contains(x.ClassId) && x.StudentId == studentId);
+        }
         public bool IsUsedRoom(int id)
         {
             return _context.ClassSchedules.Any(x => x.RoomId == id);
@@ -273,6 +342,7 @@ namespace EnglishCenterManagement.Repository
         {
             return _context.ClassSchedules.Where(x => x.ClassId == id).ToList();
         }
+
         public bool SaveChange()
         {
             return _context.SaveChanges() > 0;
