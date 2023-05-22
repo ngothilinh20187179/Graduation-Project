@@ -20,16 +20,22 @@ namespace EnglishCenterManagement.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
-        private readonly ISchoolRepository _schoolRepository;
+        private readonly IClassRoomRepository _classRoomRepository;
+        private readonly ISubjectRoomRepository _subjectRoomRepository;
+        private readonly ITeacherStudentRepository _teacherStudentRepository;
         public ClassRoomController(
             IMapper mapper,
-            ISchoolRepository schoolRepository,
-            IUserRepository userRepository
+            IClassRoomRepository classRoomRepository,
+            ISubjectRoomRepository subjectRoomRepository,
+            IUserRepository userRepository,
+            ITeacherStudentRepository teacherStudentRepository
             )
         {
             _mapper = mapper;
             _userRepository = userRepository;
-            _schoolRepository = schoolRepository;
+            _classRoomRepository = classRoomRepository;
+            _subjectRoomRepository = subjectRoomRepository;
+            _teacherStudentRepository = teacherStudentRepository;
         }
 
         #region CLASS
@@ -40,7 +46,7 @@ namespace EnglishCenterManagement.Controllers
             page = page < 1 ? 1 : page;
             pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
 
-            var listClasses = _schoolRepository.GetAllClasses(search, page, pageSize);
+            var listClasses = _classRoomRepository.GetAllClasses(search, page, pageSize);
             var mappedListClasses = _mapper.Map<List<BasicClassRoomInfoDto>>(listClasses.Data);
             listClasses.Data = mappedListClasses;
 
@@ -51,7 +57,7 @@ namespace EnglishCenterManagement.Controllers
         [HttpGet("classes/{id}")]
         public ActionResult<ClassRoomDetailDto> GetClassById(int id)
         {
-            var getClassById = _schoolRepository.GetClassById(id);
+            var getClassById = _classRoomRepository.GetClassById(id);
             if (getClassById == null)
             {
                 return NotFound(new ApiReponse(626));
@@ -60,22 +66,22 @@ namespace EnglishCenterManagement.Controllers
             var mappedClassDetailInfo = _mapper.Map<ClassRoomDetailDto>(getClassById);
 
             // Subject of class
-            var getSubjectById = _schoolRepository.GetSubjectById(getClassById.SubjectId);
+            var getSubjectById = _subjectRoomRepository.GetSubjectById(getClassById.SubjectId);
             var mappedSubject = _mapper.Map<SubjectDto>(getSubjectById);
             mappedClassDetailInfo.Subject = mappedSubject;
 
             // Schedules
-            var getListSchedulesOfClass = _schoolRepository.GetAllSchedulesOfClass(id);
+            var getListSchedulesOfClass = _classRoomRepository.GetAllSchedulesOfClass(id);
             var mappedListSchedulesOfClass = _mapper.Map<List<ClassScheduleDto>>(getListSchedulesOfClass);
             mappedListSchedulesOfClass.ForEach((item) =>
             {
-                var room = _schoolRepository.GetRoomById(item.RoomId);
+                var room = _subjectRoomRepository.GetRoomById(item.RoomId);
                 item.RoomName = room.Name;
             });
             mappedClassDetailInfo.ClassSchedules = mappedListSchedulesOfClass;
 
             // Teachers of class
-            var getListTeachersInClass = _schoolRepository.GetAllTeachersInClass(id);
+            var getListTeachersInClass = _teacherStudentRepository.GetAllTeachersInClass(id);
             var mappedTeachersInClass = _mapper.Map<List<BasicUserInfoDto>>(getListTeachersInClass);
             mappedClassDetailInfo.Teachers = mappedTeachersInClass;
 
@@ -86,7 +92,7 @@ namespace EnglishCenterManagement.Controllers
         [HttpGet("subject/{id}/classes")]
         public ActionResult<PagedResponse> GetAllClassesBySubject(string? search, int id, int page = 1, int pageSize = 20)
         {
-            if (_schoolRepository.GetSubjectById(id) == null)
+            if (_subjectRoomRepository.GetSubjectById(id) == null)
             {
                 return NotFound(new ApiReponse(629));
             }
@@ -94,7 +100,7 @@ namespace EnglishCenterManagement.Controllers
             page = page < 1 ? 1 : page;
             pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
 
-            var listClassesBySubject = _schoolRepository.GetAllClassesBySubject(search, id, page, pageSize);
+            var listClassesBySubject = _classRoomRepository.GetAllClassesBySubject(search, id, page, pageSize);
             var mappedListClasses = _mapper.Map<List<BasicClassRoomInfoDto>>(listClassesBySubject.Data);
             listClassesBySubject.Data = mappedListClasses;
 
@@ -112,18 +118,18 @@ namespace EnglishCenterManagement.Controllers
                 return Unauthorized();
             }
 
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
 
-            var getStudentById = _schoolRepository.GetStudentById(id);
+            var getStudentById = _teacherStudentRepository.GetStudentById(id);
             if (getStudentById == null)
             {
                 return NotFound(new ApiReponse(635));
             }
 
-            if (user.Role == RoleType.Student && (!_schoolRepository.CheckStudentClassExists(id, user.Id)))
+            if (user.Role == RoleType.Student && (!_teacherStudentRepository.CheckStudentClassExists(id, user.Id)))
             {
                 return Unauthorized(new ApiReponse(1000));
             }
@@ -131,7 +137,7 @@ namespace EnglishCenterManagement.Controllers
             page = page < 1 ? 1 : page;
             pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
 
-            var listClassesOfStudent = _schoolRepository.GetAllClassesOfStudent(search, id, page, pageSize);
+            var listClassesOfStudent = _classRoomRepository.GetAllClassesOfStudent(search, id, page, pageSize);
             var mappedListClasses = _mapper.Map<List<BasicClassRoomInfoDto>>(listClassesOfStudent.Data);
             listClassesOfStudent.Data = mappedListClasses;
 
@@ -149,18 +155,18 @@ namespace EnglishCenterManagement.Controllers
                 return Unauthorized();
             }
 
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
 
-            var getTeacherById = _schoolRepository.GetTeacherById(id);
+            var getTeacherById = _teacherStudentRepository.GetTeacherById(id);
             if (getTeacherById == null)
             {
                 return NotFound(new ApiReponse(636));
             }
 
-            if (user.Role == RoleType.Teacher && (!_schoolRepository.CheckTeacherClassExists(id, user.Id)))
+            if (user.Role == RoleType.Teacher && (!_teacherStudentRepository.CheckTeacherClassExists(id, user.Id)))
             {
                 return Unauthorized(new ApiReponse(1000));
             }
@@ -168,7 +174,7 @@ namespace EnglishCenterManagement.Controllers
             page = page < 1 ? 1 : page;
             pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
 
-            var listClassesOfTeacher = _schoolRepository.GetAllClassesOfTeacher(search, id, page, pageSize);
+            var listClassesOfTeacher = _classRoomRepository.GetAllClassesOfTeacher(search, id, page, pageSize);
             var mappedListClasses = _mapper.Map<List<BasicClassRoomInfoDto>>(listClassesOfTeacher.Data);
             listClassesOfTeacher.Data = mappedListClasses;
 
@@ -176,13 +182,18 @@ namespace EnglishCenterManagement.Controllers
         }
 
         // TODO POST: /create-class
+        // Tạo thông tin lớp học, tạo lịch học, gán phòng học
+        // => cần check phòng đó vào giờ đó ngày đó có lớp nào đang học ko => thêm API get list room trống
+        // => cần set status cho class đó (đã kết thúc/chưa kết thúc/tạm dừng)
         [HttpPost("create-class")]
         [Authorize(Roles = "Admin, Staff")]
         #endregion
 
         #region CLASS - REFERENCE
         // TODO POST: /add-teacher-class
+        // TODO DELETE: /remove-student/5 => chỉ cho xóa khi class chưa bđ (status)
         // TODO POST: /add-student-class
+        // cần check xem student/teacher đó có class khác trùng lịch ko
         // TODO POST: /create-new-student-class
         #endregion
 

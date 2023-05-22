@@ -9,6 +9,7 @@
 
         // Relationship 1 Student hoc duoc nhieu class
         public ICollection<StudentClassModel>? StudentClasses { get; set; }
+        public ICollection<MarkModel>? Marks { get; set; }
         public UserInfoModel User { get; set; }
     }
 }

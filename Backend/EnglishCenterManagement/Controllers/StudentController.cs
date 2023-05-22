@@ -19,16 +19,19 @@ namespace EnglishCenterManagement.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
-        private readonly ISchoolRepository _schoolRepository;
+        private readonly IClassRoomRepository _classRoomRepository;
+        private readonly ITeacherStudentRepository _teacherStudentRepository;
         public StudentController(
             IMapper mapper,
-            ISchoolRepository schoolRepository,
-            IUserRepository userRepository
+            IClassRoomRepository classRoomRepository,
+            IUserRepository userRepository,
+            ITeacherStudentRepository teacherStudentRepository
             )
         {
             _mapper = mapper;
             _userRepository = userRepository;
-            _schoolRepository = schoolRepository;
+            _classRoomRepository = classRoomRepository;
+            _teacherStudentRepository = teacherStudentRepository;
         }
 
         #region STUDENT
@@ -43,14 +46,14 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
             page = page < 1 ? 1 : page;
             pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
 
-            var listStudents = _schoolRepository.GetAllStudents(search, page, pageSize);
+            var listStudents = _teacherStudentRepository.GetAllStudents(search, page, pageSize);
             var mappedListStudents = _mapper.Map<List<BasicUserInfoDto>>(listStudents.Data);
             mappedListStudents.ForEach((item) =>
             {
@@ -72,11 +75,11 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
-            var getStudentById = _schoolRepository.GetStudentById(id);
+            var getStudentById = _teacherStudentRepository.GetStudentById(id);
             var getUserById = _userRepository.GetUserByUserId(id);
             if (getStudentById == null || getUserById == null)
             {
@@ -86,7 +89,7 @@ namespace EnglishCenterManagement.Controllers
             // check teacher va student cung lop hay ko
             if (user.Role == RoleType.Teacher)
             {
-                if (!_schoolRepository.CheckTeacherStudentInSameClass(user.Id, id))
+                if (!_teacherStudentRepository.CheckTeacherStudentInSameClass(user.Id, id))
                 {
                     return Unauthorized(new ApiReponse(1000));
                 }
@@ -110,19 +113,19 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
-            var getClassById = _schoolRepository.GetClassById(id);
+            var getClassById = _classRoomRepository.GetClassById(id);
             if (getClassById == null)
             {
                 return NotFound(new ApiReponse(626));
             }
 
             // Học sinh hoặc giáo viên ngoài lớp đó không xem được danh sách lớp
-            if ((user.Role == RoleType.Student && (!_schoolRepository.CheckStudentClassExists(id, user.Id))) ||
-                (user.Role == RoleType.Teacher && (!_schoolRepository.CheckTeacherClassExists(id, user.Id))))
+            if ((user.Role == RoleType.Student && (!_teacherStudentRepository.CheckStudentClassExists(id, user.Id))) ||
+                (user.Role == RoleType.Teacher && (!_teacherStudentRepository.CheckTeacherClassExists(id, user.Id))))
             {
                 return Unauthorized(new ApiReponse(1000));
             }
@@ -131,7 +134,7 @@ namespace EnglishCenterManagement.Controllers
             page = page < 1 ? 1 : page;
             pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
 
-            var getListStudentsInClass = _schoolRepository.GetAllStudentsInClass(id, search, page, pageSize);
+            var getListStudentsInClass = _teacherStudentRepository.GetAllStudentsInClass(id, search, page, pageSize);
             var mappedStudentsInClass = _mapper.Map<List<BasicUserInfoDto>>(getListStudentsInClass.Data);
             mappedStudentsInClass.ForEach((item) =>
             {
@@ -154,7 +157,7 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
@@ -232,7 +235,7 @@ namespace EnglishCenterManagement.Controllers
             var studentInfo = _mapper.Map<StudentModel>(newStudent);
             studentInfo.Id = userProfile.Id;
 
-            if (!_schoolRepository.CreateStudentProfile(studentInfo))
+            if (!_teacherStudentRepository.CreateStudentProfile(studentInfo))
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }

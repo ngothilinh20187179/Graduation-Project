@@ -38,10 +38,18 @@ namespace EnglishCenterManagement.Repository
 
             return new PagedResponse(data, totalStudents, page, pageSize);
         }
-
+        public bool CreateStaffProfile(StaffModel newStaff)
+        {
+            _context.Staffs.Add(newStaff);
+            return SaveChange();
+        }
         public StaffModel GetStaffById(int id)
         {
             return _context.Staffs.Where(x => x.Id == id).FirstOrDefault();
+        }
+        public bool SaveChange()
+        {
+            return _context.SaveChanges() > 0;
         }
     }
 }

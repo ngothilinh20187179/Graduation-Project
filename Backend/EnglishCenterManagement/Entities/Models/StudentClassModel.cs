@@ -6,7 +6,7 @@ namespace EnglishCenterManagement.Entities.Models
     {
         public int StudentId { get; set; }
         public int ClassId { get; set; }
-        public bool PaidTuition = false;
+        public bool PaidTuition { get; set; } = false;
         public string? Note { get; set; }
 
         // Relationship

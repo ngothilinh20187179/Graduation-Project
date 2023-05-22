@@ -1,6 +1,6 @@
 ﻿namespace EnglishCenterManagement.Entities.Enumerations
 {
-    public enum UserStatus
+    public enum UserStatusType
     {
         Lock, UnLock
     }

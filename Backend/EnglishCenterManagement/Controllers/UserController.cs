@@ -38,7 +38,7 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
@@ -67,7 +67,7 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
@@ -96,7 +96,7 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
@@ -169,7 +169,7 @@ namespace EnglishCenterManagement.Controllers
         // TODO: PUT: /restricted-user/{id}
         // Khóa/mở khóa tài khoản user
         // Vấn đề khi khóa tk: access token vẫn còn hạn                                                                                             
-        [HttpPut("restricted-user/{id}")]
+        //[HttpPut("restricted-user/{id}")]
 
         // DELETE: /delete-user/5
         // TODO
@@ -182,7 +182,7 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
@@ -219,7 +219,7 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
@@ -244,7 +244,7 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
@@ -301,7 +301,7 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
@@ -353,7 +353,7 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
@@ -407,7 +407,7 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }

@@ -1,7 +1,6 @@
 ﻿using EnglishCenterManagement.Common.Helpers;
 using EnglishCenterManagement.Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace EnglishCenterManagement.Data
 {
@@ -11,16 +10,23 @@ namespace EnglishCenterManagement.Data
         public DbSet<UserInfoModel> Users { get; set; }
         public DbSet<RefreshTokenModel> Tokens { get; set; }
         public DbSet<AvatarModel> Avatars { get; set; }
-
-        public DbSet<SubjectModel> Subjects { get; set; }
-        public DbSet<ClassModel> Classes { get; set; }
-        public DbSet<ClassScheduleModel> ClassSchedules { get; set; }
-        public DbSet<RoomModel> Rooms { get; set; }
         public DbSet<StaffModel> Staffs { get; set; }
         public DbSet<StudentModel> Students { get; set; }
         public DbSet<TeacherModel> Teachers { get; set; }
-        public DbSet<StudentClassModel> StudentClasses { get; set; }
+
+        public DbSet<SubjectModel> Subjects { get; set; }
+        public DbSet<RoomModel> Rooms { get; set; }
+        public DbSet<ClassModel> Classes { get; set; }
+        public DbSet<ClassScheduleModel> ClassSchedules { get; set; }
+
+        public DbSet<QuizModel> Quizzes { get; set; }
+        public DbSet<QuestionModel> Questions { get; set; }
+        public DbSet<AnswerModel> Answers { get; set; }
+
         public DbSet<TeacherClassModel> TeacherClasses { get; set; }
+        public DbSet<StudentClassModel> StudentClasses { get; set; }
+        public DbSet<QuizClassModel> QuizClasses { get; set; }
+        public DbSet<MarkModel> Marks { get; set; }
 
         protected override void ConfigureConventions(ModelConfigurationBuilder modelConfigureBuilder)
         {
@@ -68,27 +74,55 @@ namespace EnglishCenterManagement.Data
 
             // n-n relationship Student-Class
             modelBuilder.Entity<StudentClassModel>()
-                    .HasKey(pc => new { pc.StudentId, pc.ClassId });
+                    .HasKey(x => new { x.StudentId, x.ClassId });
             modelBuilder.Entity<StudentClassModel>()
-                    .HasOne(p => p.Student)
-                    .WithMany(pc => pc.StudentClasses)
-                    .HasForeignKey(p => p.StudentId);
+                    .HasOne(x => x.Student)
+                    .WithMany(x => x.StudentClasses)
+                    .HasForeignKey(x => x.StudentId);
             modelBuilder.Entity<StudentClassModel>()
-                    .HasOne(p => p.Class)
-                    .WithMany(pc => pc.StudentClasses)
-                    .HasForeignKey(c => c.ClassId);
+                    .HasOne(x => x.Class)
+                    .WithMany(x => x.StudentClasses)
+                    .HasForeignKey(x => x.ClassId);
 
             // n-n relationship Teacher-Class
             modelBuilder.Entity<TeacherClassModel>()
-                    .HasKey(pc => new { pc.TeacherId, pc.ClassId });
+                    .HasKey(x => new { x.TeacherId, x.ClassId });
             modelBuilder.Entity<TeacherClassModel>()
-                    .HasOne(p => p.Teacher)
-                    .WithMany(pc => pc.TeacherClasses)
-                    .HasForeignKey(p => p.TeacherId);
+                    .HasOne(x => x.Teacher)
+                    .WithMany(x => x.TeacherClasses)
+                    .HasForeignKey(x => x.TeacherId);
             modelBuilder.Entity<TeacherClassModel>()
-                    .HasOne(p => p.Class)
-                    .WithMany(pc => pc.TeacherClasses)
-                    .HasForeignKey(c => c.ClassId);
+                    .HasOne(x => x.Class)
+                    .WithMany(x => x.TeacherClasses)
+                    .HasForeignKey(x => x.ClassId);
+
+            // n-n relationship Quiz-Class
+            modelBuilder.Entity<QuizClassModel>()
+               .HasKey(x => new { x.QuizId, x.ClassId });
+            modelBuilder.Entity<QuizClassModel>()
+                .HasOne(x => x.Quiz)
+                .WithMany(x => x.QuizzClasses)
+                .HasForeignKey(x => x.QuizId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<QuizClassModel>()
+                .HasOne(x => x.Class)
+                .WithMany(x => x.QuizzClasses)
+                .HasForeignKey(x => x.ClassId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // n-n relationship Quiz-Student
+            modelBuilder.Entity<MarkModel>()
+               .HasKey(x => new { x.StudentId, x.QuizId });
+            modelBuilder.Entity<MarkModel>()
+                .HasOne(x => x.Student)
+                .WithMany(x => x.Marks)
+                .HasForeignKey(x => x.StudentId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<MarkModel>()
+                .HasOne(x => x.Quiz)
+                .WithMany(x => x.Marks)
+                .HasForeignKey(x => x.QuizId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

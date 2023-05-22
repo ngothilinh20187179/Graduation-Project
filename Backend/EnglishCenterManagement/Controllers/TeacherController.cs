@@ -13,20 +13,22 @@ using System.Security.Claims;
 
 namespace EnglishCenterManagement.Controllers
 {
+    [Route("api/")]
+    [ApiController]
     public class TeacherController : Controller
     {
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
-        private readonly ISchoolRepository _schoolRepository;
+        private readonly ITeacherStudentRepository _teacherStudentRepository;
         public TeacherController(
             IMapper mapper,
-            ISchoolRepository schoolRepository,
-            IUserRepository userRepository
+            IUserRepository userRepository,
+            ITeacherStudentRepository teacherStudentRepository
             )
         {
             _mapper = mapper;
             _userRepository = userRepository;
-            _schoolRepository = schoolRepository;
+            _teacherStudentRepository = teacherStudentRepository;
         }
 
         #region TEACHER
@@ -41,14 +43,14 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
             page = page < 1 ? 1 : page;
             pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
 
-            var listTeachers = _schoolRepository.GetAllTeachers(search, page, pageSize);
+            var listTeachers = _teacherStudentRepository.GetAllTeachers(search, page, pageSize);
             var mappedListTeachers = _mapper.Map<List<BasicUserInfoDto>>(listTeachers.Data);
             mappedListTeachers.ForEach((item) =>
             {
@@ -70,11 +72,11 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
-            var getTeacherById = _schoolRepository.GetTeacherById(id);
+            var getTeacherById = _teacherStudentRepository.GetTeacherById(id);
             var getUserById = _userRepository.GetUserByUserId(id);
             if (getTeacherById == null || getUserById == null)
             {
@@ -100,7 +102,7 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
@@ -170,13 +172,17 @@ namespace EnglishCenterManagement.Controllers
             var teacherInfo = _mapper.Map<TeacherModel>(newTeacher);
             teacherInfo.Id = userProfile.Id;
 
-            if (!_schoolRepository.CreateTeacherProfile(teacherInfo))
+            if (!_teacherStudentRepository.CreateTeacherProfile(teacherInfo))
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
             return StatusCode(StatusCodes.Status201Created);
         }
+
+        // PUT: /update-teacher/5
+        [HttpPut("update-teacher/{id}")]
+        [Authorize(Roles = "Staff, Teacher")]
         #endregion
 
         private UserInfoModel? GetUserByClaim()

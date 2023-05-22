@@ -1,4 +1,6 @@
-﻿namespace EnglishCenterManagement.Dtos.ClassRoomDto
+﻿using EnglishCenterManagement.Entities.Enumerations;
+
+namespace EnglishCenterManagement.Dtos.ClassRoomDto
 {
     public class BasicClassRoomInfoDto
     {
@@ -9,6 +11,5 @@
         public int NumberOfStudents { get; set; }
         public int NumberOfSessions { get; set; }
         public double Credit { get; set; }
-        public string? Note { get; set; }
     }
 }

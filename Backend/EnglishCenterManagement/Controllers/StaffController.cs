@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EnglishCenterManagement.Common.Helpers;
 using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Common.Response;
 using EnglishCenterManagement.Dtos.SchoolDto;
@@ -40,7 +41,7 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
@@ -70,7 +71,7 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
@@ -89,15 +90,97 @@ namespace EnglishCenterManagement.Controllers
         }
 
         // POST: /staff
+        // TODO: check birthday
         [HttpPost("create-staff")]
         [Authorize(Roles = nameof(RoleType.Admin))]
+        public ActionResult CreateStaff([FromBody] CreateStaffDto newStaff)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+            if (newStaff == null)
+            {
+                return BadRequest(new ApiReponse(600));
+            }
+            // check login name = pwd ?
+            if (newStaff.Password == newStaff.LoginName)
+            {
+                return BadRequest(new ApiReponse(609));
+            }
 
+            // check login name
+            bool checkUserExist = _userRepository.CheckUserNameExist(newStaff.LoginName);
+            if (checkUserExist)
+            {
+                return Conflict(new ApiReponse(607));
+            }
+
+            Validation validateUserInfoUtils = new Validation();
+
+            // check phone number
+            if (!validateUserInfoUtils.IsValidPhoneNumber(newStaff.PhoneNumber))
+            {
+                return BadRequest(new ApiReponse(614));
+            }
+
+            // check pwd: Minimum eight characters, at least one uppercase & lowercase letter and one number
+            if (!validateUserInfoUtils.IsValidPassword(newStaff.Password))
+            {
+                return BadRequest(new ApiReponse(610));
+            }
+
+            // check gender
+            if (!(newStaff.Gender == GenderType.Male | newStaff.Gender == GenderType.Female | newStaff.Gender == null))
+            {
+                return BadRequest(new ApiReponse(617));
+            }
+
+            // check email
+            if (newStaff.Email != null)
+            {
+                if (!validateUserInfoUtils.IsValidEmail(newStaff.Email))
+                {
+                    return BadRequest(new ApiReponse(615));
+                }
+                bool checkEmailExist = _userRepository.CheckEmailExists(newStaff.Email);
+                if (checkEmailExist)
+                {
+                    return Conflict(new ApiReponse(616));
+                }
+            }
+
+            // TODO: check datetime
+
+            newStaff.Password = BCrypt.Net.BCrypt.HashPassword(newStaff.Password);
+            var userProfile = _mapper.Map<UserInfoModel>(newStaff);
+            userProfile.Role = RoleType.Staff;
+
+            if (!_userRepository.CreateUserProfile(userProfile))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            var staffInfo = _mapper.Map<StaffModel>(newStaff);
+            staffInfo.Id = userProfile.Id;
+
+            if (!_staffRepository.CreateStaffProfile(staffInfo))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return StatusCode(StatusCodes.Status201Created);
+        }
 
         // PUT: /staffs/5
         [HttpPut("staffs/{id}")]
         [Authorize(Roles = nameof(RoleType.Admin))]
         #endregion
-
 
         private UserInfoModel? GetUserByClaim()
         {

@@ -10,5 +10,6 @@
         // Relationship
         public ICollection<TeacherClassModel>? TeacherClasses { get; set; }
         public UserInfoModel User { get; set; }
+        public ICollection<QuizModel>? Quizzes { get; set; }
     }
 }

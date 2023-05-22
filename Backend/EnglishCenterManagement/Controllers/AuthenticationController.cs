@@ -11,6 +11,8 @@ using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Dtos.AuthenticationDtos;
 using System;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Routing;
 
 namespace EnglishCenterManagement.Controllers
 {
@@ -130,7 +132,7 @@ namespace EnglishCenterManagement.Controllers
             }
 
             // check status user
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
@@ -207,7 +209,7 @@ namespace EnglishCenterManagement.Controllers
             }
 
             // check status user
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
@@ -280,6 +282,11 @@ namespace EnglishCenterManagement.Controllers
             // vẫn có thể dùng access token đó để gọi API nếu lưu chúng chỗ khác -> lý do access token chỉ có thời gian ngắn
             // (Bản chất của token là mã hóa thông tin, khi có request thì server sẽ giải mã nó nên ko revoke đc)
             // -> chỉ tới khi access token hết hạn, client lấy mã refresh token để request thì mới ko đc
+
+            //1) Simply remove the token from the client
+            //2) Create a token blocklist => solve problem
+            //3) Just keep token expiry times short and rotate them often
+            //4) Session ???
 
             var token = _authenRepository.GetTokenById(user.Id);
             if (token  == null)

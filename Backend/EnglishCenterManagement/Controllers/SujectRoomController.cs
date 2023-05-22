@@ -17,16 +17,16 @@ namespace EnglishCenterManagement.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
-        private readonly ISchoolRepository _schoolRepository;
+        private readonly ISubjectRoomRepository _subjectRoomRepository;
         public SujectRoomController(
             IMapper mapper,
-            ISchoolRepository schoolRepository,
+            ISubjectRoomRepository subjectRoomRepository,
             IUserRepository userRepository
             )
         {
             _mapper = mapper;
             _userRepository = userRepository;
-            _schoolRepository = schoolRepository;
+            _subjectRoomRepository = subjectRoomRepository;
         }
 
         #region SUBJECT
@@ -37,7 +37,7 @@ namespace EnglishCenterManagement.Controllers
             page = page < 1 ? 1 : page;
             pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
 
-            var listSubjects = _schoolRepository.GetAllSubjects(search, subjectStatus, page, pageSize);
+            var listSubjects = _subjectRoomRepository.GetAllSubjects(search, subjectStatus, page, pageSize);
             var mappedListSubjects = _mapper.Map<List<SubjectDto>>(listSubjects.Data);
             listSubjects.Data = mappedListSubjects;
 
@@ -56,11 +56,11 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
-            if (_schoolRepository.CheckSubjectExists(newSubject.SubjectName))
+            if (_subjectRoomRepository.CheckSubjectExists(newSubject.SubjectName))
             {
                 return Conflict(new ApiReponse(627));
             }
@@ -71,7 +71,7 @@ namespace EnglishCenterManagement.Controllers
             }
 
             var mappedSubject = _mapper.Map<SubjectModel>(newSubject);
-            if (!_schoolRepository.CreateSubject(mappedSubject))
+            if (!_subjectRoomRepository.CreateSubject(mappedSubject))
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -91,17 +91,17 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
-            var getSubjectById = _schoolRepository.GetSubjectById(id);
+            var getSubjectById = _subjectRoomRepository.GetSubjectById(id);
             if (getSubjectById == null)
             {
                 return NotFound(new ApiReponse(629));
             }
 
-            if (_schoolRepository.CheckSubjectExists(id, updatedSubject.SubjectName))
+            if (_subjectRoomRepository.CheckSubjectExists(id, updatedSubject.SubjectName))
             {
                 return Conflict(new ApiReponse(627));
             }
@@ -112,7 +112,7 @@ namespace EnglishCenterManagement.Controllers
             }
 
             var mappedSubject = _mapper.Map(updatedSubject, getSubjectById);
-            if (!_schoolRepository.UpdateSubject(mappedSubject))
+            if (!_subjectRoomRepository.UpdateSubject(mappedSubject))
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -130,23 +130,23 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
-            var getSubjectById = _schoolRepository.GetSubjectById(id);
+            var getSubjectById = _subjectRoomRepository.GetSubjectById(id);
             if (getSubjectById == null)
             {
                 return NotFound(new ApiReponse(629));
             }
 
             // Note: Chỉ xóa được khi Subject chưa được reference tới bất kỳ Class nào
-            if (_schoolRepository.CheckSubjectExistsInClass(id))
+            if (_subjectRoomRepository.CheckSubjectExistsInClass(id))
             {
                 return BadRequest(new ApiReponse(630));
             }
 
-            if (!_schoolRepository.DeleteSubject(getSubjectById))
+            if (!_subjectRoomRepository.DeleteSubject(getSubjectById))
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -166,14 +166,14 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
             page = page < 1 ? 1 : page;
             pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
 
-            var listRooms = _schoolRepository.GetAllRooms(search, roomStatus, page, pageSize);
+            var listRooms = _subjectRoomRepository.GetAllRooms(search, roomStatus, page, pageSize);
             var mappedListRooms = _mapper.Map<List<RoomDto>>(listRooms.Data);
             listRooms.Data = mappedListRooms;
 
@@ -192,11 +192,11 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
-            if (_schoolRepository.CheckRoomExists(newRoom.Name))
+            if (_subjectRoomRepository.CheckRoomExists(newRoom.Name))
             {
                 return Conflict(new ApiReponse(631));
             }
@@ -207,7 +207,7 @@ namespace EnglishCenterManagement.Controllers
             }
 
             var mappedRoom = _mapper.Map<RoomModel>(newRoom);
-            if (!_schoolRepository.CreateRoom(mappedRoom))
+            if (!_subjectRoomRepository.CreateRoom(mappedRoom))
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -225,16 +225,16 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
-            var getRoomById = _schoolRepository.GetRoomById(id);
+            var getRoomById = _subjectRoomRepository.GetRoomById(id);
             if (getRoomById == null)
             {
                 return NotFound(new ApiReponse(633));
             }
-            if (_schoolRepository.CheckRoomExists(id, updatedRoom.Name))
+            if (_subjectRoomRepository.CheckRoomExists(id, updatedRoom.Name))
             {
                 return Conflict(new ApiReponse(631));
             }
@@ -243,7 +243,7 @@ namespace EnglishCenterManagement.Controllers
                 return BadRequest(new ApiReponse(632));
             }
             var mappedRoom = _mapper.Map(updatedRoom, getRoomById);
-            if (!_schoolRepository.UpdateRoom(mappedRoom))
+            if (!_subjectRoomRepository.UpdateRoom(mappedRoom))
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -260,22 +260,22 @@ namespace EnglishCenterManagement.Controllers
             {
                 return Unauthorized();
             }
-            if (user.UserStatus == UserStatus.Lock)
+            if (user.UserStatus == UserStatusType.Lock)
             {
                 return Unauthorized(new ApiReponse(999));
             }
-            var getRoomById = _schoolRepository.GetRoomById(id);
+            var getRoomById = _subjectRoomRepository.GetRoomById(id);
             if (getRoomById == null)
             {
                 return NotFound(new ApiReponse(633));
             }
 
-            if (_schoolRepository.IsUsedRoom(id))
+            if (_subjectRoomRepository.IsUsedRoom(id))
             {
                 return BadRequest(new ApiReponse(634));
             }
 
-            if (!_schoolRepository.DeleteRoom(getRoomById))
+            if (!_subjectRoomRepository.DeleteRoom(getRoomById))
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }

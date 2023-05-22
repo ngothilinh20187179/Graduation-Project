@@ -7,5 +7,6 @@ namespace EnglishCenterManagement.Interfaces
     {
         PagedResponse GetAllStaffs(string? search, int page, int pageSize);
         StaffModel GetStaffById(int id);
+        bool CreateStaffProfile(StaffModel newStaff);
     }
 }

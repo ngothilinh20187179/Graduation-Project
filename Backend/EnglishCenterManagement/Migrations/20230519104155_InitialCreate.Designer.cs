@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EnglishCenterManagement.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230517062256_update8")]
-    partial class update8
+    [Migration("20230519104155_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,31 @@ namespace EnglishCenterManagement.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.AnswerModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AnswerText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("Answers");
+                });
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.AvatarModel", b =>
                 {
@@ -60,6 +85,9 @@ namespace EnglishCenterManagement.Migrations
 
                     b.Property<DateTime>("ClassStartDate")
                         .HasColumnType("date");
+
+                    b.Property<int>("ClassStatus")
+                        .HasColumnType("int");
 
                     b.Property<double>("Credit")
                         .HasColumnType("float");
@@ -113,6 +141,89 @@ namespace EnglishCenterManagement.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("ClassSchedules");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.MarkModel", b =>
+                {
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuizId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StudentId", "QuizId");
+
+                    b.HasIndex("QuizId");
+
+                    b.ToTable("Marks");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.QuestionModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Point")
+                        .HasColumnType("int");
+
+                    b.Property<string>("QuestionText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("QuizId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuizId");
+
+                    b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.QuizClassModel", b =>
+                {
+                    b.Property<int>("QuizId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClassId")
+                        .HasColumnType("int");
+
+                    b.HasKey("QuizId", "ClassId");
+
+                    b.HasIndex("ClassId");
+
+                    b.ToTable("QuizClasses");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.QuizModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("time");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("Quizzes");
                 });
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.RefreshTokenModel", b =>
@@ -191,6 +302,9 @@ namespace EnglishCenterManagement.Migrations
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PaidTuition")
+                        .HasColumnType("bit");
 
                     b.HasKey("StudentId", "ClassId");
 
@@ -329,9 +443,23 @@ namespace EnglishCenterManagement.Migrations
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
+                    b.Property<int>("UserStatus")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.AnswerModel", b =>
+                {
+                    b.HasOne("EnglishCenterManagement.Entities.Models.QuestionModel", "Question")
+                        .WithMany("Answers")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.AvatarModel", b =>
@@ -373,6 +501,66 @@ namespace EnglishCenterManagement.Migrations
                     b.Navigation("Class");
 
                     b.Navigation("Room");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.MarkModel", b =>
+                {
+                    b.HasOne("EnglishCenterManagement.Entities.Models.QuizModel", "Quiz")
+                        .WithMany("Marks")
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EnglishCenterManagement.Entities.Models.StudentModel", "Student")
+                        .WithMany("Marks")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Quiz");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.QuestionModel", b =>
+                {
+                    b.HasOne("EnglishCenterManagement.Entities.Models.QuizModel", "Quiz")
+                        .WithMany("Questions")
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Quiz");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.QuizClassModel", b =>
+                {
+                    b.HasOne("EnglishCenterManagement.Entities.Models.ClassModel", "Class")
+                        .WithMany("QuizzClasses")
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EnglishCenterManagement.Entities.Models.QuizModel", "Quiz")
+                        .WithMany("QuizzClasses")
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Class");
+
+                    b.Navigation("Quiz");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.QuizModel", b =>
+                {
+                    b.HasOne("EnglishCenterManagement.Entities.Models.TeacherModel", "Teacher")
+                        .WithMany("Quizzes")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.RefreshTokenModel", b =>
@@ -461,9 +649,25 @@ namespace EnglishCenterManagement.Migrations
                 {
                     b.Navigation("ClassSchedules");
 
+                    b.Navigation("QuizzClasses");
+
                     b.Navigation("StudentClasses");
 
                     b.Navigation("TeacherClasses");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.QuestionModel", b =>
+                {
+                    b.Navigation("Answers");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.QuizModel", b =>
+                {
+                    b.Navigation("Marks");
+
+                    b.Navigation("Questions");
+
+                    b.Navigation("QuizzClasses");
                 });
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.RoomModel", b =>
@@ -473,6 +677,8 @@ namespace EnglishCenterManagement.Migrations
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StudentModel", b =>
                 {
+                    b.Navigation("Marks");
+
                     b.Navigation("StudentClasses");
                 });
 
@@ -483,6 +689,8 @@ namespace EnglishCenterManagement.Migrations
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.TeacherModel", b =>
                 {
+                    b.Navigation("Quizzes");
+
                     b.Navigation("TeacherClasses");
                 });
 

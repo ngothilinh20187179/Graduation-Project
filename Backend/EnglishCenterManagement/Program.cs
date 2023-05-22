@@ -21,9 +21,12 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // . Life cycle DI: AddSingleton(), AddTransient(), AddScoped()
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
+builder.Services.AddScoped<IClassRoomRepository, ClassRoomRepository>();
 builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
 builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+builder.Services.AddScoped<ISubjectRoomRepository, SubjectRoomRepository>();
+builder.Services.AddScoped<ITeacherStudentRepository, TeacherStudentRepository>();
+builder.Services.AddScoped<IExaminationRepository, ExaminationRepository>();
 
 // . Add authorization each api
 builder.Services.AddSwaggerGen(c =>
