@@ -70,6 +70,12 @@ namespace EnglishCenterManagement.Repository
             return SaveChange();
         }
 
+        public bool UpdateStudentProfile(StudentModel student)
+        {
+            _context.Students.Update(student);
+            return SaveChange();
+        }
+
         // teacher
         public ICollection<UserInfoModel> GetAllTeachersInClass(int id)
         {
@@ -106,6 +112,11 @@ namespace EnglishCenterManagement.Repository
         public bool CreateTeacherProfile(TeacherModel teacher)
         {
             _context.Teachers.Add(teacher);
+            return SaveChange();
+        }
+        public bool UpdateTeacherProfile(TeacherModel teacher)
+        {
+            _context.Teachers.Update(teacher);
             return SaveChange();
         }
 

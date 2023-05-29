@@ -43,6 +43,11 @@ namespace EnglishCenterManagement.Repository
             _context.Staffs.Add(newStaff);
             return SaveChange();
         }
+        public bool UpdateStaffProfile(StaffModel updateStaff)
+        {
+            _context.Staffs.Update(updateStaff);
+            return SaveChange();
+        }
         public StaffModel GetStaffById(int id)
         {
             return _context.Staffs.Where(x => x.Id == id).FirstOrDefault();

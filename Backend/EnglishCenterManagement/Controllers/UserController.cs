@@ -167,9 +167,38 @@ namespace EnglishCenterManagement.Controllers
         //}
 
         // TODO: PUT: /restricted-user/{id}
-        // Khóa/mở khóa tài khoản user
-        // Vấn đề khi khóa tk: access token vẫn còn hạn                                                                                             
-        //[HttpPut("restricted-user/{id}")]
+        // Khóa/mở khóa tài khoản user                                                                                      
+        [HttpPut("restricted-user/{id}")]
+        [Authorize(Roles = nameof(RoleType.Admin))]
+        public ActionResult RestrictedAccount([FromBody] UserStatusType userStatusType, int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+            if (user.Id == id)
+            {
+                return BadRequest(new ApiReponse(644));
+            }
+            if (!Enum.IsDefined(typeof(UserStatusType), userStatusType))
+            {
+                return BadRequest();
+            }
+            var account = _userRepository.GetUserByUserId(id);
+            if (account == null)
+            {
+                return NotFound(new ApiReponse(606));
+            }
+            account.UserStatus = userStatusType;
+            _userRepository.UpdateUserProfile(account);
+
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
 
         // DELETE: /delete-user/5
         // TODO

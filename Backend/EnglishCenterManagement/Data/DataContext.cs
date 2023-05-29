@@ -74,27 +74,27 @@ namespace EnglishCenterManagement.Data
 
             // n-n relationship Student-Class
             modelBuilder.Entity<StudentClassModel>()
-                    .HasKey(x => new { x.StudentId, x.ClassId });
+                .HasKey(x => new { x.StudentId, x.ClassId });
             modelBuilder.Entity<StudentClassModel>()
-                    .HasOne(x => x.Student)
-                    .WithMany(x => x.StudentClasses)
-                    .HasForeignKey(x => x.StudentId);
+                .HasOne(x => x.Student)
+                .WithMany(x => x.StudentClasses)
+                .HasForeignKey(x => x.StudentId);
             modelBuilder.Entity<StudentClassModel>()
-                    .HasOne(x => x.Class)
-                    .WithMany(x => x.StudentClasses)
-                    .HasForeignKey(x => x.ClassId);
+                .HasOne(x => x.Class)
+                .WithMany(x => x.StudentClasses)
+                .HasForeignKey(x => x.ClassId);
 
             // n-n relationship Teacher-Class
             modelBuilder.Entity<TeacherClassModel>()
-                    .HasKey(x => new { x.TeacherId, x.ClassId });
+                .HasKey(x => new { x.TeacherId, x.ClassId });
             modelBuilder.Entity<TeacherClassModel>()
-                    .HasOne(x => x.Teacher)
-                    .WithMany(x => x.TeacherClasses)
-                    .HasForeignKey(x => x.TeacherId);
+                .HasOne(x => x.Teacher)
+                .WithMany(x => x.TeacherClasses)
+                .HasForeignKey(x => x.TeacherId);
             modelBuilder.Entity<TeacherClassModel>()
-                    .HasOne(x => x.Class)
-                    .WithMany(x => x.TeacherClasses)
-                    .HasForeignKey(x => x.ClassId);
+                .HasOne(x => x.Class)
+                .WithMany(x => x.TeacherClasses)
+                .HasForeignKey(x => x.ClassId);
 
             // n-n relationship Quiz-Class
             modelBuilder.Entity<QuizClassModel>()

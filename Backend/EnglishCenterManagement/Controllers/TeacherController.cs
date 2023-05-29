@@ -181,8 +181,84 @@ namespace EnglishCenterManagement.Controllers
         }
 
         // PUT: /update-teacher/5
+        // TODO: check datetime
         [HttpPut("update-teacher/{id}")]
-        [Authorize(Roles = "Staff, Teacher")]
+        [Authorize(Roles = nameof(RoleType.Staff))]
+        public ActionResult UpdateStaff([FromBody] CreateTeacherDto updateTeacher, int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+            if (updateTeacher == null)
+            {
+                return BadRequest(new ApiReponse(600));
+            }
+            var getTeacherById = _teacherStudentRepository.GetTeacherById(id);
+            var getUserById = _userRepository.GetUserByUserId(id);
+            if (getTeacherById == null || getUserById == null)
+            {
+                return NotFound(new ApiReponse(638));
+            }
+
+            // check login name = pwd ?
+            if (updateTeacher.Password == updateTeacher.LoginName)
+            {
+                return BadRequest(new ApiReponse(609));
+            }
+
+            // Check login name exist except current user's login name (get user by name and userid != current userId)
+            if (_userRepository.GetUserHasSameLoginName(getUserById.Id, updateTeacher.LoginName) != null)
+            {
+                return Conflict(new ApiReponse(607));
+            }
+
+            Validation validateUserInfoUtils = new Validation();
+
+            // Valid Phonenumber
+            if (!validateUserInfoUtils.IsValidPhoneNumber(updateTeacher.PhoneNumber))
+            {
+                return BadRequest(new ApiReponse(614));
+            }
+
+            // check pwd: Minimum eight characters, at least one uppercase & lowercase letter and one number
+            if (!validateUserInfoUtils.IsValidPassword(updateTeacher.Password))
+            {
+                return BadRequest(new ApiReponse(610));
+            }
+
+            // check gender
+            if (!(updateTeacher.Gender == GenderType.Male | updateTeacher.Gender == GenderType.Female | updateTeacher.Gender == null))
+            {
+                return BadRequest(new ApiReponse(617));
+            }
+
+            // Check email exists except current user's email (get user by email and userid != current userId)
+            if (updateTeacher.Email != null)
+            {
+                if (!validateUserInfoUtils.IsValidEmail(updateTeacher.Email))
+                {
+                    return BadRequest(new ApiReponse(615));
+                }
+                if (_userRepository.GetUserHasSameEmail(user.Id, updateTeacher.Email) != null)
+                {
+                    return Conflict(new ApiReponse(616));
+                }
+            }
+
+            updateTeacher.Password = BCrypt.Net.BCrypt.HashPassword(updateTeacher.Password);
+            var updatedUserProfileMap = _mapper.Map(updateTeacher, getUserById);
+            var updatedTeacherProfileMap = _mapper.Map(updateTeacher, getTeacherById);
+            _userRepository.UpdateUserProfile(updatedUserProfileMap);
+            _teacherStudentRepository.UpdateTeacherProfile(updatedTeacherProfileMap);
+
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
         #endregion
 
         private UserInfoModel? GetUserByClaim()

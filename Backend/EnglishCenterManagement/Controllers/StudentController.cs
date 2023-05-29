@@ -147,7 +147,7 @@ namespace EnglishCenterManagement.Controllers
         }
 
         // POST: /create-student
-        // TODO: check date of birth > current
+        // TODO: check date time
         [HttpPost("create-student")]
         [Authorize(Roles = nameof(RoleType.Staff))]
         public ActionResult CreateStudent([FromBody] CreateStudentDto newStudent)
@@ -244,8 +244,93 @@ namespace EnglishCenterManagement.Controllers
         }
 
         // PUT: /student/{id}
+        // TODO: check date time
         [HttpPut("student/{id}")]
         [Authorize(Roles = nameof(RoleType.Staff))]
+        public ActionResult UpdateStudentProfile([FromBody] CreateStudentDto updateStudent, int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+            if (updateStudent == null)
+            {
+                return BadRequest(new ApiReponse(600));
+            }
+
+            var getStudentById = _teacherStudentRepository.GetStudentById(id);
+            var getUserById = _userRepository.GetUserByUserId(id);
+            if (getStudentById == null || getUserById == null)
+            {
+                return NotFound(new ApiReponse(638));
+            }
+
+            // check login name = pwd ?
+            if (updateStudent.Password == updateStudent.LoginName)
+            {
+                return BadRequest(new ApiReponse(609));
+            }
+
+            // Check login name exist except current user's login name (get user by name and userid != current userId)
+            if (_userRepository.GetUserHasSameLoginName(getUserById.Id, updateStudent.LoginName) != null)
+            {
+                return Conflict(new ApiReponse(607));
+            }
+
+            Validation validateUserInfoUtils = new Validation();
+
+            // Valid Phonenumber
+            if (!validateUserInfoUtils.IsValidPhoneNumber(updateStudent.PhoneNumber))
+            {
+                return BadRequest(new ApiReponse(614));
+            }
+
+            // check pwd: Minimum eight characters, at least one uppercase & lowercase letter and one number
+            if (!validateUserInfoUtils.IsValidPassword(updateStudent.Password))
+            {
+                return BadRequest(new ApiReponse(610));
+            }
+
+            // check gender
+            if (!(updateStudent.Gender == GenderType.Male | updateStudent.Gender == GenderType.Female | updateStudent.Gender == null))
+            {
+                return BadRequest(new ApiReponse(617));
+            }
+
+            // Check email exists except current user's email (get user by email and userid != current userId)
+            if (updateStudent.Email != null)
+            {
+                if (!validateUserInfoUtils.IsValidEmail(updateStudent.Email))
+                {
+                    return BadRequest(new ApiReponse(615));
+                }
+                if (_userRepository.GetUserHasSameEmail(user.Id, updateStudent.Email) != null)
+                {
+                    return Conflict(new ApiReponse(616));
+                }
+            }
+
+            if (updateStudent.ParentPhoneNumber != null)
+            {
+                if (!validateUserInfoUtils.IsValidPhoneNumber(updateStudent.ParentPhoneNumber))
+                {
+                    return BadRequest(new ApiReponse(614));
+                }
+            }
+
+            updateStudent.Password = BCrypt.Net.BCrypt.HashPassword(updateStudent.Password);
+            var updatedUserProfileMap = _mapper.Map(updateStudent, getUserById);
+            var updatedStudentProfileMap = _mapper.Map(updateStudent, getStudentById);
+            _userRepository.UpdateUserProfile(updatedUserProfileMap);
+            _teacherStudentRepository.UpdateStudentProfile(updatedStudentProfileMap);
+
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
 
         // PUT: /restricted-student-class
         [HttpPut("restricted-student-class/{id}")]

@@ -50,6 +50,9 @@ namespace EnglishCenterManagement.Data
             CreateMap<CreateQuizDto, QuizModel>();
             CreateMap<CreateQuestionDto, QuestionModel>();
             CreateMap<CreateAnswerDto, AnswerModel>();
+            CreateMap<MarkModel, MarkDto>();
+            CreateMap<CreateMarkDto, MarkModel>();
+            CreateMap<ClassModel, AssignClassDto>();
         }
     }
 }

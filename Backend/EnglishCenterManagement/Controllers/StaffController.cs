@@ -2,13 +2,11 @@
 using EnglishCenterManagement.Common.Helpers;
 using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Common.Response;
-using EnglishCenterManagement.Dtos.SchoolDto;
 using EnglishCenterManagement.Dtos.TeacherStudentStaffDto;
 using EnglishCenterManagement.Dtos.UserInfoDto;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
-using EnglishCenterManagement.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -178,8 +176,85 @@ namespace EnglishCenterManagement.Controllers
         }
 
         // PUT: /staffs/5
+        // TODO: check datetime
         [HttpPut("staffs/{id}")]
         [Authorize(Roles = nameof(RoleType.Admin))]
+        public ActionResult UpdateStaff([FromBody] CreateStaffDto updateStaff, int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+            if (updateStaff == null)
+            {
+                return BadRequest(new ApiReponse(600));
+            }
+            var getStaffById = _staffRepository.GetStaffById(id);
+            var getUserById = _userRepository.GetUserByUserId(id);
+            if (getStaffById == null || getUserById == null)
+            {
+                return NotFound(new ApiReponse(638));
+            }
+
+            // check login name = pwd ?
+            if (updateStaff.Password == updateStaff.LoginName)
+            {
+                return BadRequest(new ApiReponse(609));
+            }
+
+            // Check login name exist except current user's login name (get user by name and userid != current userId)
+            if (_userRepository.GetUserHasSameLoginName(getUserById.Id, updateStaff.LoginName) != null)
+            {
+                return Conflict(new ApiReponse(607));
+            }
+
+
+            Validation validateUserInfoUtils = new Validation();
+
+            // Valid Phonenumber
+            if (!validateUserInfoUtils.IsValidPhoneNumber(updateStaff.PhoneNumber))
+            {
+                return BadRequest(new ApiReponse(614));
+            }
+
+            // check pwd: Minimum eight characters, at least one uppercase & lowercase letter and one number
+            if (!validateUserInfoUtils.IsValidPassword(updateStaff.Password))
+            {
+                return BadRequest(new ApiReponse(610));
+            }
+
+            // check gender
+            if (!(updateStaff.Gender == GenderType.Male | updateStaff.Gender == GenderType.Female | updateStaff.Gender == null))
+            {
+                return BadRequest(new ApiReponse(617));
+            }
+
+            // Check email exists except current user's email (get user by email and userid != current userId)
+            if (updateStaff.Email != null)
+            {
+                if (!validateUserInfoUtils.IsValidEmail(updateStaff.Email))
+                {
+                    return BadRequest(new ApiReponse(615));
+                }
+                if (_userRepository.GetUserHasSameEmail(user.Id, updateStaff.Email) != null)
+                {
+                    return Conflict(new ApiReponse(616));
+                }
+            }
+
+            updateStaff.Password = BCrypt.Net.BCrypt.HashPassword(updateStaff.Password);
+            var updatedUserProfileMap = _mapper.Map(updateStaff, getUserById);
+            var updatedStaffProfileMap = _mapper.Map(updateStaff, getStaffById);
+            _userRepository.UpdateUserProfile(updatedUserProfileMap);
+            _staffRepository.UpdateStaffProfile(updatedStaffProfileMap);
+
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
         #endregion
 
         private UserInfoModel? GetUserByClaim()

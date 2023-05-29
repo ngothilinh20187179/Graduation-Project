@@ -1,4 +1,6 @@
-﻿namespace EnglishCenterManagement.Dtos.ExaminationDtos
+﻿using EnglishCenterManagement.Entities.Enumerations;
+
+namespace EnglishCenterManagement.Dtos.ExaminationDtos
 {
     public class BasicQuizInfoDto
     {
@@ -6,5 +8,6 @@
         public string Name { get; set; }
         public TimeOnly Duration { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
+        public QuizStatusType Status { get; set; }
     }
 }

@@ -60,6 +60,10 @@
             [638] = "Staff not exists",
             [639] = "Quiz not exists",
             [640] = "There are students taking this quiz so you can't remove it",
+            [641] = "There are students taking this quiz so you can't update it",
+            [642] = "You did this quiz",
+            [643] = "These assign classes are invalid",
+            [644] = "You don't have permission to restricted yourself",
 
             [999] = "Your account has been locked",
             [1000] = "You don't have permission to access"
