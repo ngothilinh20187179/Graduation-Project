@@ -18,10 +18,14 @@ namespace EnglishCenterManagement.Interfaces
         TeacherModel GetTeacherById(int id);
         bool CreateTeacherProfile(TeacherModel teacher);
         bool UpdateTeacherProfile(TeacherModel teacher);
+        bool TeacherNotExist(List<int> teacherIds);
 
         // class - reference
         bool CheckStudentClassExists(int classId, int studentId);
         bool CheckTeacherClassExists(int classId, int teacherId);
         bool CheckTeacherStudentInSameClass(int teacherId, int studentId);
+        ICollection<TeacherClassModel> GetTeacherClassByClassId(int id);
+        bool DeleteTeacherInClass(TeacherClassModel teacherClass);
+        bool AddTeacherClass(TeacherClassModel teacherClass);
     }
 }

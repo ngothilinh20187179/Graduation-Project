@@ -1,20 +1,13 @@
 ﻿using EnglishCenterManagement.Entities.Enumerations;
 
-namespace EnglishCenterManagement.Entities.Models
+namespace EnglishCenterManagement.Dtos.ClassRoomDto
 {
-    public class ClassScheduleModel
+    public class CreateClassScheduleDto
     {
-        public int Id { get; set; }
         //public TimeOnly PeriodStart { get; set; }
         //public TimeOnly PeriodEnd { get; set; }
         public ClassPeriodType Period { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
-
-        // relationship
-        public int ClassId { get; set; }
         public int RoomId { get; set; }
-        public RoomModel Room { get; set; }
-        public ClassModel Class { get; set; }
-
     }
 }

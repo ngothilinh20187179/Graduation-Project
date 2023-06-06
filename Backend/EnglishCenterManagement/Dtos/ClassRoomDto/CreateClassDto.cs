@@ -1,10 +1,9 @@
 ﻿using EnglishCenterManagement.Entities.Enumerations;
 
-namespace EnglishCenterManagement.Entities.Models
+namespace EnglishCenterManagement.Dtos.ClassRoomDto
 {
-    public class ClassModel
+    public class CreateClassDto
     {
-        public int Id { get; set; }
         public string ClassName { get; set; } = string.Empty;
         public DateOnly ClassStartDate { get; set; }
         public DateOnly? ClassEndDate { get; set; }
@@ -12,13 +11,7 @@ namespace EnglishCenterManagement.Entities.Models
         public double Credit { get; set; }
         public string? Note { get; set; }
         public ClassStatusType ClassStatus { get; set; } = ClassStatusType.NotStart;
-
-        // relationship
         public int SubjectId { get; set; }
-        public SubjectModel Subject { get; set; }
-        public ICollection<ClassScheduleModel> ClassSchedules { get; set; }
-        public ICollection<StudentClassModel>? StudentClasses { get; set; }
-        public ICollection<TeacherClassModel>? TeacherClasses { get; set; }
-        public ICollection<QuizClassModel>? QuizzClasses { get; set; }
+        public List<CreateClassScheduleDto> ClassSchedules { get; set; }
     }
 }

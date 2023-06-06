@@ -4,6 +4,7 @@ using EnglishCenterManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EnglishCenterManagement.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230530042733_update-teacherclass-table")]
+    partial class updateteacherclasstable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,6 +95,9 @@ namespace EnglishCenterManagement.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("NumberOfSessions")
+                        .HasColumnType("int");
+
                     b.Property<int>("NumberOfStudents")
                         .HasColumnType("int");
 
@@ -119,8 +125,11 @@ namespace EnglishCenterManagement.Migrations
                     b.Property<int>("DayOfWeek")
                         .HasColumnType("int");
 
-                    b.Property<int>("Period")
-                        .HasColumnType("int");
+                    b.Property<TimeSpan>("PeriodEnd")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan>("PeriodStart")
+                        .HasColumnType("time");
 
                     b.Property<int>("RoomId")
                         .HasColumnType("int");

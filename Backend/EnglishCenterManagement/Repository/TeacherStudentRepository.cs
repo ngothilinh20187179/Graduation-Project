@@ -69,7 +69,6 @@ namespace EnglishCenterManagement.Repository
             _context.Students.Add(student);
             return SaveChange();
         }
-
         public bool UpdateStudentProfile(StudentModel student)
         {
             _context.Students.Update(student);
@@ -119,6 +118,10 @@ namespace EnglishCenterManagement.Repository
             _context.Teachers.Update(teacher);
             return SaveChange();
         }
+        public bool TeacherNotExist(List<int> teacherIds)
+        {
+            return _context.Teachers.Any(x => !teacherIds.Contains(x.Id));
+        }
 
         // class - reference
         public bool CheckTeacherClassExists(int classId, int teacherId)
@@ -133,6 +136,20 @@ namespace EnglishCenterManagement.Repository
         {
             var teacherClassIds = _context.TeacherClasses.Where(x => x.TeacherId == teacherId).Select(x => x.ClassId).ToList();
             return _context.StudentClasses.Any(x => teacherClassIds.Contains(x.ClassId) && x.StudentId == studentId);
+        }
+        public ICollection<TeacherClassModel> GetTeacherClassByClassId(int id)
+        {
+            return _context.TeacherClasses.Where(x => x.ClassId == id).ToList();
+        }
+        public bool AddTeacherClass(TeacherClassModel teacherClass)
+        {
+            _context.Add(teacherClass);
+            return SaveChange();
+        }
+        public bool DeleteTeacherInClass(TeacherClassModel teacherClass)
+        {
+            _context.Remove(teacherClass);
+            return SaveChange();
         }
         public bool SaveChange()
         {

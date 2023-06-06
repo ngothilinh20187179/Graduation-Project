@@ -43,6 +43,8 @@ namespace EnglishCenterManagement.Data
             CreateMap<ClassModel, BasicClassRoomInfoDto>();
             CreateMap<ClassModel, ClassRoomDetailDto>();
             CreateMap<ClassScheduleModel, ClassScheduleDto>();
+            CreateMap<CreateClassDto, ClassModel>();
+            CreateMap<CreateClassScheduleDto, ClassScheduleModel>();
             CreateMap<QuizModel, BasicQuizInfoDto>();
             CreateMap<QuizModel, QuizDetailDto>();
             CreateMap<QuestionModel, QuestionDto>();

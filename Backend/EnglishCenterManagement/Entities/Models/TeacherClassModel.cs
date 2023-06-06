@@ -4,8 +4,6 @@
     {
         public int ClassId { get; set; }
         public int TeacherId { get; set; }
-        public string? Note { get; set; }
-
         // Relationship
         public ClassModel Class { get; set; }
         public TeacherModel Teacher { get; set; }

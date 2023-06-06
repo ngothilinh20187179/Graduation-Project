@@ -9,7 +9,6 @@ namespace EnglishCenterManagement.Dtos.ClassRoomDto
         public DateOnly ClassStartDate { get; set; }
         public DateOnly? ClassEndDate { get; set; }
         public int NumberOfStudents { get; set; }
-        public int NumberOfSessions { get; set; }
         public double Credit { get; set; }
     }
 }

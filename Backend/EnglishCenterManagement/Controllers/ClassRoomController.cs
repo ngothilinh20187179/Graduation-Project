@@ -9,7 +9,6 @@ using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 using System.Security.Claims;
 
 namespace EnglishCenterManagement.Controllers
@@ -39,6 +38,7 @@ namespace EnglishCenterManagement.Controllers
         }
 
         #region CLASS
+        // TODO: GET BY STATUS CLASS
         // GET: /classes
         [HttpGet("classes")]
         public ActionResult<PagedResponse> GetAllClasses(string? search, int page = 1, int pageSize = 20)
@@ -55,6 +55,7 @@ namespace EnglishCenterManagement.Controllers
 
         // GET: /classes/5
         [HttpGet("classes/{id}")]
+        [Authorize]
         public ActionResult<ClassRoomDetailDto> GetClassById(int id)
         {
             var getClassById = _classRoomRepository.GetClassById(id);
@@ -181,20 +182,107 @@ namespace EnglishCenterManagement.Controllers
             return Ok(new ApiReponse(listClassesOfTeacher));
         }
 
-        // TODO POST: /create-class
-        // Tạo thông tin lớp học, tạo lịch học, gán phòng học
-        // => cần check phòng đó vào giờ đó ngày đó có lớp nào đang học ko => thêm API get list room trống
-        // => cần set status cho class đó (đã kết thúc/chưa kết thúc/tạm dừng)
+        // POST: /create-class
         [HttpPost("create-class")]
         [Authorize(Roles = "Admin, Staff")]
+        public ActionResult CreateNewClass([FromBody] CreateClassDto createClassDto)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+            var subject = _subjectRoomRepository.GetSubjectById(createClassDto.SubjectId);
+            if (subject == null)
+            {
+                return NotFound(new ApiReponse(629));
+            }
+            if (_classRoomRepository.CheckClassNameExists(createClassDto.ClassName))
+            {
+                return Conflict(new ApiReponse(645));
+            }
+
+            // TODO: check date end > start
+
+            var mappedClass = _mapper.Map<ClassModel>(createClassDto);
+            _classRoomRepository.CreateClass(mappedClass);
+           
+            // check room + period + dayofweek có bị trùng với class nào đó có status NotStart || InProgress (nếu status là Stop/End thì ok
+            var mappedSchedule = _mapper.Map<List<ClassScheduleModel>>(createClassDto.ClassSchedules);
+            
+            for ( var i = 0; i < mappedSchedule.Count; i++)
+            {
+                if (_classRoomRepository.CheckIsSameSchedule(mappedSchedule[i]))
+                {
+                    return Conflict(new ApiReponse(646));
+                }
+            }
+
+            mappedSchedule.ForEach(item =>
+            {
+                item.ClassId = mappedClass.Id;
+            });
+
+            return StatusCode(StatusCodes.Status201Created);
+        }
         #endregion
 
         #region CLASS - REFERENCE
-        // TODO POST: /add-teacher-class
-        // TODO DELETE: /remove-student/5 => chỉ cho xóa khi class chưa bđ (status)
+        
+        // TODO: CHECK SCHEDULE
+        [HttpPost("add-teacher-to-class")]
+        [Authorize(Roles = nameof(RoleType.Staff))]
+        public ActionResult AddTeacherToClass([FromBody] AddTeacherClassDto addTeacherClassDto)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            var getClassById = _classRoomRepository.GetClassById(addTeacherClassDto.ClassId);
+            if (getClassById == null)
+            {
+                return NotFound(new ApiReponse(626));
+            }
+
+            bool checkTeacherIds = _teacherStudentRepository.TeacherNotExist(addTeacherClassDto.TeacherId);
+            if (checkTeacherIds)
+            {
+                return NotFound(new ApiReponse(636));
+            }
+
+            // TODO: check schedule của lớp đó có trùng lịch của giáo viên đó ở lớp khác ko
+
+            var allTeachetClasses = _teacherStudentRepository.GetTeacherClassByClassId(addTeacherClassDto.ClassId);
+            allTeachetClasses?.ToList().ForEach(x =>
+                {
+                    _teacherStudentRepository.DeleteTeacherInClass(x);
+                });
+
+            TeacherClassModel teacherClass = new TeacherClassModel();
+            teacherClass.ClassId = addTeacherClassDto.ClassId;
+            addTeacherClassDto.TeacherId.ForEach(x =>
+            {
+                teacherClass.TeacherId = x;
+                _teacherStudentRepository.AddTeacherClass(teacherClass);
+            });
+
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
+        // TODO: => cần API get room trống tại period và dayofweek nào đó (ko tính các class đã end hay stop)
+        // TODO PUT: edit-class/id
+        // TODO DELETE: /remove-student/5
         // TODO POST: /add-student-class
-        // cần check xem student/teacher đó có class khác trùng lịch ko
-        // TODO POST: /create-new-student-class
         #endregion
 
         private UserInfoModel? GetUserByClaim()

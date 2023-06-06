@@ -3,6 +3,7 @@ using EnglishCenterManagement.Data;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
 namespace EnglishCenterManagement.Repository
 {
@@ -15,6 +16,11 @@ namespace EnglishCenterManagement.Repository
         }
 
         // class
+        public bool CreateClass(ClassModel newclass) 
+        {
+            _context.Add(newclass);
+            return SaveChange();
+        }
         public PagedResponse GetAllClasses(string? search, int page, int pageSize)
         {
             var allClasses = _context.Classes.AsQueryable();
@@ -109,11 +115,43 @@ namespace EnglishCenterManagement.Repository
 
             return new PagedResponse(data, totalClasses, page, pageSize);
         }
+        public bool CheckClassNameExists(string className)
+        {
+            return _context.Classes.Any(x => x.ClassName == className);
+        }
 
-        
+        // schedule
         public ICollection<ClassScheduleModel> GetAllSchedulesOfClass(int id)
         {
             return _context.ClassSchedules.Where(x => x.ClassId == id).ToList();
+        }
+        public bool CreatesShedules(ClassScheduleModel schedules)
+        {
+            _context.Add(schedules);
+            return SaveChange();
+        }
+        public bool CheckIsSameSchedule(ClassScheduleModel schedule)
+        {
+            var getAllClassIdSameSchedule = _context.ClassSchedules
+                .Where(x => x.RoomId == schedule.RoomId && x.DayOfWeek == schedule.DayOfWeek && x.Period == schedule.Period)
+                .Select(x => x.ClassId).Distinct().ToList();
+
+            if (getAllClassIdSameSchedule.IsNullOrEmpty())
+            {
+                return false; // ko trung lich hoc
+            }
+
+            // get all class same chedule => check status
+            for (int i = 0; i < getAllClassIdSameSchedule.Count; i++)
+            {
+                var classSameChedule = GetClassById(getAllClassIdSameSchedule[i]);
+                if (classSameChedule.ClassStatus == ClassStatusType.NotStart || 
+                    classSameChedule.ClassStatus == ClassStatusType.InProgress)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public bool SaveChange()
