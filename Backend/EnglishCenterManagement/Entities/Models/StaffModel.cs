@@ -7,9 +7,6 @@
         public DateOnly GraduationTime { get; set; }
         public string? Note { get; set; }
 
-        // Permissions: ngoài những permission chung cho staff, mỗi staff sẽ có permissions riêng
-        //public bool CanDoSomeThing = false;
-
         // Relationship
         public UserInfoModel User { get; set; }
     }

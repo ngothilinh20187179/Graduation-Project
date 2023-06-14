@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EnglishCenterManagement.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230522035012_update-quiz-table")]
-    partial class updatequiztable
+    [Migration("20230614031153_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,9 +95,6 @@ namespace EnglishCenterManagement.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NumberOfSessions")
-                        .HasColumnType("int");
-
                     b.Property<int>("NumberOfStudents")
                         .HasColumnType("int");
 
@@ -125,11 +122,8 @@ namespace EnglishCenterManagement.Migrations
                     b.Property<int>("DayOfWeek")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("PeriodEnd")
-                        .HasColumnType("time");
-
-                    b.Property<TimeSpan>("PeriodStart")
-                        .HasColumnType("time");
+                    b.Property<int>("Period")
+                        .HasColumnType("int");
 
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
@@ -149,6 +143,15 @@ namespace EnglishCenterManagement.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("QuizId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Point")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalPoint")
                         .HasColumnType("int");
 
                     b.HasKey("StudentId", "QuizId");
@@ -218,6 +221,9 @@ namespace EnglishCenterManagement.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
@@ -369,9 +375,6 @@ namespace EnglishCenterManagement.Migrations
 
                     b.Property<int>("ClassId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TeacherId", "ClassId");
 

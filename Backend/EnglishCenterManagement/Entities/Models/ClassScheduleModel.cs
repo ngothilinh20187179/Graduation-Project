@@ -5,8 +5,6 @@ namespace EnglishCenterManagement.Entities.Models
     public class ClassScheduleModel
     {
         public int Id { get; set; }
-        //public TimeOnly PeriodStart { get; set; }
-        //public TimeOnly PeriodEnd { get; set; }
         public ClassPeriodType Period { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
 

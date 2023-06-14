@@ -77,7 +77,6 @@ namespace EnglishCenterManagement.Migrations
                     ClassStartDate = table.Column<DateTime>(type: "date", nullable: false),
                     ClassEndDate = table.Column<DateTime>(type: "date", nullable: true),
                     NumberOfStudents = table.Column<int>(type: "int", nullable: false),
-                    NumberOfSessions = table.Column<int>(type: "int", nullable: false),
                     Credit = table.Column<double>(type: "float", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClassStatus = table.Column<int>(type: "int", nullable: false),
@@ -199,8 +198,7 @@ namespace EnglishCenterManagement.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PeriodStart = table.Column<TimeSpan>(type: "time", nullable: false),
-                    PeriodEnd = table.Column<TimeSpan>(type: "time", nullable: false),
+                    Period = table.Column<int>(type: "int", nullable: false),
                     DayOfWeek = table.Column<int>(type: "int", nullable: false),
                     ClassId = table.Column<int>(type: "int", nullable: false),
                     RoomId = table.Column<int>(type: "int", nullable: false)
@@ -256,6 +254,8 @@ namespace EnglishCenterManagement.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Duration = table.Column<TimeSpan>(type: "time", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     TeacherId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -274,8 +274,7 @@ namespace EnglishCenterManagement.Migrations
                 columns: table => new
                 {
                     ClassId = table.Column<int>(type: "int", nullable: false),
-                    TeacherId = table.Column<int>(type: "int", nullable: false),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    TeacherId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -299,7 +298,10 @@ namespace EnglishCenterManagement.Migrations
                 columns: table => new
                 {
                     QuizId = table.Column<int>(type: "int", nullable: false),
-                    StudentId = table.Column<int>(type: "int", nullable: false)
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    Point = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TotalPoint = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

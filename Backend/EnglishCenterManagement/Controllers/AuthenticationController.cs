@@ -10,9 +10,6 @@ using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Dtos.AuthenticationDtos;
-using System;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Routing;
 
 namespace EnglishCenterManagement.Controllers
 {
@@ -128,7 +125,7 @@ namespace EnglishCenterManagement.Controllers
             var user = _userRepository.GetUserByLoginName(userLogin.LoginName);
             if (user == null)
             {
-                return NotFound(new ApiReponse(606));
+                return BadRequest(new ApiReponse(606));
             }
 
             // check status user
@@ -185,8 +182,9 @@ namespace EnglishCenterManagement.Controllers
         }
 
         // POST: /refreshToken
+        // TODO: Client gửi RT lên Server để lấy AT mới và RT mới (nhưng thời gian hết hạn của RT mới vẫn như RT cũ )
         [HttpPost("refresh-token")]
-        [AllowAnonymous]
+        [Authorize]
         public ActionResult RefreshToken([FromBody] TokenDto currentToken)
         {
             if (currentToken == null)
@@ -231,11 +229,11 @@ namespace EnglishCenterManagement.Controllers
             var token = _authenRepository.GetTokenById(user.Id);
             if (!token.RefreshToken.Equals(currentToken.RefreshToken))
             {
-                return Unauthorized(new ApiReponse(604)); ; // => Ma Refresh Token ko khop voi database
+                return BadRequest(new ApiReponse(604)); ; // => Ma Refresh Token ko khop voi database
             }
             if (token.ExpiredAt < DateTime.Now)
             {
-                return Unauthorized(new ApiReponse(605)); // => Phai dang nhap lai
+                return BadRequest(new ApiReponse(605)); // => Phai dang nhap lai
             }
 
             // Update Token
