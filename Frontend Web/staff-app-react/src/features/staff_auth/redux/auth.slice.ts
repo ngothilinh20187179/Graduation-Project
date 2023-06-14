@@ -1,14 +1,14 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import AUTH_KEY from "../constants/auth.keys";
 import {
   AuthState,
   LoginRequestBody,
   LoginResponse,
   TokenInfo,
 } from "../types/auth.types";
+import { loginApi, refreshTokenApi } from "../staff_auth";
 import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
-import AUTH_KEY from "../constants/auth.keys";
-import { loginApi, refreshTokenApi } from "../admin_auth";
 
 const initialState: AuthState = {
   tokenInfo: null,

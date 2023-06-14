@@ -8,9 +8,9 @@ import { ROOT_ROUTE } from "routes/routes.config";
 import { requireRules } from "helpers/validations.helper";
 import { SubmitButton } from "components/SubmitButton";
 import mess from "messages/messages.json";
-import { login } from "features/admin_auth/redux/auth.slice";
 import { useState } from "react";
-import { RoleType } from "features/admin_auth/constants/auth.constants";
+import { login } from "features/staff_auth/redux/auth.slice";
+import { RoleType } from "features/staff_auth/constants/auth.constants";
 
 const LoginScreen = () => {
   const dispatch = useAppDispatch();
@@ -24,7 +24,7 @@ const LoginScreen = () => {
       login({
         loginName: form.getFieldValue("loginName"),
         password: form.getFieldValue("password"),
-        role: RoleType.Admin
+        role: RoleType.Staff
       })
     )
       .unwrap()
@@ -38,7 +38,7 @@ const LoginScreen = () => {
   return (
     <div className={cx(styles.loginScreen)}>
       <div className={cx(styles.loginContent)}>
-      <Typography className={cx(styles.title)}>Admin Login</Typography>
+      <Typography className={cx(styles.title)}>Staff Login</Typography>
       <Form
         form={form}
         labelCol={{ span: 8 }}

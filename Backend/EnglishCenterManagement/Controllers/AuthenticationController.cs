@@ -128,17 +128,22 @@ namespace EnglishCenterManagement.Controllers
                 return BadRequest(new ApiReponse(606));
             }
 
-            // check status user
-            if (user.UserStatus == UserStatusType.Lock)
-            {
-                return Unauthorized(new ApiReponse(999));
-            }
-
             // check pwd 
             bool checkPassword = BCrypt.Net.BCrypt.Verify(userLogin.Password, user.Password);
             if (!checkPassword)
             {
                 return BadRequest(new ApiReponse(610));
+            }
+
+            if (user.Role != userLogin.Role)
+            {
+                return BadRequest(new ApiReponse(1000));
+            }
+
+            // check status user
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
             }
 
             // generate token
@@ -174,11 +179,14 @@ namespace EnglishCenterManagement.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            return Ok(new ApiReponse(new TokenDto
+            var tokenInfo = new
             {
                 AccessToken = accessToken,
-                RefreshToken = refreshToken
-            }));
+                RefreshToken = refreshToken,
+                user.Role,
+            };
+
+            return Ok(new ApiReponse(tokenInfo));
         }
 
         // POST: /refreshToken

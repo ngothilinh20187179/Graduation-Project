@@ -1,4 +1,4 @@
-import { RoleType } from "../admin_auth";
+import { RoleType } from "../staff_auth";
 
 export type LoginRequestBody = {
   loginName: string;
