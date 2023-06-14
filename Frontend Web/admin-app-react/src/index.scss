@@ -1,0 +1,61 @@
+@import "src/styles/colors";
+@import "src/styles/common";
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+// Input
+
+.ant-form-item {
+  margin-bottom: 30px;
+  .ant-input,
+  .ant-input-affix-wrapper {
+    padding: 8px 11px;
+  }
+  .ant-form-item-label >label {
+    font-size: 16px;
+  }
+}
+
+.ant-btn {
+  height: 38px;
+  font-size: 16px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+.ant-input-affix-wrapper > input.ant-input:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
+.ant-input-group-wrapper.has-button {
+  .ant-input-group-addon {
+    padding: 0 !important;
+    background-color: unset !important;
+    border: unset !important;
+  }
+  .ant-input,
+  .ant-input-password {
+    border-radius: 0 6px 6px 0 !important;
+  }
+  .ant-btn {
+    border-radius: 6px 0 0 6px !important;
+  }
+}

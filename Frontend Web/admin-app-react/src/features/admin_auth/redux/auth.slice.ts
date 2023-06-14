@@ -1,0 +1,77 @@
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import AUTH_KEY from "../constants/auth.keys";
+import { AuthState, LoginRequestBody, TokenInfo } from "../types/auth.types";
+import { loginApi, refreshTokenApi } from "../admin_auth";
+import storage from "redux-persist/lib/storage";
+import { persistReducer } from "redux-persist";
+
+const initialState: AuthState = {
+  tokenInfo: null,
+};
+
+export const login = createAsyncThunk(
+  `${AUTH_KEY}/login`,
+  async (data: LoginRequestBody) => {
+    const response = await loginApi(data);
+    return response.data.data;
+  }
+);
+
+export const refreshToken = createAsyncThunk(
+  `${AUTH_KEY}/refreshToken`,
+  async (data: TokenInfo) => {
+    const response = await refreshTokenApi(data);
+    return response.data.data;
+  }
+);
+
+const authSlice = createSlice({
+  name: AUTH_KEY,
+  initialState,
+  reducers: {
+    clearUser(state) {
+      state.tokenInfo = null;
+      localStorage.clear();
+    },
+  },
+  extraReducers: (builder) => {
+    // LOGIN
+    builder.addCase(login.pending, (state) => {
+      state.tokenInfo = null;
+      localStorage.clear();
+    });
+    builder.addCase(
+      login.fulfilled,
+      (state, action: PayloadAction<TokenInfo>) => {
+        state.tokenInfo = action.payload;
+        localStorage.setItem("accessToken", action.payload.accessToken);
+      }
+    );
+
+    // REFRESH TOKEN
+    builder.addCase(refreshToken.pending, (state) => {
+      state.tokenInfo = null;
+      localStorage.clear();
+    });
+    builder.addCase(
+      refreshToken.fulfilled,
+      (state, action: PayloadAction<TokenInfo>) => {
+        state.tokenInfo = action.payload;
+        localStorage.setItem("accessToken", action.payload.accessToken);
+      }
+    );
+  },
+});
+
+const authPersistConfig = {
+  key: AUTH_KEY,
+  storage,
+  whitelist: ["tokenInfo"],
+};
+
+export const authReducer = persistReducer<AuthState>(
+  authPersistConfig,
+  authSlice.reducer
+);
+
+export const { clearUser } = authSlice.actions;
