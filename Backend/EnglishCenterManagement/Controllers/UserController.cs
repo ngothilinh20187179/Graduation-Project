@@ -262,6 +262,27 @@ namespace EnglishCenterManagement.Controllers
             return Ok(new ApiReponse(userProfileMap));
         }
 
+        // GET: /myavatar
+        [HttpGet("myavatar")]
+        [Authorize]
+        public ActionResult<AvatarDto> GetMyAvatar()
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            var avatar = _userRepository.GetUserAvatar(user.Id);
+            var mappedAvatar = _mapper.Map<AvatarDto>(avatar);
+
+            return Ok(new ApiReponse(mappedAvatar));
+        }
+
         // PUT: /change-information
         [HttpPut("change-information")]
         [Authorize]

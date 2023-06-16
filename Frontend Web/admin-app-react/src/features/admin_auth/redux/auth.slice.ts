@@ -8,7 +8,7 @@ import {
 import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
 import AUTH_KEY from "../constants/auth.keys";
-import { loginApi, refreshTokenApi } from "../admin_auth";
+import { loginApi, logoutApi, refreshTokenApi } from "../admin_auth";
 
 const initialState: AuthState = {
   tokenInfo: null,
@@ -30,6 +30,11 @@ export const refreshToken = createAsyncThunk(
     return response.data.data;
   }
 );
+
+export const logout = createAsyncThunk(`${AUTH_KEY}/logout`, async () => {
+  const response = await logoutApi();
+  return response.data.data;
+});
 
 const authSlice = createSlice({
   name: AUTH_KEY,
@@ -67,6 +72,11 @@ const authSlice = createSlice({
         localStorage.setItem("accessToken", action.payload.accessToken);
       }
     );
+
+    builder.addCase(logout.pending, (state) => {
+      state.tokenInfo = null;
+      localStorage.clear();
+    });
   },
 });
 

@@ -1,19 +1,15 @@
-import { getUserById } from "features/admin_users/admin_users";
-import { useEffect } from "react";
-import { useAppDispatch } from "redux/store";
+import { Typography } from "antd";
+import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
+import { memo } from "react";
 
 const TopScreen = () => {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(getUserById(1))
-  }, [dispatch]);
   
   return (
     <div>
-      <p>root</p>
+      <Typography>test top screen</Typography>
+      <LoadingSpinner />
     </div>
   );
 };
 
-export default TopScreen;
+export default memo(TopScreen);

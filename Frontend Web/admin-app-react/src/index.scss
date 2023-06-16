@@ -15,6 +15,26 @@ code {
     monospace;
 }
 
+.ant-typography {
+  font-size: 16px;
+}
+
+.ant-dropdown {
+  .ant-dropdown-menu {
+    padding: 8px;
+  }
+  .ant-dropdown-menu-item {
+    padding: 12px !important;
+    gap: 6px;
+  }
+  .ant-dropdown-menu-title-content {
+    font-size: 16px !important;
+  }
+  .ant-dropdown-menu-item-icon {
+    font-size: 18px !important;
+  }
+}
+
 // Input
 
 .ant-form-item {

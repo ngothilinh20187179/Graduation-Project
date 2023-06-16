@@ -1,5 +1,5 @@
 import { getUserById } from "features/admin_users/admin_users";
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { RootState } from "redux/root-reducer";
 import { useAppDispatch, useAppSelector } from "redux/store";
@@ -22,4 +22,4 @@ const UsersDetailScreen = () => {
   );
 };
 
-export default UsersDetailScreen;
+export default memo(UsersDetailScreen);

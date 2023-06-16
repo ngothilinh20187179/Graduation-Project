@@ -4,7 +4,7 @@ import {
     createRoutesFromElements,
     Route,
   } from "react-router-dom";
-import { FORBIDDEN_ROUTE, LIST_ROUTES } from "./routes.config";
+import { FORBIDDEN_ROUTE, LIST_PRIVATE_ROUTES, LIST_PUBLIC_ROUTES } from "./routes.config";
 import Forbidden from "components/Forbidden";
 import { routeWrapper } from "./RouteWrapper";
   
@@ -13,7 +13,10 @@ export const router = createBrowserRouter(
     <>
       <Route errorElement={<NotFound />}>
         <Route>
-          {LIST_ROUTES.map(route => routeWrapper(route))}
+          {LIST_PUBLIC_ROUTES.map(route => routeWrapper(route))}
+          {LIST_PRIVATE_ROUTES.map(route => 
+            routeWrapper(route, { isPrivateRoutes: true })
+          )}
         </Route>
         <Route 
           path={FORBIDDEN_ROUTE}

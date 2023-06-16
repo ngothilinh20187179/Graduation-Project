@@ -9,7 +9,7 @@ import { requireRules } from "helpers/validations.helper";
 import { SubmitButton } from "components/SubmitButton";
 import mess from "messages/messages.json";
 import { login } from "features/admin_auth/redux/auth.slice";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { RoleType } from "features/admin_auth/constants/auth.constants";
 
 const LoginScreen = () => {
@@ -36,9 +36,9 @@ const LoginScreen = () => {
   };
 
   return (
-    <div className={cx(styles.loginScreen)}>
-      <div className={cx(styles.loginContent)}>
-      <Typography className={cx(styles.title)}>Admin Login</Typography>
+    <div className={cx(styles.loginScreen, "flex-center full-height")}>
+      <div className={cx(styles.loginContent, "pt-30 pr-60 pb-6 pl-15")}>
+      <Typography className={cx(styles.title, "font-30")}>Admin Login</Typography>
       <Form
         form={form}
         labelCol={{ span: 8 }}
@@ -71,4 +71,4 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default memo(LoginScreen);
