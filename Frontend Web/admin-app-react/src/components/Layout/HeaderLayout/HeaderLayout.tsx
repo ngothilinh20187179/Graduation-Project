@@ -17,7 +17,7 @@ import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
 } from "@ant-design/icons";
-import { clearUser, logout } from "features/admin_auth/redux/auth.slice";
+import { logout } from "features/admin_auth/redux/auth.slice";
 import { AuthPathsEnum } from "features/admin_auth/admin_auth";
 import { useNavigate } from "react-router-dom";
 

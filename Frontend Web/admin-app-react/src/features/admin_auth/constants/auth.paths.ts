@@ -9,5 +9,5 @@ export const AuthRoutePaths = {
 };
 
 export const AuthPaths = {
-  LOGIN: () => `login`,
+  LOGIN: () => "/login",
 };

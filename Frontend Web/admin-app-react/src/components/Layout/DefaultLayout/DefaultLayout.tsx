@@ -13,7 +13,7 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
       <SiderLayout collapsed={collapsed}/>
       <Layout>
         <HeaderLayout collapsed={collapsed} setCollapsed={setCollapsed}/>
-        <Content className="full-height full-width pl-50 pt-30">
+        <Content className="full-height full-width pl-55 pt-55">
           {children}
           <Outlet />
         </Content>

@@ -4,13 +4,13 @@ import { Form, Input, Typography } from "antd";
 import cx from "classnames";
 import styles from "./LoginScreen.module.scss";
 import { useForm } from "antd/es/form/Form";
-import { ROOT_ROUTE } from "routes/routes.config";
 import { requireRules } from "helpers/validations.helper";
 import { SubmitButton } from "components/SubmitButton";
 import mess from "messages/messages.json";
 import { login } from "features/admin_auth/redux/auth.slice";
 import { memo, useState } from "react";
 import { RoleType } from "features/admin_auth/constants/auth.constants";
+import { TopPaths } from "features/admin_top/admin_top";
 
 const LoginScreen = () => {
   const dispatch = useAppDispatch();
@@ -29,7 +29,7 @@ const LoginScreen = () => {
     )
       .unwrap()
       .then(() => {
-        navigate(ROOT_ROUTE);
+        navigate(TopPaths.TOP());
       })
       .catch(err => console.log(err))
       .finally(() => setIsSubmitting(false));

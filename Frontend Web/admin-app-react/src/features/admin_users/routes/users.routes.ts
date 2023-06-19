@@ -10,4 +10,10 @@ const USER_DETAIL_SCREEN: RouteItem = {
   ),
 };
 
-export const USERS_ROUTES = [USER_DETAIL_SCREEN];
+const USERS_SCREEN: RouteItem = {
+  id: "admin-users",
+  path: UserRoutePaths.GET_ALL_USERS,
+  component: lazy(() => import("../screens/UsersScreen/UsersScreen")),
+};
+
+export const USERS_ROUTES = [USER_DETAIL_SCREEN, USERS_SCREEN];
