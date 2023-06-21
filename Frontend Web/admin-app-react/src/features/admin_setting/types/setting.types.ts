@@ -1,7 +1,4 @@
-export type GetMyAvatarResponse = {
-  mediaType: string;
-  data: string;
-};
+import { UserProfile } from "features/admin_users/admin_users";
 
 export type ChangePasswordRequestBody = {
   oldPassword: string;
@@ -10,5 +7,5 @@ export type ChangePasswordRequestBody = {
 };
 
 export interface SettingState {
-  avatar: GetMyAvatarResponse | null;
+  myProfile: UserProfile | null;
 }

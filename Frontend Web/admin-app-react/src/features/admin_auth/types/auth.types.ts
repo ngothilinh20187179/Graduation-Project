@@ -12,10 +12,8 @@ export type TokenInfo = {
 };
 
 export type LoginResponse = {
-  refreshToken: string;
-  accessToken: string;
-  role: number;
-};
+  role: RoleType;
+} & TokenInfo;
 
 export interface AuthState {
   tokenInfo: TokenInfo | null;

@@ -16,4 +16,14 @@ const CHANGE_PASSWORD_SCREEN: RouteItem = {
   ),
 };
 
-export const SETTING_ROUTES = [SETTING_SCREEN, CHANGE_PASSWORD_SCREEN];
+const MY_PROFILE_SCREEN: RouteItem = {
+  id: "admin-setting-my-profile",
+  path: SettingRoutePaths.MY_PROFILE,
+  component: lazy(() => import("../screens/MyProfileScreen/MyProfileScreen")),
+};
+
+export const SETTING_ROUTES = [
+  SETTING_SCREEN,
+  CHANGE_PASSWORD_SCREEN,
+  MY_PROFILE_SCREEN,
+];

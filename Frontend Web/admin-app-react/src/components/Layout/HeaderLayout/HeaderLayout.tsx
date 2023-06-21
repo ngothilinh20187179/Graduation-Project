@@ -7,10 +7,6 @@ import styles from "./HeaderLayout.module.scss";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { RootState } from "redux/root-reducer";
 import {
-  SettingPaths,
-  getMyAvatar,
-} from "features/admin_setting/admin_setting";
-import {
   UserOutlined,
   LogoutOutlined,
   AuditOutlined,
@@ -20,6 +16,8 @@ import {
 import { logout } from "features/admin_auth/redux/auth.slice";
 import { AuthPathsEnum } from "features/admin_auth/admin_auth";
 import { useNavigate } from "react-router-dom";
+import { getMyAvatar } from "features/admin_users/admin_users";
+import { SettingPaths } from "features/admin_setting/admin_setting";
 
 const HeaderLayout = ({
   collapsed,
@@ -30,7 +28,7 @@ const HeaderLayout = ({
 }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { avatar } = useAppSelector((state: RootState) => state.setting);
+  const { avatar } = useAppSelector((state: RootState) => state.users);
 
   useEffect(() => {
     dispatch(getMyAvatar());

@@ -1,29 +1,28 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   ChangePasswordRequestBody,
-  GetMyAvatarResponse,
   SettingState,
   changePasswordApi,
-  getMyAvatarApi,
+  getMyProfileApi,
 } from "../admin_setting";
 import SETTING_KEY from "../constants/setting.keys";
+import { UserProfile } from "features/admin_users/admin_users";
 
 const initialState: SettingState = {
-  avatar: null,
+  myProfile: null,
 };
-
-export const getMyAvatar = createAsyncThunk(
-  `${SETTING_KEY}/getMyAvatar`,
-  async () => {
-    const response = await getMyAvatarApi();
-    return response.data.data;
-  }
-);
 
 export const changePassword = createAsyncThunk(
   `${SETTING_KEY}/changePassword`,
   async (data: ChangePasswordRequestBody) => {
-    const response = await changePasswordApi(data);
+    return changePasswordApi(data);
+  }
+);
+
+export const getMyProfile = createAsyncThunk(
+  `${SETTING_KEY}/myprofile`,
+  async () => {
+    const response = await getMyProfileApi();
     return response.data.data;
   }
 );
@@ -34,13 +33,13 @@ const settingSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(
-      getMyAvatar.fulfilled,
-      (state, action: PayloadAction<GetMyAvatarResponse>) => {
-        state.avatar = action.payload;
+      getMyProfile.fulfilled,
+      (state, action: PayloadAction<UserProfile>) => {
+        state.myProfile = action.payload;
       }
     );
-    builder.addCase(getMyAvatar.rejected, (state) => {
-      state.avatar = null;
+    builder.addCase(getMyProfile.rejected, (state) => {
+      state.myProfile = null;
     });
   },
 });

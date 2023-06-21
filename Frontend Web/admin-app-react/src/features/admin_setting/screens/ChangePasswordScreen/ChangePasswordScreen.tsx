@@ -1,12 +1,17 @@
-import { Input, Form, Typography, Modal } from "antd";
+import { Input, Form, Modal, Breadcrumb } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { SubmitButton } from "components/SubmitButton";
-import { SettingPaths, changePassword } from "features/admin_setting/admin_setting";
+import {
+  SettingPaths,
+  changePassword,
+} from "features/admin_setting/admin_setting";
 import { passwordRules, requireRules } from "helpers/validations.helper";
 import { memo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import mess from "messages/messages.json";
 import { useAppDispatch } from "redux/store";
+import { HomeOutlined } from "@ant-design/icons";
+import { TopPaths } from "features/admin_top/admin_top";
 
 const ChangePasswordScreen = () => {
   const [form] = useForm();
@@ -17,22 +22,34 @@ const ChangePasswordScreen = () => {
 
   const handleChangePassword = () => {
     setIsSubmitting(true);
-    dispatch(changePassword({...form.getFieldsValue()})) 
-    .unwrap()
-    .then(() => navigate(SettingPaths.SETTING()))
-    .catch(err => console.log(err))
-    .finally(() => {
-      setIsSubmitting(false);
-      setIsModalOpen(false);
-    })
+    dispatch(changePassword({ ...form.getFieldsValue() }))
+      .unwrap()
+      .then(() => navigate(SettingPaths.SETTING()))
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsSubmitting(false);
+        setIsModalOpen(false);
+      });
   };
 
   return (
     <div>
-      <Link className="font-20 text-link" to={SettingPaths.SETTING()}>
-        {`Settings >`}
-      </Link>
-      <Typography className="pt-30 font-18 pb-50">Change Password</Typography>
+      <Breadcrumb className="pb-50 font-18">
+        <Breadcrumb.Item
+          className="cursor-pointer"
+          onClick={() => navigate(TopPaths.TOP())}
+        >
+          <HomeOutlined />
+        </Breadcrumb.Item>
+        <Breadcrumb.Item
+          className="cursor-pointer"
+          onClick={() => navigate(SettingPaths.SETTING())}
+        >
+          Settings
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>Change Password</Breadcrumb.Item>
+      </Breadcrumb>
+
       <Form
         form={form}
         name="wrap"
@@ -44,7 +61,7 @@ const ChangePasswordScreen = () => {
         style={{ maxWidth: 600 }}
         onFinish={() => setIsModalOpen(true)}
       >
-        <Form.Item 
+        <Form.Item
           label="Old Password"
           name="oldPassword"
           rules={[...requireRules(mess.fe_1), ...passwordRules(mess.fe_4)]}
@@ -55,7 +72,7 @@ const ChangePasswordScreen = () => {
         <Form.Item
           label="New Password"
           name="password"
-          dependencies={['oldPassword']}
+          dependencies={["oldPassword"]}
           rules={[
             ...requireRules(mess.fe_1),
             ...passwordRules(mess.fe_4),
@@ -75,7 +92,7 @@ const ChangePasswordScreen = () => {
         <Form.Item
           label="Confirmation"
           name="confirmPassword"
-          dependencies={['password']}
+          dependencies={["password"]}
           rules={[
             ...requireRules(mess.fe_1),
             ({ getFieldValue }) => ({

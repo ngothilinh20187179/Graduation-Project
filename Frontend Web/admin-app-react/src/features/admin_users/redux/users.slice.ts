@@ -1,15 +1,28 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import USERS_KEY from "../constants/users.keys";
-import { GetUserResponse, UsersState, getUserByIdApi } from "../admin_users";
+import {
+  UserAvatar,
+  UsersState,
+  getMyAvatarApi,
+  getUserByIdApi,
+} from "../admin_users";
 
 const initialState: UsersState = {
-  user: null,
+  avatar: null,
 };
 
 export const getUserById = createAsyncThunk(
   `${USERS_KEY}/getUserById`,
-  async (userId: number, thunkAPI) => {
+  async (userId: number) => {
     const response = await getUserByIdApi(userId);
+    return response.data.data;
+  }
+);
+
+export const getMyAvatar = createAsyncThunk(
+  `${USERS_KEY}/getMyAvatar`,
+  async () => {
+    const response = await getMyAvatarApi();
     return response.data.data;
   }
 );
@@ -20,13 +33,13 @@ const usersSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(
-      getUserById.fulfilled,
-      (state, action: PayloadAction<GetUserResponse>) => {
-        state.user = action.payload;
+      getMyAvatar.fulfilled,
+      (state, action: PayloadAction<UserAvatar>) => {
+        state.avatar = action.payload;
       }
     );
-    builder.addCase(getUserById.rejected, (state) => {
-      state.user = null;
+    builder.addCase(getMyAvatar.rejected, (state) => {
+      state.avatar = null;
     });
   },
 });

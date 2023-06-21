@@ -5,3 +5,8 @@ export enum RoleType {
   Staff,
   Admin,
 }
+
+export enum GenderType {
+  Male,
+  Female,
+}

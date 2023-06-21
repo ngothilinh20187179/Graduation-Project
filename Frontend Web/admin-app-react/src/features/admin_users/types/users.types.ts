@@ -1,23 +1,32 @@
-export type GetUserResponse = {
+import { GenderType, RoleType } from "features/admin_auth/admin_auth";
+
+export type BasicUserInfo = {
   id: number;
-  loginName: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  gender: number;
-  email: string;
-  location: string;
-  dateOfBirth: string;
-  created: string;
-  role: number;
-  avatar: GetUserAvatarResponse;
+  gender: GenderType | null;
+  dateOfBirth: string | null;
 };
 
-export type GetUserAvatarResponse = {
+export type PrivateUserInfo = {
+  loginName: string;
+  email: string | null;
+  location: string | null;
+  created: string;
+  role: RoleType;
+};
+
+export type UserAvatar = {
   mediaType: string;
   data: string;
 };
 
+export type UserProfile = BasicUserInfo &
+  PrivateUserInfo & {
+    avatar: UserAvatar | null;
+  };
+
 export interface UsersState {
-  user: GetUserResponse | null;
+  avatar: UserAvatar | null;
 }

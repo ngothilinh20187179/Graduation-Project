@@ -9,7 +9,7 @@ import { SubmitButton } from "components/SubmitButton";
 import mess from "messages/messages.json";
 import { login } from "features/admin_auth/redux/auth.slice";
 import { memo, useState } from "react";
-import { RoleType } from "features/admin_auth/constants/auth.constants";
+import { RoleType } from "features/admin_users/constants/users.constants";
 import { TopPaths } from "features/admin_top/admin_top";
 
 const LoginScreen = () => {
