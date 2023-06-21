@@ -13,7 +13,7 @@ import {
 import {
   UserOutlined,
   LogoutOutlined,
-  SettingOutlined,
+  AuditOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
 } from "@ant-design/icons";
@@ -63,9 +63,9 @@ const HeaderLayout = ({
           items: [
             {
               key: "1",
-              label: "Setting",
-              icon: <SettingOutlined />,
-              onClick: () => navigate(SettingPaths.SETTING()),
+              label: "My Profile",
+              icon: <AuditOutlined />,
+              onClick: () => navigate(SettingPaths.MY_PROFILE()),
             },
             {
               key: "2",

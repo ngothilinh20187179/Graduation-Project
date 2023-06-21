@@ -2,5 +2,8 @@
   "fe_0": "Please input your login name!",
   "fe_1": "Please input your password!",
   "fe_2": "The connection has timed out",
-  "fe_3": "Server error"
+  "fe_3": "Server error",
+  "fe_4": "Invalid password. Use at least 8 characters, 1 uppercase, 1 number",
+  "fe_5": "Password and old password cannot be the same",
+  "fe_6": "Password and confirm password does not match"
 }

@@ -46,7 +46,7 @@ const items: MenuProps["items"] = [
   getItem("Finances", "manageFinancesKey", <DollarOutlined />, [
     getItem("Salary", "/salary"),
   ]),
-  getItem("Setting", SettingPaths.SETTING(), <SettingOutlined />),
+  getItem("Settings", SettingPaths.SETTING(), <SettingOutlined />),
 ];
 
 const SiderLayout = ({ collapsed }: { collapsed: boolean }) => {

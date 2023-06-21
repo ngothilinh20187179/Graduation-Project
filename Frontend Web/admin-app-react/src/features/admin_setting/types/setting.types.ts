@@ -3,6 +3,12 @@ export type GetMyAvatarResponse = {
   data: string;
 };
 
+export type ChangePasswordRequestBody = {
+  oldPassword: string;
+  password: string;
+  confirmPassword: string;
+};
+
 export interface SettingState {
   avatar: GetMyAvatarResponse | null;
 }

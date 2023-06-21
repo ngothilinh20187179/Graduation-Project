@@ -3,8 +3,7 @@
 
 export const EMAIL_REGEX =
   /^[^.\W](?!.*\.\.)[a-zA-Z0-9._+-/]{1,64}@[a-zA-Z0-9-.]+(\.[a-zA-Z]{2,}){1}$/g;
-export const PASSWORD_REGEX =
-  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[#$%()*+-.\/:;?@[\]_{}~])[A-Za-z*\d#$%()*+-.\/:;?@[\]_{}~]{10,20}$/g;
+export const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/g;
 
 export const requireRules = (message: string) => [
   {

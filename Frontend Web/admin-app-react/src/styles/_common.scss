@@ -155,3 +155,16 @@ $positions: "static", "relative", "absolute", "fixed", "sticky";
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+//link
+.text-link {
+  text-decoration: underline !important;
+  text-underline-offset: 2px;
+  color: black;
+}
+
+.text-link-blue {
+  color: $dark-blue;
+  text-decoration: none;
+  font-size: 18px;
+}

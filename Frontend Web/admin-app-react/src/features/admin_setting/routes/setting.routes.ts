@@ -8,4 +8,12 @@ const SETTING_SCREEN: RouteItem = {
   component: lazy(() => import("../screens/SettingScreen/SettingScreen")),
 };
 
-export const SETTING_ROUTES = [SETTING_SCREEN];
+const CHANGE_PASSWORD_SCREEN: RouteItem = {
+  id: "admin-setting-change-pwd",
+  path: SettingRoutePaths.CHANGE_PASSWORD,
+  component: lazy(
+    () => import("../screens/ChangePasswordScreen/ChangePasswordScreen")
+  ),
+};
+
+export const SETTING_ROUTES = [SETTING_SCREEN, CHANGE_PASSWORD_SCREEN];
