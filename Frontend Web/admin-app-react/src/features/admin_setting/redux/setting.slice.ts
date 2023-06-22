@@ -2,7 +2,9 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   ChangePasswordRequestBody,
   SettingState,
+  changeAvatarApi,
   changePasswordApi,
+  deleteAvatarApi,
   getMyProfileApi,
 } from "../admin_setting";
 import SETTING_KEY from "../constants/setting.keys";
@@ -24,6 +26,20 @@ export const getMyProfile = createAsyncThunk(
   async () => {
     const response = await getMyProfileApi();
     return response.data.data;
+  }
+);
+
+export const changeAvatar = createAsyncThunk(
+  `${SETTING_KEY}/changeAvatar`,
+  async (data: FormData) => {
+    return changeAvatarApi(data);
+  }
+);
+
+export const deleteAvatar = createAsyncThunk(
+  `${SETTING_KEY}/deleteAvatar`,
+  async () => {
+    return deleteAvatarApi();
   }
 );
 

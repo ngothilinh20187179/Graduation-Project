@@ -192,7 +192,7 @@ namespace EnglishCenterManagement.Controllers
         // POST: /refreshToken
         // TODO: Client gửi RT lên Server để lấy AT mới và RT mới (nhưng thời gian hết hạn của RT mới vẫn như RT cũ )
         [HttpPost("refresh-token")]
-        [Authorize]
+        [AllowAnonymous]
         public ActionResult RefreshToken([FromBody] TokenDto currentToken)
         {
             if (currentToken == null)

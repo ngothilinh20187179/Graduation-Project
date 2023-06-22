@@ -76,6 +76,7 @@ const HeaderLayout = ({
       >
         {avatar?.data ? (
           <Image
+            preview={false}
             width={30}
             src={`data:${avatar.mediaType};base64,${avatar.data}`}
           />
