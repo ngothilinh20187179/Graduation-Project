@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import ja from "dayjs/locale/ja";
+import vi from "dayjs/locale/vi";
 import isBetween from "dayjs/plugin/isBetween";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
@@ -17,4 +17,4 @@ dayjs.extend(weekday);
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isBetween);
-dayjs.locale(ja);
+dayjs.locale(vi);

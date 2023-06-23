@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { SettingPaths } from "features/admin_setting/admin_setting";
 import { TopPaths } from "features/admin_top/admin_top";
 import { UserPaths } from "features/admin_users/admin_users";
+import { ClassesPaths } from "features/admin_classes/admin_classes";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -39,7 +40,7 @@ const items: MenuProps["items"] = [
     getItem("Students", "/students"),
   ]),
   getItem("Classes", "manageClassesKey", <BookOutlined />, [
-    getItem("Subjects", "/subjects"),
+    getItem("Subjects", ClassesPaths.SUBJECTS()),
     getItem("Rooms", "/rooms"),
     getItem("Classes", "/classes"),
   ]),

@@ -9,7 +9,6 @@ import {
   Space,
   Typography,
 } from "antd";
-import type { DatePickerProps } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { SubmitButton } from "components/SubmitButton";
 import { SettingPaths } from "features/admin_setting/admin_setting";
