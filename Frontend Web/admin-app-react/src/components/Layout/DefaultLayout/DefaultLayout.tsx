@@ -1,9 +1,11 @@
 import { memo, ReactNode, useState } from "react";
 import { Layout } from "antd";
-import { Content, Footer } from "antd/lib/layout/layout";
+import { Content } from "antd/lib/layout/layout";
 import { Outlet } from "react-router-dom";
 import SiderLayout from "../SiderLayout/SiderLayout";
 import HeaderLayout from "../HeaderLayout/HeaderLayout";
+import cx from "classnames";
+import styles from "./DefaultLayout.module.scss";
 
 const DefaultLayout = ({ children }: { children: ReactNode }) => {
   const [collapsed, setCollapsed] = useState(false);
@@ -13,11 +15,10 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
       <SiderLayout collapsed={collapsed}/>
       <Layout>
         <HeaderLayout collapsed={collapsed} setCollapsed={setCollapsed}/>
-        <Content className="full-height full-width pl-55 pt-55">
+        <Content className={cx(styles.content, "full-width")}>
           {children}
           <Outlet />
         </Content>
-        <Footer>Footer</Footer>
       </Layout>
     </Layout>
   );

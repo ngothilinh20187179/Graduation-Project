@@ -3,12 +3,16 @@ import {
   ChangePasswordRequestBody,
   SettingState,
   changeAvatarApi,
+  changeInformationApi,
   changePasswordApi,
   deleteAvatarApi,
   getMyProfileApi,
 } from "../admin_setting";
 import SETTING_KEY from "../constants/setting.keys";
-import { UserProfile } from "features/admin_users/admin_users";
+import {
+  EditInformationRequestBody,
+  UserProfile,
+} from "features/admin_users/admin_users";
 
 const initialState: SettingState = {
   myProfile: null,
@@ -26,6 +30,13 @@ export const getMyProfile = createAsyncThunk(
   async () => {
     const response = await getMyProfileApi();
     return response.data.data;
+  }
+);
+
+export const changeInformation = createAsyncThunk(
+  `${SETTING_KEY}/edit-myprofile`,
+  async (data: EditInformationRequestBody) => {
+    return changeInformationApi(data);
   }
 );
 

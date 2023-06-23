@@ -21,6 +21,9 @@ const errorInterceptor = async (axiosError: AxiosError) => {
     });
     return Promise.reject(axiosError);
   }
+  if (axiosError.code === AXIOS_ERROR_CODE.ERR_NETWORK) {
+    router.navigate(AuthPathsEnum.REFUSED_CONNECTION);
+  }
   const statusCode = axiosError?.response?.status;
 
   switch (statusCode) {

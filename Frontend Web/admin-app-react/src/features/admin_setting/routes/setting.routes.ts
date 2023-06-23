@@ -22,8 +22,17 @@ const MY_PROFILE_SCREEN: RouteItem = {
   component: lazy(() => import("../screens/MyProfileScreen/MyProfileScreen")),
 };
 
+const EDIT_PROFILE: RouteItem = {
+  id: "admin-setting-edit-my-profile",
+  path: SettingRoutePaths.CHANGE_INFORMATION,
+  component: lazy(
+    () => import("../screens/EditInformationScreen/EditInformationScreen")
+  ),
+};
+
 export const SETTING_ROUTES = [
   SETTING_SCREEN,
   CHANGE_PASSWORD_SCREEN,
   MY_PROFILE_SCREEN,
+  EDIT_PROFILE,
 ];

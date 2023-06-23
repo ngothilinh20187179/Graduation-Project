@@ -27,6 +27,12 @@ export type UserProfile = BasicUserInfo &
     avatar: UserAvatar | null;
   };
 
+export type EditInformationRequestBody = {
+  loginName: string;
+  email: string | null;
+  location: string | null;
+} & BasicUserInfo;
+
 export interface UsersState {
   avatar: UserAvatar | null;
 }
