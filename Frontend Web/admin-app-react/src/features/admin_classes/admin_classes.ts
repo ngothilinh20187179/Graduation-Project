@@ -5,3 +5,4 @@ export * from "./constants/classes.endpoints";
 export * from "./redux/classes.slice";
 export * from "./routes/classes.routes";
 export * from "./types/classes.types";
+export * from "./components/FormCreateEditSubject/FormCreateEditSubject";

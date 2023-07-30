@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const SettingScreen = () => {
   return (
-    <div className="pl-55 pt-55">
+    <div className="pl-55 pt-30">
       <Typography className="font-24">Settings</Typography>
       <ul>
         <li className="pt-20 pb-20">

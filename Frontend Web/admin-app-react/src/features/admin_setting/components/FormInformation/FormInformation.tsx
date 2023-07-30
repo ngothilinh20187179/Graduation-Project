@@ -50,7 +50,7 @@ const FormInformation = ({
     form.setFieldsValue({
       ...myProfile,
       created: getTimeUTC(myProfile?.created),
-      dateOfBirth: myProfile?.dateOfBirth ? dayjs() : null,
+      dateOfBirth: myProfile?.dateOfBirth ? dayjs(myProfile?.dateOfBirth) : null,
     });
   }, [form, myProfile]);
 

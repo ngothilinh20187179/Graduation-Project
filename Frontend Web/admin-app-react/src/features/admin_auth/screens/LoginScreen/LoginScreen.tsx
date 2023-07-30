@@ -51,7 +51,7 @@ const LoginScreen = () => {
           name="loginName"
           rules={[...requireRules(mess.fe_0)]}
         >
-          <Input />
+          <Input allowClear/>
         </Form.Item>
 
         <Form.Item
@@ -59,7 +59,7 @@ const LoginScreen = () => {
           name="password"
           rules={[...requireRules(mess.fe_1)]}
         >
-          <Input.Password />
+          <Input.Password allowClear/>
         </Form.Item>
         
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

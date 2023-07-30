@@ -33,7 +33,7 @@ const ChangePasswordScreen = () => {
   };
 
   return (
-    <div className="pl-55 pt-55">
+    <div className="pl-55 pt-30">
       <Breadcrumb className="pb-50 font-18">
         <Breadcrumb.Item
           className="cursor-pointer"

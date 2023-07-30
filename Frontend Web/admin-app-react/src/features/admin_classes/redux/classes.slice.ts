@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import CLASSES_KEY from "../constants/classes.keys";
-import { ClassesState, getSubjectsApi } from "../admin_classes";
+import { ClassesState, Subject, createSubjectApi, deleteSubjectApi, getSubjectsApi } from "../admin_classes";
+import { RequestParams } from "types/param.types";
 
 const initialState: ClassesState = {
   subjects: null,
@@ -8,13 +9,27 @@ const initialState: ClassesState = {
 
 export const getSubjects = createAsyncThunk(
   `${CLASSES_KEY}/getSubjects`,
-  async () => {
-    const response = await getSubjectsApi();
+  async (params: RequestParams) => {
+    const response = await getSubjectsApi(params);
     return response.data;
   }
 );
 
-const usersSlice = createSlice({
+export const createSubject = createAsyncThunk(
+  `${CLASSES_KEY}/createSubject`,
+  async (data: Subject) => {
+    return createSubjectApi(data);
+  }
+);
+
+export const deleteSubject = createAsyncThunk(
+  `${CLASSES_KEY}/deleteSubject`,
+  async (id: number) => {
+    return deleteSubjectApi(id);
+  }
+);
+
+const classesSlice = createSlice({
   name: CLASSES_KEY,
   initialState,
   reducers: {},
@@ -28,4 +43,4 @@ const usersSlice = createSlice({
   },
 });
 
-export const usersReducer = usersSlice.reducer;
+export const classesReducer = classesSlice.reducer;

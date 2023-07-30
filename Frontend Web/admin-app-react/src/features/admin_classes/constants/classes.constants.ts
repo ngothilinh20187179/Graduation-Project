@@ -3,6 +3,55 @@ export enum SubjectStatusType {
   Open,
 }
 
+export const COLUMNS_TABLE_SUBJECTS = () => [
+  {
+    title: "",
+    dataIndex: "index",
+    key: "index",
+    width: "70px",
+  },
+  {
+    title: "Id",
+    dataIndex: "id",
+    key: "id",
+    width: "70px",
+  }, 
+  {
+    title: "Name",
+    dataIndex: "subjectName",
+    key: "name",
+    ellipsis: true,
+    width: "200px",
+  },
+  {
+    title: "Description",
+    dataIndex: "subjectDescription",
+    key: "description",
+    ellipsis: true,
+    width: "200px",
+  }, 
+  {
+    title: "Status",
+    dataIndex: "subjectStatus",
+    key: "status",
+    ellipsis: true,
+    width: "120px",
+  },
+  {
+    title: "Note",
+    dataIndex: "note",
+    key: "note",
+    ellipsis: true,
+    width: "200px",
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    key: "action",
+    width: "150px",
+  }
+]
+
 // export const COLUMNS_TABLE_VEHICLES = () => [
 //   {
 //     title: i18next.t("vin", { ns: "vehicles" }),

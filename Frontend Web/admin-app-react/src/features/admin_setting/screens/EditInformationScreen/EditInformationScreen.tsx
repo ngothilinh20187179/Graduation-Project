@@ -34,8 +34,8 @@ const EditInformationScreen = () => {
   if (!myProfile) return <LoadingSpinner />;
 
   return (
-    <div className="pt-55 pl-55">
-      <Breadcrumb className="pb-50 font-18">
+    <div className="pt-30 pl-55">
+      <Breadcrumb className="pb-30 font-18">
         <Breadcrumb.Item
           className="cursor-pointer"
           onClick={() => navigate(TopPaths.TOP())}

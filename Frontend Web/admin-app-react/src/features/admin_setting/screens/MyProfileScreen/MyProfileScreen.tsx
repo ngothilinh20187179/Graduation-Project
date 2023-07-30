@@ -90,8 +90,8 @@ const MyProfileScreen = () => {
   if (isLoading) return <LoadingSpinner />;
 
   return (
-    <div className="pl-55 pt-55">
-      <Breadcrumb className="pb-50 font-18">
+    <div className="pl-55 pt-30">
+      <Breadcrumb className="pb-40 font-18">
         <Breadcrumb.Item
           className="cursor-pointer"
           onClick={() => navigate(TopPaths.TOP())}
@@ -139,7 +139,7 @@ const MyProfileScreen = () => {
         )}
       </div>
       <div className="ml-20">
-        <Title title="edit" className="mt-50 mb-30 cursor-pointer" level={3}>
+        <Title title="edit" className="mt-30 mb-30 cursor-pointer" level={4}>
           My Information{" "}
           <span>
             <EditOutlined

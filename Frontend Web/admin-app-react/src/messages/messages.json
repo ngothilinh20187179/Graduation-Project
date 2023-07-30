@@ -10,5 +10,7 @@
   "fe_8": "Please input your last name!",
   "fe_9": "Please input your phone number!",
   "fe_10": "Invalid email!",
-  "fe_11": "Invalid phone number. Maximum 10 number characters."
+  "fe_11": "Invalid phone number. Maximum 10 number characters.",
+  "fe_12": "Please input your subject name!",
+  "fe_13": "Please input your description!"
 }

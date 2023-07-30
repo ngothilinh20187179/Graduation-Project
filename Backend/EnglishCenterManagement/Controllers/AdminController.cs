@@ -28,7 +28,7 @@ namespace EnglishCenterManagement.Controllers
         // POST: /create-admin
         [HttpPost("create-admin")]
         [Authorize(Roles = nameof(RoleType.Admin))]
-        public ActionResult Register([FromBody] RegisterDto newUser)
+        public ActionResult CreateAdmin([FromBody] RegisterDto newUser)
         {
             if (newUser == null)
             {

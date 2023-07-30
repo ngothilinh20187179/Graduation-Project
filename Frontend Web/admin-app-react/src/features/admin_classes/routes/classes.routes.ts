@@ -8,4 +8,16 @@ const SUBJECTS_SCREEN: RouteItem = {
   component: lazy(() => import("../screens/SubjectScreen/SubjectScreen")),
 };
 
-export const CLASSES_ROUTES = [SUBJECTS_SCREEN];
+const EDIT_SUBJECTS_SCREEN: RouteItem = {
+  id: "admin-classes-edit-subjects",
+  path: ClassesRoutePaths.EDIT_SUBJECT,
+  component: lazy(() => import("../screens/EditSubjectScreen/EditSubjectScreen")),
+};
+
+const CREATE_SUBJECTS_SCREEN: RouteItem = {
+  id: "admin-classes-create-subjects",
+  path: ClassesRoutePaths.CREATE_SUBJECT,
+  component: lazy(() => import("../screens/CreateSubjectScreen/CreateSubjectScreen")),
+};
+
+export const CLASSES_ROUTES = [SUBJECTS_SCREEN, EDIT_SUBJECTS_SCREEN, CREATE_SUBJECTS_SCREEN];

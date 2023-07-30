@@ -85,3 +85,17 @@ input::-ms-clear {
   height: 36px !important;
   padding: 2px 11px !important;
 }
+
+// table
+.ant-table {
+  .ant-table-tbody > tr > td{
+    padding-left: 16px !important;
+  }
+  .ant-table-thead .ant-table-cell {
+    background-color: $grey-lightRed;
+    padding-left: 16px !important;
+  }
+  .ant-btn{
+    font-size: 14px !important;
+  }
+}

@@ -1,5 +1,5 @@
 import { PaginationResponse } from "types/pagination.types";
-import { SubjectStatusType } from "../admin_classes";
+import { SubjectStatusType } from "../constants/classes.constants";
 
 export type Subject = {
   id?: number;
@@ -10,7 +10,7 @@ export type Subject = {
 };
 
 export interface GetAllSubjectsResponse extends PaginationResponse {
-  subjects: Subject[];
+  data: Subject[];
 }
 
 export interface ClassesState {
