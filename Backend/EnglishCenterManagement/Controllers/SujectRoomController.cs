@@ -2,6 +2,7 @@
 using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Common.Response;
 using EnglishCenterManagement.Dtos.SchoolRoomDto;
+using EnglishCenterManagement.Dtos.UserInfoDto;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
@@ -43,6 +44,22 @@ namespace EnglishCenterManagement.Controllers
 
             return Ok(listSubjects);
         }
+
+        // GET: /subject/5
+        [HttpGet("subject/{id}")]
+        public ActionResult<SubjectDto> GetSubjectById(int id)
+        {
+            var getSubjectById = _subjectRoomRepository.GetSubjectById(id);
+            if (getSubjectById == null)
+            {
+                return NotFound(new ApiReponse(629));
+            }
+
+            var subjectMap = _mapper.Map<SubjectDto>(getSubjectById);
+
+            return Ok(new ApiReponse(subjectMap));
+        }
+
 
         // POST: /create-subject
         [HttpPost("create-subject")]

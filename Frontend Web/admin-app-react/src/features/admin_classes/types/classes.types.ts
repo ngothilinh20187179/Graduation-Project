@@ -13,6 +13,11 @@ export interface GetAllSubjectsResponse extends PaginationResponse {
   data: Subject[];
 }
 
+export interface GetSubjectResponse {
+  data: Subject
+}
+
 export interface ClassesState {
   subjects: GetAllSubjectsResponse | null;
+  subject: GetSubjectResponse | null;
 }

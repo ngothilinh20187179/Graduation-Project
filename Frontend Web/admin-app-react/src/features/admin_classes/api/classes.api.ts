@@ -10,12 +10,24 @@ export const getSubjectsApi = (
   return api.get(ClassesEndpoints.GET_SUBJECTS(params));
 };
 
+export const getSubjectApi = (
+  id: number
+): Promise<AxiosResponse> => {
+  return api.get(ClassesEndpoints.GET_SUBJECT(id));
+};
+
 export const createSubjectApi = (
   data: Subject
 ): Promise<AxiosResponse> => {
   return api.post(ClassesEndpoints.CREATE_SUBJECT(), data);
 };
 
+export const updateSubjectApi = (
+  id: number,
+  data: Subject
+): Promise<AxiosResponse> => {
+  return api.put(ClassesEndpoints.UPDATE_SUBJECT(id), data);
+};
 
 export const deleteSubjectApi = (id: number): Promise<AxiosResponse> => {
   return api.delete(ClassesEndpoints.DELETE_SUBJECT(id));

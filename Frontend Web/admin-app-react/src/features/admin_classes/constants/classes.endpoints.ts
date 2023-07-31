@@ -7,7 +7,9 @@ const ClassesEndpoints = {
     }
     return `/subjects?search=${search}&page=${page}&pageSize=${pageSize}`;
   },
+  GET_SUBJECT: (id: number) => `/subject/${id}`,
   CREATE_SUBJECT: () => `create-subject`,
+  UPDATE_SUBJECT: (id: number) =>  `update-subject/${id}`,
   DELETE_SUBJECT: (id: number) => `/remove-subject/${id}`,
 };
 

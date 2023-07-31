@@ -1,7 +1,7 @@
-import { Col, Form, Input, Modal, Row, Select, Space, Typography } from "antd";
+import { Form, Input, Modal, Select } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { SubmitButton } from "components/SubmitButton";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import mess from "messages/messages.json";
 import { AxiosResponse } from "axios";
@@ -19,7 +19,7 @@ const FormCreateEditSubject = ({
   onSubmit,
 }: {
   isEditScreen?: boolean;
-  subject?: Subject;
+  subject?: Subject | null;
   onSubmit: (data: Subject) => Promise<AxiosResponse<any, any>>;
 }) => {
   const [form] = useForm();
@@ -27,6 +27,14 @@ const FormCreateEditSubject = ({
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isEditScreen) {
+      form.setFieldsValue({
+        ...subject,
+      });
+    }
+  }, [form, subject, isEditScreen]);
 
   const handleSubmit = () => {
     setIsSubmitting(true);
@@ -56,6 +64,11 @@ const FormCreateEditSubject = ({
         style={{ maxWidth: 450 }}
         onFinish={() => setIsModalOpen(true)}
       >
+        {isEditScreen && (
+          <Form.Item label="Id:" name="id">
+            <Input disabled />
+          </Form.Item>
+        )}
         <Form.Item
           label="Subject Name:"
           name="subjectName"
@@ -83,7 +96,7 @@ const FormCreateEditSubject = ({
           <TextArea />
         </Form.Item>
         <Form.Item label=" ">
-            <SubmitButton form={form} text="Save" isSubmitting={isSubmitting} />
+          <SubmitButton form={form} text="Save" isSubmitting={isSubmitting} />
         </Form.Item>
       </Form>
       <Modal
