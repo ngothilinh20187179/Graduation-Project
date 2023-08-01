@@ -3,16 +3,16 @@ import { Breadcrumb } from "antd";
 import { useNavigate } from "react-router-dom";
 import { TopPaths } from "features/admin_top/admin_top";
 import { HomeOutlined } from "@ant-design/icons";
-import { ClassesPaths, Subject, createSubject } from "features/admin_classes/admin_classes";
-import FormCreateEditSubject from "features/admin_classes/components/FormCreateEditSubject/FormCreateEditSubject";
+import { ClassesPaths, Room, createRoom } from "features/admin_classes/admin_classes";
 import { useAppDispatch } from "redux/store";
+import FormCreateEditRoom from "features/admin_classes/components/FormCreateEditRoom/FormCreateEditRoom";
 
-const CreateSubjectScreen = () => {
+const CreateRoomScreen = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleCreateSubject = (data: Subject) => {
-    return dispatch(createSubject(data)).unwrap();
+  const handleCreateRoom = (data: Room) => {
+    return dispatch(createRoom(data)).unwrap();
   }
 
   return (
@@ -26,14 +26,14 @@ const CreateSubjectScreen = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item
           className="cursor-pointer"
-          onClick={() => navigate(ClassesPaths.SUBJECTS())}
+          onClick={() => navigate(ClassesPaths.ROOMS())}
         >
-          Subjects
+          Rooms
         </Breadcrumb.Item>
         <Breadcrumb.Item>Create</Breadcrumb.Item>
       </Breadcrumb>
-      <FormCreateEditSubject onSubmit={handleCreateSubject} />
+      <FormCreateEditRoom onSubmit={handleCreateRoom} />
     </div>
   );
 };
-export default memo(CreateSubjectScreen);
+export default memo(CreateRoomScreen);

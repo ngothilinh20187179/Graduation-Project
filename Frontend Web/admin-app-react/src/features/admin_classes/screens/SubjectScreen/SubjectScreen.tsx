@@ -25,6 +25,10 @@ import DropdownButton from "components/DropdownButton/DropdownButton";
 import { HomeOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import Search from "antd/es/input/Search";
 
+// TODO: 
+// filter list subject theo status subject
+// add search, page, pageSize on url
+
 const SubjectScreen = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();

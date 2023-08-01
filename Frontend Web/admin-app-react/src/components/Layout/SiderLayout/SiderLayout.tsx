@@ -16,6 +16,9 @@ import { TopPaths } from "features/admin_top/admin_top";
 import { UserPaths } from "features/admin_users/admin_users";
 import { ClassesPaths } from "features/admin_classes/admin_classes";
 
+// TODO:
+// handle active item in slider (problem: reload)
+
 type MenuItem = Required<MenuProps>["items"][number];
 
 function getItem(
@@ -35,13 +38,14 @@ function getItem(
 const items: MenuProps["items"] = [
   getItem("Users", "manageUsersKey", <UserOutlined />, [
     getItem("All Users", UserPaths.GET_ALL_USER()),
+    getItem("Admins", "/admin"),
     getItem("Staffs", "/staffs"),
     getItem("Teachers", "/teachers"),
     getItem("Students", "/students"),
   ]),
   getItem("Classes", "manageClassesKey", <BookOutlined />, [
     getItem("Subjects", ClassesPaths.SUBJECTS()),
-    getItem("Rooms", "/rooms"),
+    getItem("Rooms", ClassesPaths.ROOMS()),
     getItem("Classes", "/classes"),
   ]),
   getItem("Finances", "manageFinancesKey", <DollarOutlined />, [

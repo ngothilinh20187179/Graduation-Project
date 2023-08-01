@@ -197,6 +197,29 @@ namespace EnglishCenterManagement.Controllers
             return Ok(listRooms);
         }
 
+        [HttpGet("room/{id}")]
+        [Authorize(Roles = "Admin, Staff")]
+        public ActionResult<RoomDto> GetRoomById(int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+            var getRoomById = _subjectRoomRepository.GetRoomById(id);
+            if (getRoomById == null)
+            {
+                return NotFound(new ApiReponse(633));
+            }
+            var roomMap = _mapper.Map<RoomDto>(getRoomById);
+
+            return Ok(new ApiReponse(roomMap));
+        }
+
         // POST: /create-room
         [HttpPost("create-room")]
         [Authorize(Roles = "Admin, Staff")]

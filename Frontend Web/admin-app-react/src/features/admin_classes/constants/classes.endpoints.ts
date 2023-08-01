@@ -11,6 +11,16 @@ const ClassesEndpoints = {
   CREATE_SUBJECT: () => `create-subject`,
   UPDATE_SUBJECT: (id: number) =>  `update-subject/${id}`,
   DELETE_SUBJECT: (id: number) => `/remove-subject/${id}`,
+  GET_ROOMS: ({ page, pageSize, search }: RequestParams) => {
+    if (search === undefined || search === "") {
+      return `/rooms?page=${page}&pageSize=${pageSize}`;
+    }
+    return `/rooms?search=${search}&page=${page}&pageSize=${pageSize}`;
+  },
+  GET_ROOM: (id: number) => `/room/${id}`,
+  CREATE_ROOM: () => `create-room`,
+  UPDATE_ROOM: (id: number) =>  `update-room/${id}`,
+  DELETE_ROOM: (id: number) => `/remove-room/${id}`,
 };
 
 export default ClassesEndpoints;

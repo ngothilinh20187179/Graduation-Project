@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import { api } from "api/api";
 import ClassesEndpoints from "../constants/classes.endpoints";
 import { RequestParams } from "types/param.types";
-import { Subject } from "../admin_classes";
+import { Room, Subject } from "../admin_classes";
 
 export const getSubjectsApi = (
   params: RequestParams
@@ -31,4 +31,33 @@ export const updateSubjectApi = (
 
 export const deleteSubjectApi = (id: number): Promise<AxiosResponse> => {
   return api.delete(ClassesEndpoints.DELETE_SUBJECT(id));
+};
+
+export const getRoomsApi = (
+  params: RequestParams
+): Promise<AxiosResponse> => {
+  return api.get(ClassesEndpoints.GET_ROOMS(params));
+};
+
+export const getRoomApi = (
+  id: number
+): Promise<AxiosResponse> => {
+  return api.get(ClassesEndpoints.GET_ROOM(id));
+};
+
+export const createRoomApi = (
+  data: Room
+): Promise<AxiosResponse> => {
+  return api.post(ClassesEndpoints.CREATE_ROOM(), data);
+};
+
+export const updateRoomApi = (
+  id: number,
+  data: Room
+): Promise<AxiosResponse> => {
+  return api.put(ClassesEndpoints.UPDATE_ROOM(id), data);
+};
+
+export const deleteRoomApi = (id: number): Promise<AxiosResponse> => {
+  return api.delete(ClassesEndpoints.DELETE_ROOM(id));
 };

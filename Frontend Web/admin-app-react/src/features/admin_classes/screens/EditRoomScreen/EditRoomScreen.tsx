@@ -1,37 +1,32 @@
 import { memo, useEffect } from "react";
 import { Breadcrumb } from "antd";
+import { HomeOutlined } from "@ant-design/icons";
+import { useAppDispatch, useAppSelector } from "redux/store";
 import { useNavigate, useParams } from "react-router-dom";
 import { TopPaths } from "features/admin_top/admin_top";
-import { HomeOutlined } from "@ant-design/icons";
-import {
-  ClassesPaths,
-  Subject,
-  getSubject,
-  updateSubject,
-} from "features/admin_classes/admin_classes";
-import FormCreateEditSubject from "features/admin_classes/components/FormCreateEditSubject/FormCreateEditSubject";
-import { useAppDispatch, useAppSelector } from "redux/store";
+import { ClassesPaths, Room, getRoom, updateRoom } from "features/admin_classes/admin_classes";
 import { RootState } from "redux/root-reducer";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
+import FormCreateEditRoom from "features/admin_classes/components/FormCreateEditRoom/FormCreateEditRoom";
 
-const EditSubjectScreen = () => {
+const EditRoomScreen = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
 
   const {
-    classes: { subject },
+    classes: { room },
   } = useAppSelector((state: RootState) => state);
 
   useEffect(() => {
-    dispatch(getSubject(Number(id)));
+    dispatch(getRoom(Number(id)));
   }, [dispatch, id]);
 
-  const handleEditSubject = (data: Subject) => {
-    return dispatch(updateSubject(data)).unwrap();
+  const handleEditRoom = (data: Room) => {
+    return dispatch(updateRoom(data)).unwrap();
   };
 
-  if (!subject) return <LoadingSpinner />;
+  if (!room) return <LoadingSpinner />;
 
   return (
     <div className="pt-30 pl-55">
@@ -44,18 +39,19 @@ const EditSubjectScreen = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item
           className="cursor-pointer"
-          onClick={() => navigate(ClassesPaths.SUBJECTS())}
+          onClick={() => navigate(ClassesPaths.ROOMS())}
         >
-          Subjects
+          Rooms
         </Breadcrumb.Item>
         <Breadcrumb.Item>Edit</Breadcrumb.Item>
       </Breadcrumb>
-      <FormCreateEditSubject
+      <FormCreateEditRoom
         isEditScreen
-        onSubmit={handleEditSubject}
-        subject={subject?.data}
+        onSubmit={handleEditRoom}
+        room={room?.data}
       />
     </div>
   );
 };
-export default memo(EditSubjectScreen);
+
+export default memo(EditRoomScreen);

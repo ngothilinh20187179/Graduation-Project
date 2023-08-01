@@ -1,11 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import CLASSES_KEY from "../constants/classes.keys";
-import { ClassesState, Subject, createSubjectApi, deleteSubjectApi, getSubjectApi, getSubjectsApi, updateSubjectApi } from "../admin_classes";
+import { ClassesState, Room, Subject, createRoomApi, createSubjectApi, deleteRoomApi, deleteSubjectApi, getRoomApi, getRoomsApi, getSubjectApi, getSubjectsApi, updateRoomApi, updateSubjectApi } from "../admin_classes";
 import { RequestParams } from "types/param.types";
 
 const initialState: ClassesState = {
   subjects: null,
   subject: null,
+  rooms: null,
+  room: null
 };
 
 export const getSubjects = createAsyncThunk(
@@ -46,6 +48,44 @@ export const deleteSubject = createAsyncThunk(
   }
 );
 
+export const getRooms = createAsyncThunk(
+  `${CLASSES_KEY}/getRooms`,
+  async (params: RequestParams) => {
+    const response = await getRoomsApi(params);
+    return response.data;
+  }
+);
+
+export const getRoom = createAsyncThunk(
+  `${CLASSES_KEY}/getRoom`,
+  async (id: number) => {
+    const response = await getRoomApi(id);
+    return response.data;
+  }
+);
+
+export const createRoom = createAsyncThunk(
+  `${CLASSES_KEY}/createRoom`,
+  async (data: Room) => {
+    return createRoomApi(data);
+  }
+);
+
+export const updateRoom = createAsyncThunk(
+  `${CLASSES_KEY}/updateRoom`,
+  async (room: Room) => {
+    const { id, ...fields } = room
+    return updateRoomApi(Number(id), fields );
+  }
+);
+
+export const deleteRoom = createAsyncThunk(
+  `${CLASSES_KEY}/deleteRoom`,
+  async (id: number) => {
+    return deleteRoomApi(id);
+  }
+);
+
 const classesSlice = createSlice({
   name: CLASSES_KEY,
   initialState,
@@ -62,6 +102,18 @@ const classesSlice = createSlice({
     });
     builder.addCase(getSubject.rejected, (state) => {
       state.subject = null;
+    });
+    builder.addCase(getRooms.fulfilled, (state, action) => {
+      state.rooms = action.payload;
+    });
+    builder.addCase(getRooms.rejected, (state) => {
+      state.rooms = null;
+    });
+    builder.addCase(getRoom.fulfilled, (state, action) => {
+      state.room = action.payload;
+    });
+    builder.addCase(getRoom.rejected, (state) => {
+      state.room = null;
     });
   },
 });
