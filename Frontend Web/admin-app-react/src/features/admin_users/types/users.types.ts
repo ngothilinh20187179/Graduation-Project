@@ -1,4 +1,5 @@
-import { GenderType, RoleType } from "features/admin_auth/admin_auth";
+import { GenderType, RoleType, UserStatusType } from "features/admin_auth/admin_auth";
+import { PaginationResponse } from "types/pagination.types";
 
 export type BasicUserInfo = {
   id: number;
@@ -7,6 +8,7 @@ export type BasicUserInfo = {
   phoneNumber: string;
   gender: GenderType | null;
   dateOfBirth: string | null;
+  userStatus: UserStatusType;
 };
 
 export type PrivateUserInfo = {
@@ -33,6 +35,32 @@ export type EditInformationRequestBody = {
   location: string | null;
 } & BasicUserInfo;
 
+export interface GetAllAdminsResponse extends PaginationResponse {
+  data: (BasicUserInfo & {
+    avatar: UserAvatar | null;
+  }) [];
+}
+
+export type RestricteAccount = {
+  id: number;
+  userStatusType: UserStatusType;
+}
+
+export type AdminInformation = {
+  id?: number;
+  loginName: string;
+  password: string | null;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  email: string | null;
+  gender: GenderType | null;
+  location: string | null;
+  dateOfBirth: string | null;
+}
+
 export interface UsersState {
   avatar: UserAvatar | null;
+  admins: GetAllAdminsResponse | null;
+  admin: UserProfile | null;
 }

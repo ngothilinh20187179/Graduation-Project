@@ -26,7 +26,7 @@ namespace EnglishCenterManagement.Interfaces
         bool DeleteAvatar(AvatarModel avatar);
 
         bool DeleteUser(UserInfoModel user);
-        PagedResponse GetAllUsers(string? search, RoleType? role, int page, int pageSize);
+        PagedResponse GetAllAdmins(string? search, int page, int pageSize);
 
         bool SaveChange();
     }

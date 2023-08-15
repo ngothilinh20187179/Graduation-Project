@@ -13,9 +13,11 @@ export type TokenInfo = {
 
 export type LoginResponse = {
   role: RoleType;
+  userId: string;
 } & TokenInfo;
 
 export interface AuthState {
   tokenInfo: TokenInfo | null;
   role: number | null;
+  userId: string | null;
 }

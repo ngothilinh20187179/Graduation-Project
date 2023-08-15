@@ -135,7 +135,7 @@ const RoomScreen = () => {
       <div className="flex-space-between-center">
         <Typography>Total: There are {rooms?.totalRecords} rooms</Typography>
         <Search
-          placeholder="room"
+          placeholder="room's name"
           allowClear
           enterButton
           size="large"

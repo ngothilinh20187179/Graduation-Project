@@ -175,6 +175,7 @@ namespace EnglishCenterManagement.Controllers
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
+                UserId = user.Id,
                 user.Role,
             };
 

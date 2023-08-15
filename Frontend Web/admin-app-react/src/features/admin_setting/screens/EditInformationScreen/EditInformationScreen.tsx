@@ -11,8 +11,8 @@ import { useNavigate } from "react-router-dom";
 import { RootState } from "redux/root-reducer";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { HomeOutlined } from "@ant-design/icons";
-import FormInformation from "features/admin_setting/components/FormInformation/FormInformation";
 import { EditInformationRequestBody } from "features/admin_users/admin_users";
+import FormInformation from "features/admin_setting/components/FormInformation/FormInformation";
 
 
 const EditInformationScreen = () => {

@@ -28,64 +28,6 @@ namespace EnglishCenterManagement.Controllers
             _userRepository = userRepository;
         }
 
-        // GET: /users
-        [HttpGet("users")]
-        [Authorize(Roles = nameof(RoleType.Admin))]
-        public ActionResult<PagedResponse> GetAllUsers(string? search, RoleType? role, int page = 1, int pageSize = 20)
-        {
-            var user = GetUserByClaim();
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-            if (user.UserStatus == UserStatusType.Lock)
-            {
-                return Unauthorized(new ApiReponse(999));
-            }
-            page = page < 1 ? 1 : page;
-            pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
-
-            var listUsers = _userRepository.GetAllUsers(search, role, page, pageSize);
-            var mappedListUsers = _mapper.Map<List<BasicUserInfoDto>>(listUsers.Data);
-            mappedListUsers.ForEach((item) =>
-            {
-                var avatar = _userRepository.GetUserAvatar(item.Id);
-                item.Avatar = _mapper.Map<AvatarDto>(avatar);
-            });
-            listUsers.Data = mappedListUsers;
-
-            return Ok(listUsers);
-        }
-
-        // GET: /user/5
-        [HttpGet("user/{id}")]
-        [Authorize(Roles = nameof(RoleType.Admin))]
-        public ActionResult<UserProfileDetailDto> GetUserProfile(int id)
-        {
-            var user = GetUserByClaim();
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-            if (user.UserStatus == UserStatusType.Lock)
-            {
-                return Unauthorized(new ApiReponse(999));
-            }
-            var getUserById = _userRepository.GetUserByUserId(id);
-            if (getUserById == null)
-            {
-                return NotFound(new ApiReponse(606));
-            }
-            var userProfileMap = _mapper.Map<UserProfileDetailDto>(getUserById);
-
-            var avatar = _userRepository.GetUserAvatar(id);
-            var mappedAvatar = _mapper.Map<AvatarDto>(avatar);
-
-            userProfileMap.Avatar = mappedAvatar;
-
-            return Ok(new ApiReponse(userProfileMap));
-        }
-
         // GET: /user-role/5
         [HttpGet("user-role/{id}")]
         [Authorize(Roles = nameof(RoleType.Admin))]

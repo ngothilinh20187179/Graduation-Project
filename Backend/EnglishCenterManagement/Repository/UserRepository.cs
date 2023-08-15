@@ -84,18 +84,40 @@ namespace EnglishCenterManagement.Repository
             _context.Remove(user);
             return SaveChange();
         }
-        public PagedResponse GetAllUsers(string? search, RoleType? role, int page, int pageSize)
+        //public PagedResponse GetAllUsers(string? search, RoleType? role, int page, int pageSize)
+        //{
+        //    var allUsers = _context.Users.AsQueryable();
+
+        //    #region Filtering
+        //    if (!String.IsNullOrEmpty(search))
+        //    {
+        //        allUsers = allUsers.Where(u => u.FirstName.Contains(search));
+        //    }
+        //    if (role.HasValue)
+        //    {
+        //        allUsers = allUsers.Where(u => u.Role == role);
+        //    }
+        //    #endregion
+
+        //    #region Sorting
+        //    allUsers = allUsers.OrderByDescending(u => u.Created);
+        //    #endregion
+
+        //    #region Paginated
+        //    var data = allUsers.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        //    var totalUsers = allUsers.Count();
+        //    #endregion
+
+        //    return new PagedResponse(data, totalUsers, page, pageSize);
+        //}
+        public PagedResponse GetAllAdmins(string? search, int page, int pageSize)
         {
-            var allUsers = _context.Users.AsQueryable();
+            var allUsers = _context.Users.Where(x => x.Role == RoleType.Admin).AsQueryable();
 
             #region Filtering
             if (!String.IsNullOrEmpty(search))
             {
-                allUsers = allUsers.Where(u => u.FirstName.Contains(search));
-            }
-            if (role.HasValue)
-            {
-                allUsers = allUsers.Where(u => u.Role == role);
+                allUsers = allUsers.Where(u => u.LastName.Contains(search));
             }
             #endregion
 
@@ -110,7 +132,6 @@ namespace EnglishCenterManagement.Repository
 
             return new PagedResponse(data, totalUsers, page, pageSize);
         }
-
         public bool SaveChange()
         {
             return _context.SaveChanges() > 0;

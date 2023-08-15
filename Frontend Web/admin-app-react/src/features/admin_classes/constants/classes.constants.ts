@@ -76,7 +76,7 @@ export const COLUMNS_TABLE_ROOMS = () => [
     dataIndex: "name",
     key: "name",
     ellipsis: true,
-    width: "200px",
+    width: "170px",
   },
   {
     title: "Size",
@@ -97,7 +97,7 @@ export const COLUMNS_TABLE_ROOMS = () => [
     dataIndex: "note",
     key: "note",
     ellipsis: true,
-    width: "200px",
+    width: "250px",
   },
   {
     title: "Action",

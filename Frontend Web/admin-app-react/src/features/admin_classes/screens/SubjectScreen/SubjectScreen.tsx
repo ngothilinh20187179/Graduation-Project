@@ -146,7 +146,7 @@ const SubjectScreen = () => {
             Total: There are {subjects?.totalRecords} subjects
           </Typography>
           <Search
-            placeholder="subject"
+            placeholder="subject's name"
             allowClear
             enterButton
             size="large"

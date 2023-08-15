@@ -13,6 +13,7 @@ import { loginApi, logoutApi, refreshTokenApi } from "../admin_auth";
 const initialState: AuthState = {
   tokenInfo: null,
   role: null,
+  userId: null,
 };
 
 export const login = createAsyncThunk(
@@ -57,13 +58,14 @@ const authSlice = createSlice({
         state.tokenInfo = action.payload;
         state.role = action.payload.role;
         localStorage.setItem("accessToken", action.payload.accessToken);
+        localStorage.setItem("userId", action.payload.userId);
       }
     );
 
     // REFRESH TOKEN
     builder.addCase(refreshToken.pending, (state) => {
       state.tokenInfo = null;
-      localStorage.clear();
+      // localStorage.clear();
     });
     builder.addCase(
       refreshToken.fulfilled,

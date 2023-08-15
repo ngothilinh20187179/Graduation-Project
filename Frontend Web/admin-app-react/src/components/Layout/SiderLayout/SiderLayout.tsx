@@ -37,8 +37,7 @@ function getItem(
 
 const items: MenuProps["items"] = [
   getItem("Users", "manageUsersKey", <UserOutlined />, [
-    getItem("All Users", UserPaths.GET_ALL_USER()),
-    getItem("Admins", "/admin"),
+    getItem("Admins", UserPaths.GET_ADMINS()),
     getItem("Staffs", "/staffs"),
     getItem("Teachers", "/teachers"),
     getItem("Students", "/students"),
