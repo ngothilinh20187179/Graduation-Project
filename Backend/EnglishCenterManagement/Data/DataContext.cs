@@ -28,6 +28,17 @@ namespace EnglishCenterManagement.Data
         public DbSet<QuizClassModel> QuizClasses { get; set; }
         public DbSet<MarkModel> Marks { get; set; }
 
+        public DbSet<PermissionModel> Permissions { get; set; }
+        public DbSet<PositionModel> Positions { get; set; }
+        public DbSet<PermissionPositionModel> PermissionPositions { get; set; }
+        public DbSet<SpendingModel> Spendings { get; set; }
+        public DbSet<StaffAttendanceModel> StaffAttendances { get; set; }
+        public DbSet<StudentAttendanceModel> StudentAttendances { get; set; }
+        public DbSet<TeacherAttendanceModel> TeacherAttendances { get; set; }
+        public DbSet<StaffSalaryModel> StaffSalaries { get; set; }
+        public DbSet<TeacherSalaryModel> TeacherSalaries { get; set; }
+        public DbSet<NotificationModel> Notifications { get; set; }
+
         protected override void ConfigureConventions(ModelConfigurationBuilder modelConfigureBuilder)
         {
             // Support "TimeOnly" and "DateOnly" type in ClassModel
@@ -74,7 +85,7 @@ namespace EnglishCenterManagement.Data
 
             // n-n relationship Student-Class
             modelBuilder.Entity<StudentClassModel>()
-                .HasKey(x => new { x.StudentId, x.ClassId });
+                .HasKey(x => new { x.Id });
             modelBuilder.Entity<StudentClassModel>()
                 .HasOne(x => x.Student)
                 .WithMany(x => x.StudentClasses)
@@ -86,7 +97,7 @@ namespace EnglishCenterManagement.Data
 
             // n-n relationship Teacher-Class
             modelBuilder.Entity<TeacherClassModel>()
-                .HasKey(x => new { x.TeacherId, x.ClassId });
+                .HasKey(x => new { x.Id });
             modelBuilder.Entity<TeacherClassModel>()
                 .HasOne(x => x.Teacher)
                 .WithMany(x => x.TeacherClasses)
@@ -98,7 +109,7 @@ namespace EnglishCenterManagement.Data
 
             // n-n relationship Quiz-Class
             modelBuilder.Entity<QuizClassModel>()
-               .HasKey(x => new { x.QuizId, x.ClassId });
+               .HasKey(x => new { x.Id });
             modelBuilder.Entity<QuizClassModel>()
                 .HasOne(x => x.Quiz)
                 .WithMany(x => x.QuizzClasses)
@@ -112,7 +123,7 @@ namespace EnglishCenterManagement.Data
 
             // n-n relationship Quiz-Student
             modelBuilder.Entity<MarkModel>()
-               .HasKey(x => new { x.StudentId, x.QuizId });
+               .HasKey(x => new { x.Id });
             modelBuilder.Entity<MarkModel>()
                 .HasOne(x => x.Student)
                 .WithMany(x => x.Marks)
@@ -123,6 +134,21 @@ namespace EnglishCenterManagement.Data
                 .WithMany(x => x.Marks)
                 .HasForeignKey(x => x.QuizId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // n-n relationship Position-Permission
+            modelBuilder.Entity<PermissionPositionModel>()
+                .HasKey(x => new { x.Id });
+            modelBuilder.Entity<PermissionPositionModel>()
+                .HasOne(x => x.Position)
+                .WithMany(x => x.PermissionPositions)
+                .HasForeignKey(x => x.PositionId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<PermissionPositionModel>()
+                .HasOne(x => x.Permission)
+                .WithMany(x => x.PermissionPositions)
+                .HasForeignKey(x => x.PermissionId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EnglishCenterManagement.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230614031153_InitialCreate")]
+    [Migration("20231109200241_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -95,6 +95,9 @@ namespace EnglishCenterManagement.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("NumberOfSessions")
+                        .HasColumnType("int");
+
                     b.Property<int>("NumberOfStudents")
                         .HasColumnType("int");
 
@@ -139,26 +142,141 @@ namespace EnglishCenterManagement.Migrations
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.MarkModel", b =>
                 {
-                    b.Property<int>("StudentId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("QuizId")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Point")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("QuizId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentId")
                         .HasColumnType("int");
 
                     b.Property<int>("TotalPoint")
                         .HasColumnType("int");
 
-                    b.HasKey("StudentId", "QuizId");
+                    b.HasKey("Id");
 
                     b.HasIndex("QuizId");
 
+                    b.HasIndex("StudentId");
+
                     b.ToTable("Marks");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.NotificationModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.PermissionModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Permissions");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.PermissionPositionModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PositionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PermissionId");
+
+                    b.HasIndex("PositionId");
+
+                    b.ToTable("PermissionPositions");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.PositionModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("HourlyRate")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SalaryMax")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SalaryMin")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Positions");
                 });
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.QuestionModel", b =>
@@ -191,15 +309,23 @@ namespace EnglishCenterManagement.Migrations
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.QuizClassModel", b =>
                 {
-                    b.Property<int>("QuizId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ClassId")
                         .HasColumnType("int");
 
-                    b.HasKey("QuizId", "ClassId");
+                    b.Property<int>("QuizId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("ClassId");
+
+                    b.HasIndex("QuizId");
 
                     b.ToTable("QuizClasses");
                 });
@@ -212,7 +338,7 @@ namespace EnglishCenterManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<TimeSpan>("Duration")
@@ -281,6 +407,79 @@ namespace EnglishCenterManagement.Migrations
                     b.ToTable("Rooms");
                 });
 
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.SpendingModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Budget")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SpendOn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("Spendings");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StaffAttendanceModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time");
+
+                    b.Property<double>("HoursWorked")
+                        .HasColumnType("float");
+
+                    b.Property<bool>("IsOverTime")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("StaffAttendances");
+                });
+
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StaffModel", b =>
                 {
                     b.Property<int>("Id")
@@ -293,31 +492,122 @@ namespace EnglishCenterManagement.Migrations
                     b.Property<DateTime>("GraduationTime")
                         .HasColumnType("date");
 
+                    b.Property<DateTime>("HireDate")
+                        .HasColumnType("date");
+
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PositionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("YearsOfWorking")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("PositionId");
 
                     b.ToTable("Staffs");
                 });
 
-            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StudentClassModel", b =>
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StaffSalaryModel", b =>
                 {
-                    b.Property<int>("StudentId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("ClassId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Bonus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Month")
                         .HasColumnType("int");
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("PaidTuition")
+                    b.Property<int>("StaffId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Total")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalDaysWorked")
+                        .HasColumnType("int");
+
+                    b.Property<double>("TotalHoursWorked")
+                        .HasColumnType("float");
+
+                    b.Property<int>("WorkDaysInMonth")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("StaffSalaries");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StudentAttendanceModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentClassId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentClassId");
+
+                    b.ToTable("StudentAttendances");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StudentClassModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClassId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsPaidTuition")
                         .HasColumnType("bit");
 
-                    b.HasKey("StudentId", "ClassId");
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("ClassId");
+
+                    b.HasIndex("StudentId");
 
                     b.ToTable("StudentClasses");
                 });
@@ -368,17 +658,52 @@ namespace EnglishCenterManagement.Migrations
                     b.ToTable("Subjects");
                 });
 
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.TeacherAttendanceModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TeacherClassId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeacherClassId");
+
+                    b.ToTable("TeacherAttendances");
+                });
+
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.TeacherClassModel", b =>
                 {
-                    b.Property<int>("TeacherId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ClassId")
                         .HasColumnType("int");
 
-                    b.HasKey("TeacherId", "ClassId");
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("ClassId");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("TeacherClasses");
                 });
@@ -395,12 +720,54 @@ namespace EnglishCenterManagement.Migrations
                     b.Property<DateTime>("GraduationTime")
                         .HasColumnType("date");
 
+                    b.Property<int>("HourlySalary")
+                        .HasColumnType("int");
+
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Teachers");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.TeacherSalaryModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Bonus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Month")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Total")
+                        .HasColumnType("int");
+
+                    b.Property<double>("TotalHoursWorked")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("TeacherSalaries");
                 });
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.UserInfoModel", b =>
@@ -411,7 +778,7 @@ namespace EnglishCenterManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateOfBirth")
@@ -514,8 +881,7 @@ namespace EnglishCenterManagement.Migrations
                     b.HasOne("EnglishCenterManagement.Entities.Models.QuizModel", "Quiz")
                         .WithMany("Marks")
                         .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("EnglishCenterManagement.Entities.Models.StudentModel", "Student")
                         .WithMany("Marks")
@@ -526,6 +892,36 @@ namespace EnglishCenterManagement.Migrations
                     b.Navigation("Quiz");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.NotificationModel", b =>
+                {
+                    b.HasOne("EnglishCenterManagement.Entities.Models.UserInfoModel", "Receiver")
+                        .WithMany("Notifications")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.PermissionPositionModel", b =>
+                {
+                    b.HasOne("EnglishCenterManagement.Entities.Models.PermissionModel", "Permission")
+                        .WithMany("PermissionPositions")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EnglishCenterManagement.Entities.Models.PositionModel", "Position")
+                        .WithMany("PermissionPositions")
+                        .HasForeignKey("PositionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("Position");
                 });
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.QuestionModel", b =>
@@ -580,6 +976,28 @@ namespace EnglishCenterManagement.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.SpendingModel", b =>
+                {
+                    b.HasOne("EnglishCenterManagement.Entities.Models.StaffModel", "Staff")
+                        .WithMany("Spendings")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StaffAttendanceModel", b =>
+                {
+                    b.HasOne("EnglishCenterManagement.Entities.Models.StaffModel", "Staff")
+                        .WithMany("StaffAttendances")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Staff");
+                });
+
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StaffModel", b =>
                 {
                     b.HasOne("EnglishCenterManagement.Entities.Models.UserInfoModel", "User")
@@ -588,7 +1006,37 @@ namespace EnglishCenterManagement.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EnglishCenterManagement.Entities.Models.PositionModel", "Position")
+                        .WithMany("Staffs")
+                        .HasForeignKey("PositionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Position");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StaffSalaryModel", b =>
+                {
+                    b.HasOne("EnglishCenterManagement.Entities.Models.StaffModel", "Staff")
+                        .WithMany("StaffSalaries")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StudentAttendanceModel", b =>
+                {
+                    b.HasOne("EnglishCenterManagement.Entities.Models.StudentClassModel", "StudentClass")
+                        .WithMany("StudentAttendances")
+                        .HasForeignKey("StudentClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StudentClass");
                 });
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StudentClassModel", b =>
@@ -621,6 +1069,17 @@ namespace EnglishCenterManagement.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.TeacherAttendanceModel", b =>
+                {
+                    b.HasOne("EnglishCenterManagement.Entities.Models.TeacherClassModel", "TeacherClass")
+                        .WithMany("TeacherAttendances")
+                        .HasForeignKey("TeacherClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TeacherClass");
+                });
+
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.TeacherClassModel", b =>
                 {
                     b.HasOne("EnglishCenterManagement.Entities.Models.ClassModel", "Class")
@@ -651,6 +1110,17 @@ namespace EnglishCenterManagement.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.TeacherSalaryModel", b =>
+                {
+                    b.HasOne("EnglishCenterManagement.Entities.Models.TeacherModel", "Teacher")
+                        .WithMany("TeacherSalaries")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Teacher");
+                });
+
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.ClassModel", b =>
                 {
                     b.Navigation("ClassSchedules");
@@ -660,6 +1130,18 @@ namespace EnglishCenterManagement.Migrations
                     b.Navigation("StudentClasses");
 
                     b.Navigation("TeacherClasses");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.PermissionModel", b =>
+                {
+                    b.Navigation("PermissionPositions");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.PositionModel", b =>
+                {
+                    b.Navigation("PermissionPositions");
+
+                    b.Navigation("Staffs");
                 });
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.QuestionModel", b =>
@@ -681,6 +1163,20 @@ namespace EnglishCenterManagement.Migrations
                     b.Navigation("ClassSchedules");
                 });
 
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StaffModel", b =>
+                {
+                    b.Navigation("Spendings");
+
+                    b.Navigation("StaffAttendances");
+
+                    b.Navigation("StaffSalaries");
+                });
+
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StudentClassModel", b =>
+                {
+                    b.Navigation("StudentAttendances");
+                });
+
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.StudentModel", b =>
                 {
                     b.Navigation("Marks");
@@ -693,16 +1189,25 @@ namespace EnglishCenterManagement.Migrations
                     b.Navigation("Classes");
                 });
 
+            modelBuilder.Entity("EnglishCenterManagement.Entities.Models.TeacherClassModel", b =>
+                {
+                    b.Navigation("TeacherAttendances");
+                });
+
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.TeacherModel", b =>
                 {
                     b.Navigation("Quizzes");
 
                     b.Navigation("TeacherClasses");
+
+                    b.Navigation("TeacherSalaries");
                 });
 
             modelBuilder.Entity("EnglishCenterManagement.Entities.Models.UserInfoModel", b =>
                 {
                     b.Navigation("Avatar");
+
+                    b.Navigation("Notifications");
 
                     b.Navigation("Staff");
 

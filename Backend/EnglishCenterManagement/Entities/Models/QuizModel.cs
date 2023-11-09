@@ -7,7 +7,7 @@ namespace EnglishCenterManagement.Entities.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public TimeOnly Duration { get; set; }
-        public DateTime Created { get; set; } = DateTime.Now;
+        public DateTime CreatedOn { get; set; } = DateTime.Now;
         public QuizStatusType Status { get; set; } = QuizStatusType.NobodyDid;
 
         // relationship

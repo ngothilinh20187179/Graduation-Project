@@ -73,7 +73,7 @@ namespace EnglishCenterManagement.Repository
             #endregion
 
             #region Sorting
-            allQuizzes = allQuizzes.OrderByDescending(u => u.Created);
+            allQuizzes = allQuizzes.OrderByDescending(u => u.CreatedOn);
             #endregion
 
             #region Paginated
@@ -97,7 +97,7 @@ namespace EnglishCenterManagement.Repository
             #endregion
 
             #region Sorting
-            myQuizzes = myQuizzes.OrderByDescending(u => u.Created);
+            myQuizzes = myQuizzes.OrderByDescending(u => u.CreatedOn);
             #endregion
 
             #region Paginated
@@ -172,7 +172,7 @@ namespace EnglishCenterManagement.Repository
             var marks = _context.Marks.Where(x => x.StudentId == studentId).AsQueryable();
 
             #region Sorting
-            marks = marks.OrderByDescending(u => u.Created);
+            marks = marks.OrderByDescending(u => u.CreatedOn);
             #endregion
 
             #region Paginated

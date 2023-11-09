@@ -18,7 +18,7 @@ namespace EnglishCenterManagement.Entities.Models
         public DateOnly? DateOfBirth { get; set; }
 
         public RoleType Role { get; set; } = RoleType.RestrictedRole;
-        public DateTime Created { get; set; } = DateTime.Now;
+        public DateTime CreatedOn { get; set; } = DateTime.Now;
         public UserStatusType UserStatus { get; set; } = UserStatusType.UnLock;
 
         // Relationship
@@ -27,5 +27,6 @@ namespace EnglishCenterManagement.Entities.Models
         public StudentModel? Student { get; set; }
         public TeacherModel? Teacher { get; set; }
         public StaffModel? Staff { get; set; }
+        public ICollection<NotificationModel>? Notifications { get; set; }
     }
 }
