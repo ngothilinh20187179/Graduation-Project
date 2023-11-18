@@ -2,6 +2,7 @@
 
 namespace EnglishCenterManagement.Dtos.AuthenticationDtos
 {
+    // Checked
     public class LoginDto
     {
         public string LoginName { get; set; } = string.Empty;

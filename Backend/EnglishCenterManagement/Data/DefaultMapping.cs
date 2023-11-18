@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EnglishCenterManagement.Dtos.AuthenticationDtos;
+using EnglishCenterManagement.Dtos.ReceivedNotificationDto;
 using EnglishCenterManagement.Dtos.ClassRoomDto;
 using EnglishCenterManagement.Dtos.ExaminationDtos;
 using EnglishCenterManagement.Dtos.SchoolDto;
@@ -7,6 +8,7 @@ using EnglishCenterManagement.Dtos.SchoolRoomDto;
 using EnglishCenterManagement.Dtos.TeacherStudentStaffDto;
 using EnglishCenterManagement.Dtos.UserInfoDto;
 using EnglishCenterManagement.Entities.Models;
+using EnglishCenterManagement.Dtos.SentNotificationDto;
 
 namespace EnglishCenterManagement.Data
 {
@@ -56,6 +58,9 @@ namespace EnglishCenterManagement.Data
             CreateMap<MarkModel, MarkDto>();
             CreateMap<CreateMarkDto, MarkModel>();
             CreateMap<ClassModel, AssignClassDto>();
+
+            CreateMap<NotificationModel, ReceivedNotificationDto>();
+            CreateMap<NotificationModel, SentNotificationDto>();
         }
     }
 }

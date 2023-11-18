@@ -2,6 +2,8 @@ import AUTH_KEY from "features/admin_auth/constants/auth.keys";
 import { authReducer } from "features/admin_auth/redux/auth.slice";
 import { classesReducer } from "features/admin_classes/admin_classes";
 import CLASSES_KEY from "features/admin_classes/constants/classes.keys";
+import { notificationReducer } from "features/admin_notification/admin_notification";
+import NOTIFICATION_KEY from "features/admin_notification/constants/notification.keys";
 import { settingReducer } from "features/admin_setting/admin_setting";
 import SETTING_KEY from "features/admin_setting/constants/setting.keys";
 import { usersReducer } from "features/admin_users/admin_users";
@@ -13,6 +15,7 @@ const rootReducer = combineReducers({
   [AUTH_KEY]: authReducer,
   [SETTING_KEY]: settingReducer,
   [CLASSES_KEY]: classesReducer,
+  [NOTIFICATION_KEY]: notificationReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -2,6 +2,7 @@
 
 namespace EnglishCenterManagement.Dtos.UserInfoDto
 {
+    // checked
     public class BasicUserInfoDto
     {
         public int Id { get; set; }

@@ -151,9 +151,9 @@ const MyProfileScreen = () => {
           <Descriptions.Item className="font-16" label="My Id">
             {myProfile?.id}
           </Descriptions.Item>
-          <Descriptions.Item label="My Role">
+          {/* <Descriptions.Item label="My Role">
             {myProfile?.role}
-          </Descriptions.Item>
+          </Descriptions.Item> */}
           <Descriptions.Item label="Login Name">
             {myProfile?.loginName}
           </Descriptions.Item>
@@ -178,8 +178,8 @@ const MyProfileScreen = () => {
           <Descriptions.Item label="Address">
             {myProfile?.location}
           </Descriptions.Item>
-          <Descriptions.Item label="Created At">
-            {getTimeUTC(myProfile?.created)}
+          <Descriptions.Item label="Created On">
+            {getTimeUTC(myProfile?.createdOn)}
           </Descriptions.Item>
         </Descriptions>
       </div>

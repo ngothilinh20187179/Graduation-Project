@@ -49,7 +49,7 @@ const FormAdminInformation = ({
   useEffect(() => {
     form.setFieldsValue({
       ...adminInfo,
-      created: getTimeUTC(adminInfo?.created),
+      created: getTimeUTC(adminInfo?.createdOn),
       dateOfBirth: adminInfo?.dateOfBirth
         ? dayjs(adminInfo?.dateOfBirth)
         : null,

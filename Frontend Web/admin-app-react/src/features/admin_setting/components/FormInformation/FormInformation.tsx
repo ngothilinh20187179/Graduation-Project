@@ -49,7 +49,7 @@ const FormInformation = ({
   useEffect(() => {
     form.setFieldsValue({
       ...myProfile,
-      created: getTimeUTC(myProfile?.created),
+      created: getTimeUTC(myProfile?.createdOn),
       dateOfBirth: myProfile?.dateOfBirth ? dayjs(myProfile?.dateOfBirth) : null,
     });
   }, [form, myProfile]);
@@ -166,7 +166,7 @@ const FormInformation = ({
             </Form.Item>
           </Col>
           <Col xs={24} xl={8} style={{ maxWidth: 360 }}>
-            <Form.Item label="Created At:" name="created">
+            <Form.Item label="Created On:" name="createdOn">
               <Input disabled />
             </Form.Item>
           </Col>

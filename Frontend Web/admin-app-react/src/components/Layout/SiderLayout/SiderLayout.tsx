@@ -1,23 +1,24 @@
 import { Menu, MenuProps, Typography } from "antd";
 import Sider from "antd/es/layout/Sider";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import styles from "./SiderLayout.module.scss";
 import cx from "classnames";
 import {
   DingdingOutlined,
   SettingOutlined,
   UserOutlined,
-  DollarOutlined,
+  BellOutlined,
   BookOutlined,
+  BarChartOutlined,
 } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { SettingPaths } from "features/admin_setting/admin_setting";
 import { TopPaths } from "features/admin_top/admin_top";
 import { UserPaths } from "features/admin_users/admin_users";
 import { ClassesPaths } from "features/admin_classes/admin_classes";
+import { NotificationPaths } from "features/admin_notification/admin_notification";
 
-// TODO:
-// handle active item in slider (problem: reload)
+// TODO: còn 1 vđ là khi navigate ở các screen khác thì sider ko update
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -36,6 +37,7 @@ function getItem(
 }
 
 const items: MenuProps["items"] = [
+  getItem("Notifications", NotificationPaths.NOTIFICATION(), <BellOutlined />),
   getItem("Users", "manageUsersKey", <UserOutlined />, [
     getItem("Admins", UserPaths.GET_ADMINS()),
     getItem("Staffs", "/staffs"),
@@ -47,15 +49,20 @@ const items: MenuProps["items"] = [
     getItem("Rooms", ClassesPaths.ROOMS()),
     getItem("Classes", "/classes"),
   ]),
-  getItem("Finances", "manageFinancesKey", <DollarOutlined />, [
-    getItem("Salary", "/salary"),
-  ]),
+  getItem("Statistical", "statisticalKey", <BarChartOutlined />),
   getItem("Settings", SettingPaths.SETTING(), <SettingOutlined />),
 ];
 
 const SiderLayout = ({ collapsed }: { collapsed: boolean }) => {
   const navigate = useNavigate();
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const location = useLocation();
+
+  useEffect(() => {
+    const firstPathName = `/${location.pathname.split('/')[1]}`
+    setSelectedKeys([firstPathName]);
+    navigate(firstPathName);
+  }, []);
 
   const onClickMenuItem: MenuProps["onClick"] = (e) => {
     setSelectedKeys([e.key]);

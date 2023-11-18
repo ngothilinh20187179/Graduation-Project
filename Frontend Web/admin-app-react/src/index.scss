@@ -99,3 +99,12 @@ input::-ms-clear {
     font-size: 14px !important;
   }
 }
+
+.ant-list {
+  .ant-list-item-meta-description {
+    width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

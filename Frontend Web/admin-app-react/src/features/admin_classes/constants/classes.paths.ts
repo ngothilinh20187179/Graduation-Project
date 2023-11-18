@@ -1,17 +1,17 @@
 export const ClassesRoutePaths = {
   SUBJECTS: "/subjects",
-  EDIT_SUBJECT: "/update-subject/:id",
-  CREATE_SUBJECT: "/create-subject",
+  EDIT_SUBJECT: "/subjects/update/:id",
+  CREATE_SUBJECT: "/subjects/create",
   ROOMS: "/rooms",
-  CREATE_ROOM: "/create-room",
-  EDIT_ROOM: "/update-room/:id",
+  CREATE_ROOM: "/rooms/create",
+  EDIT_ROOM: "/rooms/update/:id",
 };
 
 export const ClassesPaths = {
   SUBJECTS: () => "/subjects",
-  EDIT_SUBJECT: (id: number) => `/update-subject/${id}`,
-  CREATE_SUBJECT: () => "/create-subject",
+  EDIT_SUBJECT: (id: number) => `/subjects/update/${id}`,
+  CREATE_SUBJECT: () => "/subjects/create",
   ROOMS: () => "/rooms",
-  EDIT_ROOM: (id: number) => `/update-room/${id}`,
-  CREATE_ROOM: () => "/create-room",
+  EDIT_ROOM: (id: number) => `/rooms/update/${id}`,
+  CREATE_ROOM: () => "/rooms/create",
 };

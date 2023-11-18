@@ -110,6 +110,9 @@ namespace EnglishCenterManagement.Controllers
 
         // TODO: PUT: /restricted-user/{id}
         // Khóa/mở khóa tài khoản user                                                                                      
+
+        // checked
+        // PUT: /restricted-user/5
         [HttpPut("restricted-user/{id}")]
         [Authorize(Roles = nameof(RoleType.Admin))]
         public ActionResult RestrictedAccount([FromBody] UserStatusType userStatusType, int id)
@@ -180,6 +183,7 @@ namespace EnglishCenterManagement.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
+        // checked
         // GET: /myprofile
         [HttpGet("myprofile")]
         [Authorize]
@@ -204,6 +208,7 @@ namespace EnglishCenterManagement.Controllers
             return Ok(new ApiReponse(userProfileMap));
         }
 
+        // checked
         // GET: /myavatar
         [HttpGet("myavatar")]
         [Authorize]
@@ -225,6 +230,7 @@ namespace EnglishCenterManagement.Controllers
             return Ok(new ApiReponse(mappedAvatar));
         }
 
+        // checked
         // PUT: /change-information
         [HttpPut("change-information")]
         [Authorize]
@@ -282,6 +288,7 @@ namespace EnglishCenterManagement.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
+        // checked
         // PUT: /change-password
         [HttpPut("change-password")]
         [Authorize]
@@ -334,6 +341,7 @@ namespace EnglishCenterManagement.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
         
+        // checked
         // PUT: /change-avatar
         // The max request body size is 30.000.000 bytes.
         [HttpPut("change-avatar")]
@@ -389,6 +397,7 @@ namespace EnglishCenterManagement.Controllers
             return NoContent();
         }
 
+        // checked
         // DELETE: /remove-myavatar
         [HttpDelete("remove-myavatar")]
         [Authorize]

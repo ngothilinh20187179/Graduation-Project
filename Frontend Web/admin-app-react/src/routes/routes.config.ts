@@ -1,5 +1,6 @@
 import { AUTH_ROUTES } from "features/admin_auth/admin_auth";
 import { CLASSES_ROUTES } from "features/admin_classes/admin_classes";
+import { NOTIFICATION_ROUTES } from "features/admin_notification/admin_notification";
 import { SETTING_ROUTES } from "features/admin_setting/routes/setting.routes";
 import { TOP_ROUTES } from "features/admin_top/routes/top.routes";
 import { USERS_ROUTES } from "features/admin_users/admin_users";
@@ -13,4 +14,5 @@ export const LIST_PRIVATE_ROUTES = [
   ...TOP_ROUTES,
   ...SETTING_ROUTES,
   ...CLASSES_ROUTES,
+  ...NOTIFICATION_ROUTES
 ];

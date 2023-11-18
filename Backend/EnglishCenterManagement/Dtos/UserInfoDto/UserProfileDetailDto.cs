@@ -2,6 +2,7 @@
 
 namespace EnglishCenterManagement.Dtos.UserInfoDto
 {
+    // checked
     public class UserProfileDetailDto : UserInfoDto
     {
         public DateTime CreatedOn { get; set; }

@@ -1,5 +1,6 @@
 ﻿namespace EnglishCenterManagement.Dtos.UserInfoDto
 {
+    // checked
     public class ChangePasswordDto
     {
         public string OldPassword { get; set; } = string.Empty;

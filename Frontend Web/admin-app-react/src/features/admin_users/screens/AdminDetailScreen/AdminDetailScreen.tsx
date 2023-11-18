@@ -97,7 +97,7 @@ const AdminDetailScreen = () => {
             {admin?.location}
           </Descriptions.Item>
           <Descriptions.Item label="Created At">
-            {getTimeUTC(admin?.created)}
+            {getTimeUTC(admin?.createdOn)}
           </Descriptions.Item>
         </Descriptions>
       </div>

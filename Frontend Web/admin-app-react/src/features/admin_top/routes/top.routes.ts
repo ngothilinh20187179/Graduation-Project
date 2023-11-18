@@ -6,6 +6,8 @@ const TOP_SCREEN: RouteItem = {
   id: "admin-top",
   path: TopRoutePaths.TOP,
   component: lazy(() => import("../screens/TopScreen/TopScreen")),
-};
+}; 
 
-export const TOP_ROUTES = [TOP_SCREEN];
+export const TOP_ROUTES = [
+  TOP_SCREEN,
+];

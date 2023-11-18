@@ -2,6 +2,7 @@
 
 namespace EnglishCenterManagement.Dtos.UserInfoDto
 {
+    // checked
     public class EditUserInfo
     {
         public string LoginName { get; set; } = string.Empty;

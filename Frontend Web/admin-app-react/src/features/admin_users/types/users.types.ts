@@ -15,7 +15,7 @@ export type PrivateUserInfo = {
   loginName: string;
   email: string | null;
   location: string | null;
-  created: string;
+  createdOn: string;
   role: RoleType;
 };
 

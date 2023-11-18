@@ -1,12 +1,10 @@
 import { Typography } from "antd";
-import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import { memo } from "react";
 
 const TopScreen = () => {
   return (
-    <div>
-      <Typography>test top screen</Typography>
-      <LoadingSpinner />
+    <div className="pl-55 pt-30">
+      <Typography className="font-24">Top</Typography>
     </div>
   );
 };

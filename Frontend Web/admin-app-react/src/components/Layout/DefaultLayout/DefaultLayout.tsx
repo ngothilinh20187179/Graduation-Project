@@ -9,7 +9,6 @@ import styles from "./DefaultLayout.module.scss";
 
 const DefaultLayout = ({ children }: { children: ReactNode }) => {
   const [collapsed, setCollapsed] = useState(false);
-
   return (
     <Layout>
       <SiderLayout collapsed={collapsed}/>

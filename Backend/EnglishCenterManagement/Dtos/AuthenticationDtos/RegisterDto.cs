@@ -3,6 +3,7 @@ using EnglishCenterManagement.Entities.Enumerations;
 
 namespace EnglishCenterManagement.Dtos.AuthenticationDtos
 {
+    // checked
     public class RegisterDto
     {
         public string LoginName { get; set; } = string.Empty;

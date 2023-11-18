@@ -1,5 +1,6 @@
 ﻿namespace EnglishCenterManagement.Dtos.AuthenticationDtos
 {
+    // checked
     public class RefreshTokenDto
     {
         public int Id { get; set; }

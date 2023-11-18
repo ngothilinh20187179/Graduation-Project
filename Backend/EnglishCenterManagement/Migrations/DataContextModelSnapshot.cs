@@ -187,10 +187,25 @@ namespace EnglishCenterManagement.Migrations
                     b.Property<DateTime>("CreateOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsMarkedReceiverNoti")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsMarkedSenderNoti")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("IsReceiverDeleteNoti")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("IsSenderDeleteNoti")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("ReceiverId")
                         .HasColumnType("int");
 
                     b.Property<int>("SenderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
