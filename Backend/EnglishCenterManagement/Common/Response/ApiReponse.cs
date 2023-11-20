@@ -68,6 +68,7 @@
             [646] = "Same schedule",
             [647] = "Admin not exists",
             [648] = "Notification not exists",
+            [649] = "You are not receiver of this notification",
 
             [999] = "Your account has been locked",
             [1000] = "You don't have permission to access"

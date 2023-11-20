@@ -13,5 +13,7 @@
   "fe_11": "Invalid phone number. Maximum 10 number characters.",
   "fe_12": "Please input your subject name!",
   "fe_13": "Please input your description!",
-  "fe_14": "Please input your room name!"
+  "fe_14": "Please input your room name!",
+  "fe_15": "Please input your notification's title",
+  "fe_16": "Please input your notification's content"
 }

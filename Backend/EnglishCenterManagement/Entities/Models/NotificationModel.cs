@@ -8,7 +8,7 @@ namespace EnglishCenterManagement.Entities.Models
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime CreateOn { get; set; } = DateTime.Now;
-        public ReadStatusType Status { get; set; }
+        public ReadStatusType Status { get; set; } = ReadStatusType.UnRead;
         public bool IsMarkedSenderNoti { get; set; } = false;
         public bool IsMarkedReceiverNoti { get; set; } = false;
         public DateTime? IsSenderDeleteNoti { get; set; }

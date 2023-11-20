@@ -1,6 +1,6 @@
 ﻿using EnglishCenterManagement.Entities.Enumerations;
 
-namespace EnglishCenterManagement.Dtos.SchoolRoomDto
+namespace EnglishCenterManagement.Dtos.SubjectRoomDtos
 {
     public class CreateUpdateSubjectDto
     {

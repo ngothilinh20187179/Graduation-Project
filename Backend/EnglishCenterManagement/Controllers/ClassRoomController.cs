@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Common.Response;
-using EnglishCenterManagement.Dtos.ClassRoomDto;
-using EnglishCenterManagement.Dtos.SchoolRoomDto;
-using EnglishCenterManagement.Dtos.UserInfoDto;
+using EnglishCenterManagement.Dtos.ClassRoomDtos;
+using EnglishCenterManagement.Dtos.SubjectRoomDtos;
+using EnglishCenterManagement.Dtos.UserInfoDtos;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;

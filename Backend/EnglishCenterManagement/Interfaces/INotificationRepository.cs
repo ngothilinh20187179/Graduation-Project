@@ -9,6 +9,8 @@ namespace EnglishCenterManagement.Interfaces
         bool UpdateNotification(NotificationModel notification);
         PagedResponse GetAllSentNotifications(int senderId, int page, int pageSize);
         PagedResponse GetAllReceivedNotifications(int receiverId, int page, int pageSize);
+        ICollection<UserInfoModel> GetAllReceiversNotification(int senderId);
+        bool CreateNotification(NotificationModel notification);
         bool SaveChange();
     }
 }

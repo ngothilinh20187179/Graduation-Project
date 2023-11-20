@@ -1,8 +1,8 @@
-﻿using EnglishCenterManagement.Dtos.AuthenticationDtos;
+﻿using EnglishCenterManagement.Dtos.UserInfoDtos;
 
-namespace EnglishCenterManagement.Dtos.SchoolDto
+namespace EnglishCenterManagement.Dtos.TeacherStudentStaffDtos
 {
-    public class CreateTeacherDto : RegisterDto
+    public class TeacherProfileDetailDto : BasicUserInfoDto
     {
         public string GraduateAt { get; set; } = string.Empty;
         public DateOnly GraduationTime { get; set; }

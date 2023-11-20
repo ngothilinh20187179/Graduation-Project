@@ -1,6 +1,6 @@
-﻿using EnglishCenterManagement.Dtos.UserInfoDto;
+﻿using EnglishCenterManagement.Dtos.UserInfoDtos;
 
-namespace EnglishCenterManagement.Dtos.TeacherStudentStaffDto
+namespace EnglishCenterManagement.Dtos.TeacherStudentStaffDtos
 {
     public class StaffProfileDetailDto : BasicUserInfoDto
     {

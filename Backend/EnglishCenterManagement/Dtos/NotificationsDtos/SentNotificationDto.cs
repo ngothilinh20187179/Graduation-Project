@@ -1,4 +1,4 @@
-﻿namespace EnglishCenterManagement.Dtos.SentNotificationDto
+﻿namespace EnglishCenterManagement.Dtos.NotificationsDtos
 {
     public class SentNotificationDto
     {

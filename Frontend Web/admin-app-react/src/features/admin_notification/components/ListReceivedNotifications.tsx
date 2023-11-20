@@ -1,6 +1,16 @@
 import { memo, useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Divider, List, Modal, Skeleton, Tooltip, Typography } from "antd";
+import {
+  Divider,
+  List,
+  Modal,
+  Skeleton,
+  Tooltip,
+  Typography,
+  Image,
+  Avatar,
+  Spin,
+} from "antd";
 import styles from "./ListReceivedNotifications.module.scss";
 import cx from "classnames";
 import {
@@ -9,29 +19,44 @@ import {
   StarFilled,
   CheckCircleTwoTone,
   EyeOutlined,
+  CheckOutlined,
+  RollbackOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { Card, Space } from "antd";
-import { useAppDispatch } from "redux/store";
+import { useAppDispatch, useAppSelector } from "redux/store";
 import { RequestParams } from "types/param.types";
 import {
+  NotificationPaths,
+  ReadStatusType,
+  confirmReadNotification,
   deleteNotification,
+  getReceivedNotificationDetail,
   getReceivedNotifications,
+  markUnMarkReceivedNotification,
 } from "../admin_notification";
 import { ReceivedNotification } from "../types/notification.types";
 import { getTimeUTC } from "helpers/utils.helper";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { useNavigate } from "react-router-dom";
+import { RootState } from "redux/root-reducer";
 
 const ListReceivedNotifications = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
+  const [loadingDetailNoti, setDetailNoti] = useState(false);
   const [data, setData] = useState<ReceivedNotification[]>([]);
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(20);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [triggerReload, setTriggerReload] = useState<boolean>(false);
   const [notiSelected, setNotiSelected] = useState<number | null>(null);
+
+  const {
+    notification: { receivedNotificationDetail },
+  } = useAppSelector((state: RootState) => state);
 
   const loadMoreData = () => {
     if (loading) {
@@ -44,7 +69,6 @@ const ListReceivedNotifications = () => {
     setLoading(true);
     dispatch(getReceivedNotifications(params))
       .unwrap()
-      .then()
       .then((body) => {
         var newdata = body.data.data;
         if (newdata.length === 0) {
@@ -67,9 +91,6 @@ const ListReceivedNotifications = () => {
     setLoading(true);
     dispatch(deleteNotification(notiSelected))
       .then(unwrapResult)
-      .then(() => {
-        setTriggerReload(!triggerReload);
-      })
       .finally(() => {
         setIsSubmitting(false);
         setLoading(false);
@@ -80,8 +101,26 @@ const ListReceivedNotifications = () => {
   };
 
   const handleGetDetailNoti = (id: number) => {
-    setNotiSelected(id);
-    //dispatch(getReceivedNotificationDetail(Number(id)));
+    setDetailNoti(true);
+    dispatch(getReceivedNotificationDetail(Number(id)))
+      .unwrap()
+      .finally(() => setDetailNoti(false));
+  };
+
+  const handleMarkReceivedNotification = (id: number) => {
+    dispatch(markUnMarkReceivedNotification(id))
+      .then(unwrapResult)
+      .finally(() => {
+        window.location.reload();
+      });
+  };
+
+  const handleConfirmReadNoti = (id: number) => {
+    dispatch(confirmReadNotification(id))
+      .then(unwrapResult)
+      .finally(() => {
+        window.location.reload();
+      });
   }
 
   return (
@@ -111,14 +150,20 @@ const ListReceivedNotifications = () => {
             renderItem={(item) => {
               const date = getTimeUTC(item.createOn);
               return (
-                <List.Item key={item.id} onClick={() => console.log("test")}>
+                <List.Item key={item.id}>
                   {item.isMarkedReceiverNoti ? (
                     <StarFilled
                       className={cx(styles.starred, "pr-10 mr-15 font-18")}
+                      onClick={() => {
+                        handleMarkReceivedNotification(item.id);
+                      }}
                     />
                   ) : (
                     <StarOutlined
                       className={cx(styles.star, "pr-10 mr-15 font-18")}
+                      onClick={() => {
+                        handleMarkReceivedNotification(item.id);
+                      }}
                     />
                   )}
                   <List.Item.Meta
@@ -127,7 +172,7 @@ const ListReceivedNotifications = () => {
                   />
                   <div className="flex-center gap-20">
                     <div className="font-15">
-                      {item?.status == 1 ? (
+                      {item?.status === 1 ? (
                         <Tooltip title="Seen">
                           <CheckCircleTwoTone twoToneColor="#52c41a" />
                         </Tooltip>
@@ -166,11 +211,98 @@ const ListReceivedNotifications = () => {
           />
         </InfiniteScroll>
       </div>
-      <Card
-        title="Detail Notification"
-        extra={<a href="#">More</a>}
-        style={{ border: "1px solid rgba(140, 140, 140, 0.35)", width: 380 }}
-      ></Card>
+      {loadingDetailNoti ? (
+        <Spin size="small" />
+      ) : receivedNotificationDetail ? (
+        <div>
+          <Card
+            title={receivedNotificationDetail?.title}
+            style={{
+              border: "1px solid rgba(140, 140, 140, 0.35)",
+              width: 380,
+            }}
+            extra={<div>
+              {receivedNotificationDetail?.status === ReadStatusType.UnRead && (
+              <Tooltip title="Read confirmation">
+                <CheckOutlined className={cx(styles.readConfirmationIcon, "font-18 mr-5")}
+                onClick={() => handleConfirmReadNoti(Number(receivedNotificationDetail.id))}
+                />
+              </Tooltip>
+            )}
+            <Tooltip title="Reply">
+              <RollbackOutlined className={cx(styles.replyIcon, "font-18")}
+                onClick={() =>
+                  navigate(NotificationPaths.CREATE_NOTIFICATIONS())
+                }
+              />
+            </Tooltip>
+            </div>}
+          >
+            <div className="flex-space-between flex-start">
+              <div>
+                {receivedNotificationDetail?.sender?.avatar ? (
+                  <Image
+                    className="mb-20"
+                    style={{ width: 100, height: 100 }}
+                    preview={false}
+                    src={`data:${receivedNotificationDetail.sender.avatar.mediaType};base64,${receivedNotificationDetail.sender.avatar.data}`}
+                  />
+                ) : (
+                  <Avatar
+                    className="mb-20"
+                    size={100}
+                    icon={<UserOutlined />}
+                  />
+                )}
+              </div>
+              <div className="flex-align-center">
+                <p>{receivedNotificationDetail?.createOn}</p>
+                {receivedNotificationDetail?.isMarkedReceiverNoti ? (
+                  <StarFilled
+                    className={cx(styles.starred, "pr-10 ml-5 font-18")}
+                    onClick={() => {
+                      handleMarkReceivedNotification(
+                        receivedNotificationDetail.id
+                      );
+                    }}
+                  />
+                ) : (
+                  <StarOutlined
+                    className={cx(styles.star, "pr-10 ml-5 font-18")}
+                    onClick={() => {
+                      handleMarkReceivedNotification(
+                        Number(receivedNotificationDetail?.id)
+                      );
+                    }}
+                  />
+                )}
+              </div>
+            </div>
+            <Typography style={{fontWeight: "bold"}}>
+              Sender : {receivedNotificationDetail?.sender.lastName}{" "}
+              {receivedNotificationDetail?.sender.firstName}
+            </Typography>
+            <Typography>
+              Id : {receivedNotificationDetail?.sender.id}
+            </Typography>
+            <Typography>
+              Role :{" "}
+              {receivedNotificationDetail?.sender.role === 1
+                ? "Student"
+                : receivedNotificationDetail?.sender.role === 2
+                ? "Teacher"
+                : receivedNotificationDetail?.sender.role === 3
+                ? "Staff"
+                : receivedNotificationDetail?.sender.role === 4
+                ? "Admin"
+                : ""}
+            </Typography>
+            <Typography className="mb-20">
+              Content : {receivedNotificationDetail?.content}
+            </Typography>
+          </Card>
+        </div>
+      ) : ""}
       <Modal
         centered
         title="Are you sure?"

@@ -1,6 +1,6 @@
 ﻿using EnglishCenterManagement.Entities.Enumerations;
 
-namespace EnglishCenterManagement.Dtos.UserInfoDto
+namespace EnglishCenterManagement.Dtos.UserInfoDtos
 {
     // checked
     public class UserProfileDetailDto : UserInfoDto

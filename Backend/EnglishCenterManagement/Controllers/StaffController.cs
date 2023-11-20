@@ -2,8 +2,8 @@
 using EnglishCenterManagement.Common.Helpers;
 using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Common.Response;
-using EnglishCenterManagement.Dtos.TeacherStudentStaffDto;
-using EnglishCenterManagement.Dtos.UserInfoDto;
+using EnglishCenterManagement.Dtos.TeacherStudentStaffDtos;
+using EnglishCenterManagement.Dtos.UserInfoDtos;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;

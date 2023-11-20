@@ -1,4 +1,4 @@
-﻿namespace EnglishCenterManagement.Dtos.ClassRoomDto
+﻿namespace EnglishCenterManagement.Dtos.ClassRoomDtos
 {
     public class AddTeacherClassDto
     {

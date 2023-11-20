@@ -1,5 +1,4 @@
-﻿using EnglishCenterManagement.Dtos.UserInfoDto;
-using EnglishCenterManagement.Entities.Enumerations;
+﻿using EnglishCenterManagement.Entities.Enumerations;
 
 namespace EnglishCenterManagement.Dtos.AuthenticationDtos
 {

@@ -183,7 +183,7 @@ const AdminScreen = () => {
   }, [dispatch, triggerReload, page, pageSize, search]);
 
   const handleLockOrUnLock = () => {
-    if (adminIdSelected == null || adminStatusSelected == null) return;
+    if (adminIdSelected === null || adminStatusSelected === null) return;
     setIsSubmitting(true);
     setIsLoading(true);
     let userStatusType = adminStatusSelected === UserStatusType.Lock ? UserStatusType.UnLock : UserStatusType.Lock;

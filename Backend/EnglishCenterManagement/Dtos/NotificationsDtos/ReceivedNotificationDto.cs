@@ -1,5 +1,5 @@
 ﻿using EnglishCenterManagement.Entities.Enumerations;
-namespace EnglishCenterManagement.Dtos.ReceivedNotificationDto
+namespace EnglishCenterManagement.Dtos.NotificationsDtos
 {
     public class ReceivedNotificationDto
     {

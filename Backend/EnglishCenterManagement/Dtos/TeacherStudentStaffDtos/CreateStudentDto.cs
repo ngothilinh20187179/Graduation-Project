@@ -1,6 +1,6 @@
 ﻿using EnglishCenterManagement.Dtos.AuthenticationDtos;
 
-namespace EnglishCenterManagement.Dtos.SchoolDto
+namespace EnglishCenterManagement.Dtos.TeacherStudentStaffDtos
 {
     public class CreateStudentDto : RegisterDto
     {

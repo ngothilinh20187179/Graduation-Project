@@ -1,4 +1,4 @@
-﻿namespace EnglishCenterManagement.Dtos.UserInfoDto
+﻿namespace EnglishCenterManagement.Dtos.UserInfoDtos
 {
     // checked
     public class AvatarDto

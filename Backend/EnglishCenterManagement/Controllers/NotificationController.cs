@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
 using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Common.Response;
-using EnglishCenterManagement.Dtos.ReceivedNotificationDto;
-using EnglishCenterManagement.Dtos.SchoolRoomDto;
-using EnglishCenterManagement.Dtos.SentNotificationDto;
+using EnglishCenterManagement.Dtos.NotificationsDtos;
+using EnglishCenterManagement.Dtos.UserInfoDtos;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
-using EnglishCenterManagement.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -85,13 +83,97 @@ namespace EnglishCenterManagement.Controllers
             return Ok(new ApiReponse(listReceivedNotifications));
         }
 
-        // PUT: /mark-noti/5
-        // [HttpDelete("mark-noti/{id}")]
+        // GET: /receivers-notification
+        [HttpGet("receivers-notification")]
+        [Authorize]
+        public ActionResult<ICollection<ReceiversNotificationDto>> GetAllReceiversNotification()
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            var listReceiversNotification = _notificationRepository.GetAllReceiversNotification(user.Id);
+            var mappedListReceiversNotification = _mapper.Map<ICollection<ReceiversNotificationDto>>(listReceiversNotification);
+
+            return Ok(new ApiReponse(mappedListReceiversNotification));
+
+        }
+
+        // GET: /received-notification-detail/5
+        [HttpGet("received-notification-detail/{id}")]
+        [Authorize]
+        public ActionResult<ReceivedNotificationDetailDto> GetReceivedNotificationDetail(int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+            var getNotiById = _notificationRepository.GetNotiById(id);
+            if (getNotiById == null)
+            {
+                return NotFound(new ApiReponse(648));
+            }
+
+            var notificationDetail = _mapper.Map<ReceivedNotificationDetailDto>(getNotiById);
+            var sender = _userRepository.GetUserByUserId(getNotiById.SenderId);
+            var avatar = _userRepository.GetUserAvatar(getNotiById.SenderId);
+
+            notificationDetail.Sender = _mapper.Map<UserNotificationDto>(sender);
+            notificationDetail.Sender.Avatar = _mapper.Map<AvatarDto>(avatar);
+
+            return Ok(new ApiReponse(notificationDetail));
+        }
+
+        // PUT: /confirm-read-notification
+        [HttpPut("confirm-read-notification")]
+        [Authorize]
+        public ActionResult ConfirmReadNotification([FromBody] int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+            var getNotiById = _notificationRepository.GetNotiById(id);
+            if (getNotiById == null)
+            {
+                return NotFound(new ApiReponse(648));
+            }
+
+            if (user.Id != getNotiById.ReceiverId)
+            {
+                return BadRequest(new ApiReponse(649));
+            }
+            getNotiById.Status = ReadStatusType.Read;
+
+            if (!_notificationRepository.UpdateNotification(getNotiById))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
 
         // PUT: /remove-notification
         [HttpPut("remove-notification")]
         [Authorize]
-        public ActionResult UpdateRoom([FromBody] int id)
+        public ActionResult RemoveNotification([FromBody] int id)
         {
             var user = GetUserByClaim();
             if (user == null)
@@ -120,6 +202,82 @@ namespace EnglishCenterManagement.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
             return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        // PUT: /mark-unMark-notification
+        [HttpPut("mark-unmark-notification")]
+        [Authorize]
+        public ActionResult MarkUnMarkReceivedNotification([FromBody] int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+            var getNotiById = _notificationRepository.GetNotiById(id);
+            if (getNotiById == null)
+            {
+                return NotFound(new ApiReponse(648));
+            }
+
+            if (user.Id == getNotiById.SenderId)
+            {
+                getNotiById.IsMarkedSenderNoti = !getNotiById.IsMarkedSenderNoti;
+            }
+            else if (user.Id == getNotiById.ReceiverId)
+            {
+                getNotiById.IsMarkedReceiverNoti = !getNotiById.IsMarkedReceiverNoti;
+            }
+            if (!_notificationRepository.UpdateNotification(getNotiById))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        // POST: /create-notification
+        [HttpPost("create-notification")]
+        [Authorize]
+        public ActionResult CreateNotification([FromBody] CreateNotificationDto newNotification)
+        {
+            if (newNotification == null) return BadRequest(new ApiReponse(600));
+
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            var receiverIds = newNotification.Receivers;
+            foreach (var item in receiverIds)
+            {
+                if (_userRepository.GetUserByUserId(item) == null)
+                {
+                    return BadRequest(new ApiReponse(606));
+                }
+            }
+
+            var senderId = user.Id;
+            foreach (var item in receiverIds)
+            {
+                var mappedNotification = _mapper.Map<NotificationModel>(newNotification);
+                mappedNotification.ReceiverId = item;
+                mappedNotification.SenderId = senderId;
+                if (!_notificationRepository.CreateNotification(mappedNotification))
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+            }
+
+            return StatusCode(StatusCodes.Status201Created);
         }
 
         private UserInfoModel? GetUserByClaim()

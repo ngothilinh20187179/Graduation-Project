@@ -51,6 +51,17 @@ namespace EnglishCenterManagement.Repository
 
             return new PagedResponse(data, totalNotifications, page, pageSize);
         }
+        public bool CreateNotification(NotificationModel notification)
+        {
+            _context.Add(notification);
+            return SaveChange();
+        }
+        public ICollection<UserInfoModel> GetAllReceiversNotification(int senderId)
+        {
+            var allReceiverstifications = _context.Users.Where(x => x.Id != senderId).ToList();
+            return allReceiverstifications;
+        }
+
         public bool SaveChange()
         {
             return _context.SaveChanges() > 0;

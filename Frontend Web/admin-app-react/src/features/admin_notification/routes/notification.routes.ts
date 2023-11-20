@@ -24,12 +24,19 @@ const SENT_NOTIFICATIONS_SCREEN: RouteItem = {
 const STARRED_NOTIFICATIONS_SCREEN: RouteItem = {
   id: "admin-starred-notifications",
   path: NotificationRoutePaths.STARRED_NOTIFICATIONS,
-  component: lazy(() => import("../screens//StarredNotificationsScreen/StarredNotificationsScreen")),
+  component: lazy(() => import("../screens/StarredNotificationsScreen/StarredNotificationsScreen")),
+}; 
+
+const CREATE_NOTIFICATIONS_SCREEN: RouteItem = {
+  id: "admin-create-notifications",
+  path: NotificationRoutePaths.CREATE_NOTIFICATIONS,
+  component: lazy(() => import("../screens/CreateNotificationScreen/CreateNotificationScreen")),
 }; 
 
 export const NOTIFICATION_ROUTES = [
   NOTIFICATION_SCREEN,
   STARRED_NOTIFICATIONS_SCREEN,
   SENT_NOTIFICATIONS_SCREEN,
-  RECEIVED_NOTIFICATIONS_SCREEN
+  RECEIVED_NOTIFICATIONS_SCREEN,
+  CREATE_NOTIFICATIONS_SCREEN
 ];
