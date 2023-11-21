@@ -12,6 +12,14 @@ export type ReceivedNotification = {
     isMarkedReceiverNoti: boolean;
 }
 
+export type SentNotification = {
+    id: number;
+    title: string;
+    content: string;
+    createOn: string;
+    isMarkedSenderNoti: boolean;
+}
+
 export type UserNotification = {
     id: number;
     firstName: string;
@@ -22,6 +30,10 @@ export type UserNotification = {
 
 export type ReceivedNotificationDetail = ReceivedNotification & {
     sender: UserNotification
+};
+
+export type SentNotificationDetail = SentNotification & {
+    receiver: UserNotification
 };
 
 export type ReceiverNotification = {
@@ -45,8 +57,14 @@ export interface GetAllReceiversNotification extends PaginationResponse {
     data: ReceiverNotification[];
 }
 
+export interface GetAllSentNotificationDetail extends PaginationResponse {
+    data: SentNotification[];
+}
+
 export interface NotificationState {
     receivedNotifications: GetAllReceivedNotifications | null;
     receiversNotification: GetAllReceiversNotification | null;
     receivedNotificationDetail: ReceivedNotificationDetail | null;
+    sentNotificationDetail: SentNotificationDetail | null;
+    sentNotifications: GetAllSentNotificationDetail | null;
 }

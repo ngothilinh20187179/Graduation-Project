@@ -33,7 +33,7 @@ import {
   deleteNotification,
   getReceivedNotificationDetail,
   getReceivedNotifications,
-  markUnMarkReceivedNotification,
+  markUnMarkNotification,
 } from "../admin_notification";
 import { ReceivedNotification } from "../types/notification.types";
 import { getTimeUTC } from "helpers/utils.helper";
@@ -108,7 +108,7 @@ const ListReceivedNotifications = () => {
   };
 
   const handleMarkReceivedNotification = (id: number) => {
-    dispatch(markUnMarkReceivedNotification(id))
+    dispatch(markUnMarkNotification(id))
       .then(unwrapResult)
       .finally(() => {
         window.location.reload();
@@ -256,7 +256,7 @@ const ListReceivedNotifications = () => {
                 )}
               </div>
               <div className="flex-align-center">
-                <p>{receivedNotificationDetail?.createOn}</p>
+                <p>{getTimeUTC(receivedNotificationDetail?.createOn)}</p>
                 {receivedNotificationDetail?.isMarkedReceiverNoti ? (
                   <StarFilled
                     className={cx(styles.starred, "pr-10 ml-5 font-18")}

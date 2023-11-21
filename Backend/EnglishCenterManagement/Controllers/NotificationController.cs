@@ -57,6 +57,36 @@ namespace EnglishCenterManagement.Controllers
             return Ok(new ApiReponse(listSentNotifications));
         }
 
+        // GET: /sent-notification-detail/5
+        [HttpGet("sent-notification-detail/{id}")]
+        [Authorize]
+        public ActionResult<SentNotificationDetailDto> GetSentNotificationDetail(int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+            var getNotiById = _notificationRepository.GetNotiById(id);
+            if (getNotiById == null)
+            {
+                return NotFound(new ApiReponse(648));
+            }
+
+            var notificationDetail = _mapper.Map<SentNotificationDetailDto>(getNotiById);
+            var receiver = _userRepository.GetUserByUserId(getNotiById.ReceiverId);
+            var avatar = _userRepository.GetUserAvatar(getNotiById.ReceiverId);
+
+            notificationDetail.Receiver = _mapper.Map<UserNotificationDto>(receiver);
+            notificationDetail.Receiver.Avatar = _mapper.Map<AvatarDto>(avatar);
+
+            return Ok(new ApiReponse(notificationDetail));
+        }
+
         // GET: /received-notifications
         [HttpGet("received-notifications")]
         [Authorize]

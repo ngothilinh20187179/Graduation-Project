@@ -59,6 +59,7 @@ namespace EnglishCenterManagement.Data
 
             CreateMap<NotificationModel, ReceivedNotificationDto>();
             CreateMap<NotificationModel, ReceivedNotificationDetailDto>();
+            CreateMap<NotificationModel, SentNotificationDetailDto>();
             CreateMap<NotificationModel, SentNotificationDto>();
             CreateMap<UserInfoModel, ReceiversNotificationDto>();
             CreateMap<CreateNotificationDto, NotificationModel>();
