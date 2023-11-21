@@ -151,9 +151,6 @@ const MyProfileScreen = () => {
           <Descriptions.Item className="font-16" label="My Id">
             {myProfile?.id}
           </Descriptions.Item>
-          {/* <Descriptions.Item label="My Role">
-            {myProfile?.role}
-          </Descriptions.Item> */}
           <Descriptions.Item label="Login Name">
             {myProfile?.loginName}
           </Descriptions.Item>

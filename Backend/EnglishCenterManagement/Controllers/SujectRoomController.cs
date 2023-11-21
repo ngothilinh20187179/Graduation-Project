@@ -41,7 +41,7 @@ namespace EnglishCenterManagement.Controllers
             var mappedListSubjects = _mapper.Map<List<SubjectDto>>(listSubjects.Data);
             listSubjects.Data = mappedListSubjects;
 
-            return Ok(listSubjects);
+            return Ok(new ApiReponse(listSubjects));
         }
 
         // GET: /subject/5
@@ -193,7 +193,7 @@ namespace EnglishCenterManagement.Controllers
             var mappedListRooms = _mapper.Map<List<RoomDto>>(listRooms.Data);
             listRooms.Data = mappedListRooms;
 
-            return Ok(listRooms);
+            return Ok(new ApiReponse(listRooms));
         }
 
         [HttpGet("room/{id}")]

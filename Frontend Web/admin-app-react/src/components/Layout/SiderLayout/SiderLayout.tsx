@@ -40,9 +40,9 @@ const items: MenuProps["items"] = [
   getItem("Notifications", NotificationPaths.NOTIFICATION(), <BellOutlined />),
   getItem("Users", "manageUsersKey", <UserOutlined />, [
     getItem("Admins", UserPaths.GET_ADMINS()),
-    getItem("Staffs", "/staffs"),
-    getItem("Teachers", "/teachers"),
-    getItem("Students", "/students"),
+    getItem("Staffs", UserPaths.GET_STAFFS()),
+    getItem("Teachers", UserPaths.GET_TEACHERS()),
+    getItem("Students", UserPaths.GET_STUDENTS()),
   ]),
   getItem("Classes", "manageClassesKey", <BookOutlined />, [
     getItem("Subjects", ClassesPaths.SUBJECTS()),

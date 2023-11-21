@@ -62,7 +62,7 @@ namespace EnglishCenterManagement.Controllers
             });
             listStudents.Data = mappedListStudents;
 
-            return Ok(listStudents);
+            return Ok(new ApiReponse(listStudents));
         }
 
         // GET: /student/5
@@ -100,7 +100,7 @@ namespace EnglishCenterManagement.Controllers
             var avatar = _userRepository.GetUserAvatar(id);
             userMap.Avatar = _mapper.Map<AvatarDto>(avatar);
 
-            return Ok(userMap);
+            return Ok(new ApiReponse(userMap));
         }
 
         // GET: /classes/5/students

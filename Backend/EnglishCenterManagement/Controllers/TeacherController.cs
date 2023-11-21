@@ -59,7 +59,7 @@ namespace EnglishCenterManagement.Controllers
             });
             listTeachers.Data = mappedListTeachers;
 
-            return Ok(listTeachers);
+            return Ok(new ApiReponse(listTeachers));
         }
 
         // GET: /teacher/5
@@ -88,7 +88,7 @@ namespace EnglishCenterManagement.Controllers
             var avatar = _userRepository.GetUserAvatar(id);
             userMap.Avatar = _mapper.Map<AvatarDto>(avatar);
 
-            return Ok(userMap);
+            return Ok(new ApiReponse(userMap));
         }
 
         // POST: /create-teacher

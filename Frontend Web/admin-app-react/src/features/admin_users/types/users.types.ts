@@ -27,7 +27,7 @@ export type UserAvatar = {
 export type UserProfile = BasicUserInfo &
   PrivateUserInfo & {
     avatar: UserAvatar | null;
-  };
+};
 
 export type EditInformationRequestBody = {
   loginName: string;
@@ -35,11 +35,6 @@ export type EditInformationRequestBody = {
   location: string | null;
 } & BasicUserInfo;
 
-export interface GetAllAdminsResponse extends PaginationResponse {
-  data: (BasicUserInfo & {
-    avatar: UserAvatar | null;
-  }) [];
-}
 
 export type RestricteAccount = {
   id: number;
@@ -59,8 +54,37 @@ export type AdminInformation = {
   dateOfBirth: string | null;
 }
 
+export type StaffInfo = {
+  graduateAt: string;
+  graduationTime: string;
+  hireDate: string;
+  yearsOfWorking: number;
+  note: string | null;
+}
+
+export type StaffDetail = BasicUserInfo &
+  PrivateUserInfo & StaffInfo & {
+    avatar: UserAvatar | null;
+    positionName: string;
+};
+
+export interface GetAllAdminsResponse extends PaginationResponse {
+  data: (BasicUserInfo & {
+    avatar: UserAvatar | null;
+  }) [];
+}
+
+export interface GetAllStaffsResponse extends PaginationResponse {
+  data: (BasicUserInfo & {
+    avatar: UserAvatar | null;
+    positionName: string;
+  }) [];
+}
+
 export interface UsersState {
   avatar: UserAvatar | null;
   admins: GetAllAdminsResponse | null;
   admin: UserProfile | null;
+  staffs: GetAllStaffsResponse | null;
+  staff: StaffDetail | null;
 }

@@ -14,7 +14,7 @@ export const getSubjects = createAsyncThunk(
   `${CLASSES_KEY}/getSubjects`,
   async (params: RequestParams) => {
     const response = await getSubjectsApi(params);
-    return response.data;
+    return response.data.data;
   }
 );
 
@@ -52,7 +52,7 @@ export const getRooms = createAsyncThunk(
   `${CLASSES_KEY}/getRooms`,
   async (params: RequestParams) => {
     const response = await getRoomsApi(params);
-    return response.data;
+    return response.data.data;
   }
 );
 

@@ -58,7 +58,6 @@ const FormAdminInformation = ({
 
   const handleSubmit = () => {
     setIsSubmitting(true);
-    console.log(form.getFieldValue("password"));
     onSubmit({
       ...form.getFieldsValue(),
       password:
@@ -99,7 +98,7 @@ const FormAdminInformation = ({
               </Form.Item>
             </Col>
             <Col xs={24} xl={8} style={{ maxWidth: 360 }}>
-              <Form.Item label="Created At:" name="created">
+              <Form.Item label="Created On:" name="created">
                 <Input disabled />
               </Form.Item>
             </Col>

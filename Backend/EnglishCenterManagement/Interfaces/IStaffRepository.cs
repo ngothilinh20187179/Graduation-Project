@@ -9,5 +9,6 @@ namespace EnglishCenterManagement.Interfaces
         StaffModel GetStaffById(int id);
         bool CreateStaffProfile(StaffModel newStaff);
         bool UpdateStaffProfile(StaffModel updateStaff);
+        string GetStaffPositionName(int id);
     }
 }

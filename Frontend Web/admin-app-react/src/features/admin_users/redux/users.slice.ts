@@ -9,6 +9,8 @@ import {
   getAdminByIdApi,
   getAdminsApi,
   getMyAvatarApi,
+  getStaffByIdApi,
+  getStaffsApi,
   restricteAccountApi,
   updateAdminInfoApi,
 } from "../admin_users";
@@ -17,8 +19,18 @@ import { RequestParams } from "types/param.types";
 const initialState: UsersState = {
   avatar: null,
   admins: null,
-  admin: null
+  admin: null,
+  staffs: null,
+  staff: null
 };
+
+export const getAdmins = createAsyncThunk(
+  `${USERS_KEY}/getAdmins`,
+  async (params: RequestParams) => {
+    const response = await getAdminsApi(params);
+    return response.data.data;
+  }
+);
 
 export const getAdminById = createAsyncThunk(
   `${USERS_KEY}/getAdminById`,
@@ -35,15 +47,6 @@ export const getMyAvatar = createAsyncThunk(
     return response.data.data;
   }
 );
-
-export const getAdmins = createAsyncThunk(
-  `${USERS_KEY}/getAdmins`,
-  async (params: RequestParams) => {
-    const response = await getAdminsApi(params);
-    return response.data;
-  }
-);
-
 export const restricteAccount = createAsyncThunk(
   `${USERS_KEY}/restricteAccount`,
   async (data : RestricteAccount) => {
@@ -64,6 +67,22 @@ export const createAdminInfo = createAsyncThunk(
   `${USERS_KEY}/createAdminInfo`,
   async (data: AdminInformation) => {
     return createAdminInfoApi(data);
+  }
+);
+
+export const getStaffs = createAsyncThunk(
+  `${USERS_KEY}/getStaffs`,
+  async (params: RequestParams) => {
+    const response = await getStaffsApi(params);
+    return response.data.data;
+  }
+);
+
+export const getStaffById = createAsyncThunk(
+  `${USERS_KEY}/getStaffById`,
+  async (id: number) => {
+    const response = await getStaffByIdApi(id);
+    return response.data.data;
   }
 );
 
@@ -92,6 +111,18 @@ const usersSlice = createSlice({
     });
     builder.addCase(getAdminById.rejected, (state) => {
       state.admin = null;
+    });
+    builder.addCase(getStaffs.fulfilled, (state, action) => {
+      state.staffs = action.payload;
+    });
+    builder.addCase(getStaffs.rejected, (state) => {
+      state.staffs = null;
+    });
+    builder.addCase(getStaffById.fulfilled, (state, action) => {
+      state.staff = action.payload;
+    });
+    builder.addCase(getStaffById.rejected, (state) => {
+      state.staff = null;
     });
   },
 });

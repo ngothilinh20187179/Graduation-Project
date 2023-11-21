@@ -53,7 +53,7 @@ namespace EnglishCenterManagement.Controllers
             });
             listAdmins.Data = mappedListAdmins;
 
-            return Ok(listAdmins);
+            return Ok(new ApiReponse(listAdmins));
         }
 
         // GET: /admin/5

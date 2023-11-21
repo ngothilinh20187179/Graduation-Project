@@ -117,7 +117,7 @@ namespace EnglishCenterManagement.Repository
             #region Filtering
             if (!String.IsNullOrEmpty(search))
             {
-                allUsers = allUsers.Where(u => u.LastName.Contains(search));
+                allUsers = allUsers.Where(u => u.FirstName.Contains(search));
             }
             #endregion
 

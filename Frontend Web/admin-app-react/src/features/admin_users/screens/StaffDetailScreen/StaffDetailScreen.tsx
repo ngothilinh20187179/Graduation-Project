@@ -9,23 +9,22 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import Title from "antd/es/typography/Title";
 import { getTimeUTC } from "helpers/utils.helper";
-import { UserPaths, getAdminById } from "features/admin_users/admin_users";
-import styles from "./AdminDetailScreen.module.scss";
+import { UserPaths, getStaffById } from "features/admin_users/admin_users";
+import styles from "./StaffDetailScreen.module.scss";
 
-const AdminDetailScreen = () => {
+const StaffDetailScreen = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { id } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
-    users: { admin },
+    users: { staff },
   } = useAppSelector((state: RootState) => state);
-
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
-    dispatch(getAdminById(Number(id)))
+    dispatch(getStaffById(Number(id)))
       .then(unwrapResult)
       .finally(() => {
         setIsLoading(false);
@@ -45,17 +44,17 @@ const AdminDetailScreen = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item
           className="cursor-pointer"
-          onClick={() => navigate(UserPaths.GET_ADMINS())}
+          onClick={() => navigate(UserPaths.GET_STAFFS())}
         >
-          Admins
+          Staffs
         </Breadcrumb.Item>
-        <Breadcrumb.Item>Admin Detail</Breadcrumb.Item>
+        <Breadcrumb.Item>Staff Detail</Breadcrumb.Item>
       </Breadcrumb>
       <div className={styles.avatar}>
-        {admin?.avatar ? (
+        {staff?.avatar ? (
           <Image
             preview={false}
-            src={`data:${admin.avatar.mediaType};base64,${admin.avatar.data}`}
+            src={`data:${staff.avatar.mediaType};base64,${staff.avatar.data}`}
           />
         ) : (
           <Avatar size={200} icon={<UserOutlined />} />
@@ -63,39 +62,57 @@ const AdminDetailScreen = () => {
       </div>
       <div className="ml-20">
         <Title title="edit" className="mt-30 mb-30 cursor-pointer" level={4}>
-          Admin Information{" "}
+          Staff Information{" "}
           <span>
-            <EditOutlined onClick={() => navigate(UserPaths.EDIT_ADMIN(Number(id)))} />
+            <EditOutlined onClick={() => navigate(UserPaths.EDIT_STAFF(Number(id)))} />
           </span>
         </Title>
         <Descriptions>
           <Descriptions.Item className="font-16" label="Id">
-            {admin?.id}
+            {staff?.id}
+          </Descriptions.Item>
+          <Descriptions.Item label="Position">
+            {staff?.positionName}
           </Descriptions.Item>
           <Descriptions.Item label="Login Name">
-            {admin?.loginName}
+            {staff?.loginName}
           </Descriptions.Item>
           <Descriptions.Item label="First Name">
-            {admin?.firstName}
+            {staff?.firstName}
           </Descriptions.Item>
           <Descriptions.Item label="Last Name">
-            {admin?.lastName}
+            {staff?.lastName}
           </Descriptions.Item>
           <Descriptions.Item label="Gender">
-            {admin?.gender === 0 ? "Male" : "Female"}
-          </Descriptions.Item>
-          <Descriptions.Item label="Telephone">
-            {admin?.phoneNumber}
+            {staff?.gender === 0 ? "Male" : "Female"}
           </Descriptions.Item>
           <Descriptions.Item label="Date Of Birth">
-            {admin?.dateOfBirth}
+            {staff?.dateOfBirth}
           </Descriptions.Item>
-          <Descriptions.Item label="Email">{admin?.email}</Descriptions.Item>
+          <Descriptions.Item label="Telephone">
+            {staff?.phoneNumber}
+          </Descriptions.Item>
           <Descriptions.Item label="Address">
-            {admin?.location}
+            {staff?.location}
+          </Descriptions.Item>
+          <Descriptions.Item label="Email">{staff?.email}</Descriptions.Item>
+          <Descriptions.Item label="Graduate At">
+            {staff?.graduateAt}
+          </Descriptions.Item>
+          <Descriptions.Item label="Graduation Time">
+            {staff?.graduationTime}
+          </Descriptions.Item>
+          <Descriptions.Item label="Note">
+            {staff?.note}
+          </Descriptions.Item>
+          <Descriptions.Item label="Hired Date">
+            {staff?.hireDate}
+          </Descriptions.Item>
+          <Descriptions.Item label="Years Of Working">
+            {staff?.yearsOfWorking}
           </Descriptions.Item>
           <Descriptions.Item label="Created On">
-            {getTimeUTC(admin?.createdOn)}
+            {getTimeUTC(staff?.createdOn)}
           </Descriptions.Item>
         </Descriptions>
       </div>
@@ -103,4 +120,4 @@ const AdminDetailScreen = () => {
   );
 };
 
-export default memo(AdminDetailScreen);
+export default memo(StaffDetailScreen);

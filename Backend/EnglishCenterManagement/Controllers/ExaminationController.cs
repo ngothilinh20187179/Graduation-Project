@@ -82,7 +82,7 @@ namespace EnglishCenterManagement.Controllers
             var mappedMyQuizzes = _mapper.Map<List<BasicQuizInfoDto>>(myQuizzes.Data);
             myQuizzes.Data = mappedMyQuizzes;
 
-            return Ok(myQuizzes);
+            return Ok(new ApiReponse(myQuizzes));
         }
 
         [HttpGet("quiz/{id}")]
@@ -249,7 +249,8 @@ namespace EnglishCenterManagement.Controllers
                 return NotFound(new ApiReponse(639));
             }
             var listAssignedClasses = _examinationRepository.GetAssignedClasses(id);
-            return _mapper.Map<List<AssignClassDto>>(listAssignedClasses);
+            var map = _mapper.Map<List<AssignClassDto>>(listAssignedClasses);
+            return Ok(new ApiReponse(map));
         }
 
         // Note: chua co pagination
@@ -272,7 +273,8 @@ namespace EnglishCenterManagement.Controllers
                 return NotFound(new ApiReponse(639));
             }
             var listAssignableClasses = _examinationRepository.GetAssignableClasses(id);
-            return _mapper.Map<List<AssignClassDto>>(listAssignableClasses);
+            var map = _mapper.Map<List<AssignClassDto>>(listAssignableClasses);
+            return Ok(new ApiReponse(map));
         }
 
         [HttpPost("assign-quiz-class")]
@@ -374,7 +376,7 @@ namespace EnglishCenterManagement.Controllers
             });
             listMarks.Data = mappedListMarks;
 
-            return Ok(listMarks);
+            return Ok(new ApiReponse(listMarks));
         }
 
         [HttpPost("submit-quiz")]

@@ -29,7 +29,6 @@ namespace EnglishCenterManagement.Controllers
 
         #region STAFF
         // GET: /staffs
-        // Note: Bên admin đã có API get all users by role nên admin ko cần get all staffs nữa
         [HttpGet("staffs")]
         [Authorize(Roles = "Admin, Staff")]
         public ActionResult<PagedResponse> GetAllStaffs(string? search, int page = 1, int pageSize = 20)
@@ -48,19 +47,21 @@ namespace EnglishCenterManagement.Controllers
             pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
 
             var listStaffs = _staffRepository.GetAllStaffs(search, page, pageSize);
-            var mappedListStaffs = _mapper.Map<List<BasicUserInfoDto>>(listStaffs.Data);
+            var mappedListStaffs = _mapper.Map<List<BasicStaffInfoDto>>(listStaffs.Data);
             mappedListStaffs.ForEach((item) =>
             {
                 var avatar = _userRepository.GetUserAvatar(item.Id);
                 item.Avatar = _mapper.Map<AvatarDto>(avatar);
+                var positionName = _staffRepository.GetStaffPositionName(item.Id);
+                item.PositionName = positionName;
             });
             listStaffs.Data = mappedListStaffs;
 
-            return Ok(listStaffs);
+            return Ok(new ApiReponse(listStaffs));
         }
 
-        // GET: /staffs/5
-        [HttpGet("staffs/{id}")]
+        // GET: /staff/5
+        [HttpGet("staff/{id}")]
         [Authorize(Roles = "Admin, Staff")]
         public ActionResult<StaffProfileDetailDto> GetStaffInfoDetail(int id)
         {
@@ -79,12 +80,14 @@ namespace EnglishCenterManagement.Controllers
             {
                 return NotFound(new ApiReponse(638));
             }
-            StaffProfileDetailDto userMap = _mapper.Map<StaffProfileDetailDto>(getStaffById);
+            var userMap = _mapper.Map<StaffProfileDetailDto>(getStaffById);
             userMap = _mapper.Map<UserInfoModel, StaffProfileDetailDto>(getUserById, userMap);
             var avatar = _userRepository.GetUserAvatar(id);
             userMap.Avatar = _mapper.Map<AvatarDto>(avatar);
+            var positionName = _staffRepository.GetStaffPositionName(id);
+            userMap.PositionName = positionName;
 
-            return Ok(userMap);
+            return Ok(new ApiReponse(userMap));
         }
 
         // POST: /staff
@@ -175,9 +178,9 @@ namespace EnglishCenterManagement.Controllers
             return StatusCode(StatusCodes.Status201Created);
         }
 
-        // PUT: /staffs/5
+        // PUT: /staff/5
         // TODO: check datetime
-        [HttpPut("staffs/{id}")]
+        [HttpPut("staff/{id}")]
         [Authorize(Roles = nameof(RoleType.Admin))]
         public ActionResult UpdateStaff([FromBody] CreateStaffDto updateStaff, int id)
         {

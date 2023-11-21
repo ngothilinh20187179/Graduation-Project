@@ -28,7 +28,7 @@ namespace EnglishCenterManagement.Repository
             #endregion
 
             #region Sorting
-            allStaffs = allStaffs.OrderByDescending(x => x.LastName);
+            allStaffs = allStaffs.OrderByDescending(x => x.CreatedOn);
             #endregion
 
             #region Paginated
@@ -52,6 +52,14 @@ namespace EnglishCenterManagement.Repository
         {
             return _context.Staffs.Where(x => x.Id == id).FirstOrDefault();
         }
+        public string GetStaffPositionName (int id)
+        {
+            var staff = _context.Staffs.Where(x => x.Id == id).FirstOrDefault();
+            var positionId = staff.PositionId;
+            var position = _context.Positions.Where(x => x.Id == positionId).FirstOrDefault();
+            return position.Name;
+        }
+
         public bool SaveChange()
         {
             return _context.SaveChanges() > 0;

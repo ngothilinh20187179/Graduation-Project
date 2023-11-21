@@ -85,3 +85,73 @@ export const COLUMNS_TABLE_ADMINS = () => [
     width: "100px",
   }
 ]
+
+export const COLUMNS_TABLE_STAFFS = () => [
+  {
+    title: "",
+    dataIndex: "index",
+    key: "index",
+    width: "30px",
+  },
+  {
+    title: "Id",
+    dataIndex: "id",
+    key: "id",
+    width: "30px",
+  },  
+  {
+    title: "Avatar",
+    dataIndex: "avatar",
+    key: "avatar",
+    ellipsis: true,
+    width: "60px",
+  },
+  {
+    title: "First Name",
+    dataIndex: "firstName",
+    key: "firstName",
+    ellipsis: true,
+    width: "80px",
+  },
+  {
+    title: "Last Name",
+    dataIndex: "lastName",
+    key: "lastName",
+    ellipsis: true,
+    width: "80px",
+  },  
+  {
+    title: "Position",
+    dataIndex: "positionName",
+    key: "positionName",
+    ellipsis: true,
+    width: "150px",
+  },
+  {
+    title: "Status",
+    dataIndex: "userStatus",
+    key: "userStatus",
+    ellipsis: true,
+    width: "80px",
+  },
+  {
+    title: "Gender",
+    dataIndex: "gender",
+    key: "gender",
+    ellipsis: true,
+    width: "60px",
+  },
+  {
+    title: "Phone Number",
+    dataIndex: "phoneNumber",
+    key: "phoneNumber",
+    ellipsis: true,
+    width: "100px",
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    key: "action",
+    width: "100px",
+  }
+]

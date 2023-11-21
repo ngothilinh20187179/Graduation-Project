@@ -26,69 +26,59 @@ import { RootState } from "redux/root-reducer";
 import DropdownButton from "components/DropdownButton/DropdownButton";
 import { RequestParams } from "types/param.types";
 import {
-  COLUMNS_TABLE_ADMINS,
+  COLUMNS_TABLE_STAFFS,
   GenderType,
   UserStatusType,
 } from "features/admin_auth/admin_auth";
 import {
   UserPaths,
-  getAdmins,
+  getStaffs,
   restricteAccount,
 } from "features/admin_users/admin_users";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { SettingPaths } from "features/admin_setting/admin_setting";
 
-// TODO: 
-// Test khi lock someone -> đang ko redirect tới login, login lại ko tbao là bị lock
-// add search, page, pageSize on url
-
-const AdminScreen = () => {
+const StaffScreen = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const userId = localStorage.getItem("userId");
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [adminIdSelected, setAdminIdSelected] = useState<number | null>(null);
-  const [adminStatusSelected, setAdminStatusSelected] =
+  const [staffIdSelected, setStaffIdSelected] = useState<number | null>(null);
+  const [staffStatusSelected, setStaffStatusSelected] =
     useState<UserStatusType | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [triggerReload, setTriggerReload] = useState<boolean>(false);
-
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(20);
   const [search, setSearch] = useState<string>();
 
   const {
-    users: { admins },
+    users: { staffs },
   } = useAppSelector((state: RootState) => state);
-
-  const adminList = useMemo(() => {
-    return admins?.data?.map((admin, index) => ({
-      ...admin,
+  
+  const staffList = useMemo(() => {
+    return staffs?.data?.map((staff, index) => ({
+      ...staff,
       index: index + 1,
-      avatar: admin?.avatar ? (
+      avatar: staff?.avatar ? (
         <Image
           width={40}
           preview={false}
-          src={`data:${admin.avatar.mediaType};base64,${admin.avatar.data}`}
+          src={`data:${staff.avatar.mediaType};base64,${staff.avatar.data}`}
         />
       ) : (
         <Avatar size={40} icon={<UserOutlined />} />
       ),
       userStatus:
-        admin.userStatus === UserStatusType.UnLock ? (
+        staff.userStatus === UserStatusType.UnLock ? (
           <Badge status="success" text="UnLock" />
         ) : (
           <Badge status="error" text="Lock" />
         ),
       gender:
-        admin.gender === GenderType.Female ? (
-          "Female"
-        ) : admin.gender === GenderType.Male ? (
-          "Male"
-        ) : (
-          "Unknown"
-        ),
+        staff.gender === GenderType.Female
+          ? "Female"
+          : staff.gender === GenderType.Male
+          ? "Male"
+          : "Unknown",
       action: (
         <DropdownButton
           menuProps={{
@@ -105,14 +95,7 @@ const AdminScreen = () => {
                     </Typography>
                   </>
                 ),
-                onClick: () => {
-                  if(admin.id === Number(userId)) {
-                    navigate(SettingPaths.MY_PROFILE())
-                  }
-                  else {
-                    navigate(UserPaths.GET_ADMIN(admin.id))
-                  }
-                },
+                onClick: () => navigate(UserPaths.GET_STAFF(staff.id))
               },
               {
                 key: "2",
@@ -126,20 +109,13 @@ const AdminScreen = () => {
                     </Typography>
                   </>
                 ),
-                onClick: () => {
-                  if(admin.id === Number(userId)) {
-                    navigate(SettingPaths.CHANGE_INFORMATION())
-                  }
-                  else {
-                    navigate(UserPaths.EDIT_ADMIN(admin.id))
-                  }
-                },
+                onClick: () => navigate(UserPaths.EDIT_STAFF(staff.id))
               },
               {
                 key: "3",
                 label: (
                   <>
-                    {admin.userStatus === UserStatusType.UnLock ? (
+                    {staff.userStatus === UserStatusType.UnLock ? (
                       <Typography>
                         <span>
                           <LockOutlined />
@@ -157,8 +133,8 @@ const AdminScreen = () => {
                   </>
                 ),
                 onClick: () => {
-                  setAdminIdSelected(Number(admin.id));
-                  setAdminStatusSelected(admin.userStatus);
+                  setStaffIdSelected(Number(staff.id));
+                  setStaffStatusSelected(staff.userStatus);
                 },
               },
             ],
@@ -168,7 +144,7 @@ const AdminScreen = () => {
         </DropdownButton>
       ),
     }));
-  }, [admins?.data, navigate, userId]);
+  }, [staffs?.data, navigate]);
 
   useEffect(() => {
     const params: RequestParams = {
@@ -177,19 +153,22 @@ const AdminScreen = () => {
       search,
     };
     setIsLoading(true);
-    dispatch(getAdmins(params))
+    dispatch(getStaffs(params))
       .unwrap()
       .finally(() => setIsLoading(false));
   }, [dispatch, triggerReload, page, pageSize, search]);
 
   const handleLockOrUnLock = () => {
-    if (adminIdSelected === null || adminStatusSelected === null) return;
+    if (staffIdSelected === null || staffStatusSelected === null) return;
     setIsSubmitting(true);
     setIsLoading(true);
-    let userStatusType = adminStatusSelected === UserStatusType.Lock ? UserStatusType.UnLock : UserStatusType.Lock;
+    let userStatusType =
+        staffStatusSelected === UserStatusType.Lock
+        ? UserStatusType.UnLock
+        : UserStatusType.Lock;
     dispatch(
       restricteAccount({
-        id: adminIdSelected,
+        id: staffIdSelected,
         userStatusType: userStatusType,
       })
     )
@@ -201,8 +180,8 @@ const AdminScreen = () => {
       .finally(() => {
         setIsSubmitting(false);
         setIsLoading(false);
-        setAdminIdSelected(null);
-        setAdminStatusSelected(null);
+        setStaffIdSelected(null);
+        setStaffStatusSelected(null);
       });
   };
 
@@ -215,12 +194,12 @@ const AdminScreen = () => {
         >
           <HomeOutlined />
         </Breadcrumb.Item>
-        <Breadcrumb.Item>Admins</Breadcrumb.Item>
+        <Breadcrumb.Item>Staffs</Breadcrumb.Item>
       </Breadcrumb>
       <div className="flex-space-between-center">
-        <Typography>Total: There are {admins?.totalRecords} admins</Typography>
+        <Typography>Total: There are {staffs?.totalRecords} staffs</Typography>
         <Search
-          placeholder="admin's first name"
+          placeholder="staffs's first name"
           allowClear
           enterButton
           size="large"
@@ -230,9 +209,9 @@ const AdminScreen = () => {
         <Button
           type="primary"
           style={{ height: 40 }}
-          onClick={() => navigate(UserPaths.CREATE_ADMIN())}
+          onClick={() => navigate(UserPaths.CREATE_STAFF())}
         >
-          New Admin
+          New Staff
         </Button>
       </div>
       <Table
@@ -240,29 +219,29 @@ const AdminScreen = () => {
         rowKey="id"
         size="small"
         loading={isLoading}
-        columns={COLUMNS_TABLE_ADMINS()}
-        dataSource={adminList}
+        columns={COLUMNS_TABLE_STAFFS()}
+        dataSource={staffList}
         pagination={false}
         className="mt-20"
         scroll={{ y: 320, x: 400 }}
       />
       <Pagination
         className="flex-justify-center mt-20"
-        current={admins?.pageNumber}
+        current={staffs?.pageNumber}
         onChange={(newPage) => setPage(newPage)}
-        total={Number(admins?.totalPages) * 10}
+        total={Number(staffs?.totalPages) * 10}
       />
       <Modal
         centered
         title={
-          adminStatusSelected === UserStatusType.UnLock
-            ? "Are you sure you want to lock this admin?"
-            : "Are you sure you want to unlock this admin?"
+            staffStatusSelected === UserStatusType.UnLock
+            ? "Are you sure you want to lock this staff?"
+            : "Are you sure you want to unlock this staff?"
         }
-        open={!!adminIdSelected}
+        open={!!staffIdSelected}
         onCancel={() => {
-          setAdminIdSelected(null);
-          setAdminStatusSelected(null);
+          setStaffIdSelected(null);
+          setStaffStatusSelected(null);
         }}
         onOk={handleLockOrUnLock}
         okButtonProps={{
@@ -273,4 +252,4 @@ const AdminScreen = () => {
   );
 };
 
-export default memo(AdminScreen);
+export default memo(StaffScreen);

@@ -50,7 +50,7 @@ namespace EnglishCenterManagement.Controllers
             var mappedListClasses = _mapper.Map<List<BasicClassRoomInfoDto>>(listClasses.Data);
             listClasses.Data = mappedListClasses;
 
-            return Ok(listClasses);
+            return Ok(new ApiReponse(listClasses));
         }
 
         // GET: /classes/5

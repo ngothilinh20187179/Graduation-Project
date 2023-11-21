@@ -38,3 +38,13 @@ export const createAdminInfoApi = (
 ): Promise<AxiosResponse> => {
   return api.post(UsersEndpoints.CREATE_ADMIN(), data);
 }
+
+export const getStaffsApi = (
+  params: RequestParams
+): Promise<AxiosResponse> => {
+  return api.get(UsersEndpoints.GET_STAFFS(params));
+};
+
+export const getStaffByIdApi = (id: number): Promise<AxiosResponse> => {
+  return api.get(UsersEndpoints.GET_STAFF(id));
+};
