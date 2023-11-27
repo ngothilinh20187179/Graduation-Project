@@ -45,7 +45,7 @@ const ListReceivedNotifications = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-  const [loadingDetailNoti, setDetailNoti] = useState(false);
+  const [loadingDetailNoti, setLoadingDetailNoti] = useState(false);
   const [data, setData] = useState<ReceivedNotification[]>([]);
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(20);
@@ -101,10 +101,10 @@ const ListReceivedNotifications = () => {
   };
 
   const handleGetDetailNoti = (id: number) => {
-    setDetailNoti(true);
+    setLoadingDetailNoti(true);
     dispatch(getReceivedNotificationDetail(Number(id)))
       .unwrap()
-      .finally(() => setDetailNoti(false));
+      .finally(() => setLoadingDetailNoti(false));
   };
 
   const handleMarkReceivedNotification = (id: number) => {

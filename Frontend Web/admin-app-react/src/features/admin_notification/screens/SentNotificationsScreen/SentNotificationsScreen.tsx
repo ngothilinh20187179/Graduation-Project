@@ -43,7 +43,7 @@ const SentNotificationsScreen = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-  const [loadingDetailNoti, setDetailNoti] = useState(false);
+  const [loadingDetailNoti, setLoadingDetailNoti] = useState(false);
   const [data, setData] = useState<SentNotification[]>([]);
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(20);
@@ -98,10 +98,10 @@ const SentNotificationsScreen = () => {
   };
 
   const handleGetDetailNoti = (id: number) => {
-    setDetailNoti(true);
+    setLoadingDetailNoti(true);
     dispatch(getSentNotificationDetail(Number(id)))
       .unwrap()
-      .finally(() => setDetailNoti(false));
+      .finally(() => setLoadingDetailNoti(false));
   };
 
   const handleMarkSentNotification = (id: number) => {

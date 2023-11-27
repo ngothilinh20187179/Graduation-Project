@@ -34,7 +34,7 @@ namespace EnglishCenterManagement.Controllers
         // GET: /sent-notifications
         [HttpGet("sent-notifications")]
         [Authorize]
-        public ActionResult<PagedResponse> GetAllSentNotifications(int page = 1, int pageSize = 20)
+        public ActionResult<PagedResponse> GetAllSentNotifications(bool? isMarked, int page = 1, int pageSize = 20)
         {
             var user = GetUserByClaim();
             if (user == null)
@@ -50,7 +50,7 @@ namespace EnglishCenterManagement.Controllers
             page = page < 1 ? 1 : page;
             pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
 
-            var listSentNotifications = _notificationRepository.GetAllSentNotifications(user.Id, page, pageSize);
+            var listSentNotifications = _notificationRepository.GetAllSentNotifications(isMarked, user.Id, page, pageSize);
             var mappedListSentNotifications = _mapper.Map<List<SentNotificationDto>>(listSentNotifications.Data);
             listSentNotifications.Data = mappedListSentNotifications;
 
@@ -90,7 +90,7 @@ namespace EnglishCenterManagement.Controllers
         // GET: /received-notifications
         [HttpGet("received-notifications")]
         [Authorize]
-        public ActionResult<PagedResponse> GetAllReceivedNotifications(int page = 1, int pageSize = 20)
+        public ActionResult<PagedResponse> GetAllReceivedNotifications(bool? isMarked, int page = 1, int pageSize = 20)
         {
             var user = GetUserByClaim();
             if (user == null)
@@ -106,7 +106,7 @@ namespace EnglishCenterManagement.Controllers
             page = page < 1 ? 1 : page;
             pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
 
-            var listReceivedNotifications = _notificationRepository.GetAllReceivedNotifications(user.Id, page, pageSize);
+            var listReceivedNotifications = _notificationRepository.GetAllReceivedNotifications(isMarked, user.Id, page, pageSize);
             var mappedListReceivedNotifications = _mapper.Map<List<ReceivedNotificationDto>>(listReceivedNotifications.Data);
             listReceivedNotifications.Data = mappedListReceivedNotifications;
 

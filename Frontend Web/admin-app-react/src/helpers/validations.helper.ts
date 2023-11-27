@@ -14,6 +14,13 @@ export const requireRules = (message: string) => [
   },
 ];
 
+export const requireRule = (message: string) => [
+  {
+    required: true,
+    message: message,
+  },
+];
+
 export const emailRules = (message: string) => [
   {
     pattern: EMAIL_REGEX,

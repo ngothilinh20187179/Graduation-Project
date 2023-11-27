@@ -11,10 +11,11 @@ import {
   Breadcrumb,
   Select,
   Spin,
+  Checkbox,
 } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { SubmitButton } from "components/SubmitButton";
-import { requireRules } from "helpers/validations.helper";
+import { requireRule, requireRules } from "helpers/validations.helper";
 import { memo, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import mess from "messages/messages.json";
@@ -22,6 +23,7 @@ import { useAppDispatch } from "redux/store";
 import { TopPaths } from "features/admin_top/admin_top";
 import TextArea from "antd/es/input/TextArea";
 import { ReceiverNotification } from "features/admin_notification/types/notification.types";
+import { CheckboxChangeEvent } from "antd/es/checkbox";
 
 const CreateNotificationScreen = () => {
   const navigate = useNavigate();
@@ -31,6 +33,8 @@ const CreateNotificationScreen = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<ReceiverNotification[]>([]);
+  const [isSentToAllUser, setIsSentToAllUser] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(true);
 
   useEffect(() => {
     setLoading(true);
@@ -44,9 +48,26 @@ const CreateNotificationScreen = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  const onChange = (e: CheckboxChangeEvent) => {
+    setIsSentToAllUser(e.target.checked);
+    setIsDisabled(!isDisabled);
+  };
+
   const handleSendNotification = () => {
+    var receiverIds: number[] = [];
+    if(isSentToAllUser === true) {
+      data.map((receiver) => {
+        receiverIds.push(Number(receiver.id));
+      })
+    }
+    else {
+      receiverIds = form.getFieldValue("receivers");
+    }
     setIsSubmitting(true);
-    dispatch(createNotification({ ...form.getFieldsValue() }))
+    dispatch(createNotification({ 
+      ...form.getFieldsValue(),
+      receivers: receiverIds,
+     }))
       .unwrap()
       .then(() => navigate(NotificationPaths.SENT_NOTIFICATIONS()))
       .finally(() => {
@@ -100,6 +121,8 @@ const CreateNotificationScreen = () => {
               allowClear
               placeholder="Please select receivers"
               notFoundContent={loading ? <Spin size="small" /> : null}
+              maxTagCount={2}
+              disabled={isDisabled}
             >
               {data.map((option) => (
                 <Select.Option key={option.id} value={option.id}>
@@ -117,7 +140,9 @@ const CreateNotificationScreen = () => {
               ))}
             </Select>
         </Form.Item>
-
+        <Form.Item label=" ">
+            <Checkbox defaultChecked={isSentToAllUser} onChange={onChange}>Sent to all users</Checkbox>
+        </Form.Item>
         <Form.Item label=" ">
           <SubmitButton form={form} text="Submit" isSubmitting={isSubmitting} />
         </Form.Item>

@@ -21,9 +21,16 @@ namespace EnglishCenterManagement.Repository
             _context.Update(notification);
             return SaveChange();
         }
-        public PagedResponse GetAllSentNotifications(int senderId, int page, int pageSize)
+        public PagedResponse GetAllSentNotifications(bool? isMarked, int senderId, int page, int pageSize)
         {
             var allSentNotifications = _context.Notifications.Where(x => x.SenderId == senderId && x.IsSenderDeleteNoti == null).AsQueryable();
+           
+            #region Filtering
+            if (isMarked == true)
+            {
+                allSentNotifications = allSentNotifications.Where(u => u.IsMarkedSenderNoti == true);
+            }
+            #endregion
 
             #region Sorting
             allSentNotifications = allSentNotifications.OrderByDescending(u => u.CreateOn);
@@ -36,9 +43,16 @@ namespace EnglishCenterManagement.Repository
 
             return new PagedResponse(data, totalNotifications, page, pageSize);
         }
-        public PagedResponse GetAllReceivedNotifications(int receiverId, int page, int pageSize)
+        public PagedResponse GetAllReceivedNotifications(bool? isMarked, int receiverId, int page, int pageSize)
         {
             var allReceivedNotifications = _context.Notifications.Where(x => x.ReceiverId == receiverId && x.IsReceiverDeleteNoti == null).AsQueryable();
+
+            #region Filtering
+            if (isMarked == true)
+            {
+                allReceivedNotifications = allReceivedNotifications.Where(u => u.IsMarkedReceiverNoti == true);
+            }
+            #endregion
 
             #region Sorting
             allReceivedNotifications = allReceivedNotifications.OrderByDescending(u => u.CreateOn);
