@@ -3,6 +3,7 @@ using EnglishCenterManagement.Dtos.AuthenticationDtos;
 using EnglishCenterManagement.Dtos.ClassRoomDtos;
 using EnglishCenterManagement.Dtos.ExaminationDtos;
 using EnglishCenterManagement.Dtos.NotificationsDtos;
+using EnglishCenterManagement.Dtos.PositionPermissionDtos;
 using EnglishCenterManagement.Dtos.SubjectRoomDtos;
 using EnglishCenterManagement.Dtos.TeacherStudentStaffDtos;
 using EnglishCenterManagement.Dtos.UserInfoDtos;
@@ -65,6 +66,9 @@ namespace EnglishCenterManagement.Data
             CreateMap<UserInfoModel, ReceiversNotificationDto>();
             CreateMap<CreateNotificationDto, NotificationModel>();
             CreateMap<UserInfoModel, UserNotificationDto>();
+
+
+            CreateMap<PositionModel, BasicPositionDto>();
         }
     }
 }

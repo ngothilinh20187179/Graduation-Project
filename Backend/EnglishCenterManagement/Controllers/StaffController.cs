@@ -2,6 +2,7 @@
 using EnglishCenterManagement.Common.Helpers;
 using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Common.Response;
+using EnglishCenterManagement.Dtos.PositionPermissionDtos;
 using EnglishCenterManagement.Dtos.TeacherStudentStaffDtos;
 using EnglishCenterManagement.Dtos.UserInfoDtos;
 using EnglishCenterManagement.Entities.Enumerations;
@@ -178,9 +179,9 @@ namespace EnglishCenterManagement.Controllers
             return StatusCode(StatusCodes.Status201Created);
         }
 
-        // PUT: /staff/5
+        // PUT: /edit-staff/5
         // TODO: check datetime
-        [HttpPut("staff/{id}")]
+        [HttpPut("edit-staff/{id}")]
         [Authorize(Roles = nameof(RoleType.Admin))]
         public ActionResult UpdateStaff([FromBody] CreateStaffDto updateStaff, int id)
         {
@@ -257,6 +258,29 @@ namespace EnglishCenterManagement.Controllers
             _staffRepository.UpdateStaffProfile(updatedStaffProfileMap);
 
             return StatusCode(StatusCodes.Status204NoContent);
+        }
+        #endregion
+
+        #region
+        // GET: /position_list
+        [HttpGet("position_list")]
+        [Authorize(Roles = "Admin, Staff")]
+        public ActionResult<ICollection<PositionModel>> GetBasicPositionList()
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            var positionList = _staffRepository.GetBasicPositionList();
+            var mapPositionList = _mapper.Map<List<BasicPositionDto>>(positionList);
+
+            return Ok(new ApiReponse(mapPositionList));
         }
         #endregion
 

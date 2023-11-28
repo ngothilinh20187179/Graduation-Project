@@ -97,7 +97,7 @@ export const COLUMNS_TABLE_STAFFS = () => [
     title: "Id",
     dataIndex: "id",
     key: "id",
-    width: "30px",
+    width: "40px",
   },  
   {
     title: "Avatar",

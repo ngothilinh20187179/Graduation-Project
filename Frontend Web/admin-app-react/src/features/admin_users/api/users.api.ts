@@ -3,7 +3,7 @@ import { api } from "api/api";
 import { RequestParams } from "types/param.types";
 import { UserStatusType } from "../constants/users.constants";
 import UsersEndpoints from "../constants/users.endpoints";
-import { AdminInformation } from "../admin_users";
+import { AdminInformation, CreateEditStaffInfo } from "../admin_users";
 
 export const getAdminByIdApi = (id: number): Promise<AxiosResponse> => {
   return api.get(UsersEndpoints.GET_ADMIN(id));
@@ -13,9 +13,7 @@ export const getMyAvatarApi = (): Promise<AxiosResponse> => {
   return api.get(UsersEndpoints.GET_MY_AVATAR());
 };
 
-export const getAdminsApi = (
-  params: RequestParams
-): Promise<AxiosResponse> => {
+export const getAdminsApi = (params: RequestParams): Promise<AxiosResponse> => {
   return api.get(UsersEndpoints.GET_ADMINS(params));
 };
 
@@ -31,20 +29,35 @@ export const updateAdminInfoApi = (
   data: AdminInformation
 ): Promise<AxiosResponse> => {
   return api.put(UsersEndpoints.EDIT_ADMIN(id), data);
-}
+};
 
 export const createAdminInfoApi = (
   data: AdminInformation
 ): Promise<AxiosResponse> => {
   return api.post(UsersEndpoints.CREATE_ADMIN(), data);
-}
+};
 
-export const getStaffsApi = (
-  params: RequestParams
-): Promise<AxiosResponse> => {
+export const getStaffsApi = (params: RequestParams): Promise<AxiosResponse> => {
   return api.get(UsersEndpoints.GET_STAFFS(params));
 };
 
 export const getStaffByIdApi = (id: number): Promise<AxiosResponse> => {
   return api.get(UsersEndpoints.GET_STAFF(id));
+};
+
+export const createStaffInfoApi = (
+  data: CreateEditStaffInfo
+): Promise<AxiosResponse> => {
+  return api.post(UsersEndpoints.CREATE_STAFF(), data);
+};
+
+export const getPositionListApi = (): Promise<AxiosResponse> => {
+  return api.get(UsersEndpoints.GET_LIST_POSITION());
+};
+
+export const updateStaffInfoApi = (
+  id: number,
+  data: CreateEditStaffInfo
+): Promise<AxiosResponse> => {
+  return api.put(UsersEndpoints.EDIT_STAFF(id), data);
 };

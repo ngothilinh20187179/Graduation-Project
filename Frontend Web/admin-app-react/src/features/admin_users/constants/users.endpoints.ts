@@ -19,6 +19,9 @@ const UsersEndpoints = {
     return `/staffs?search=${search}&page=${page}&pageSize=${pageSize}`;
   },
   GET_STAFF: (id: number) => `/staff/${id}`,
+  CREATE_STAFF: () => `/create-staff`,
+  GET_LIST_POSITION: () => `position_list`,
+  EDIT_STAFF: (id: number) => `/edit-staff/${id}`,
 };
 
 export default UsersEndpoints;

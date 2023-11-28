@@ -60,6 +60,7 @@ export type StaffInfo = {
   hireDate: string;
   yearsOfWorking: number;
   note: string | null;
+  positionId: number;
 }
 
 export type StaffDetail = BasicUserInfo &
@@ -67,6 +68,13 @@ export type StaffDetail = BasicUserInfo &
     avatar: UserAvatar | null;
     positionName: string;
 };
+
+export type CreateEditStaffInfo = AdminInformation & StaffInfo;
+
+export type PositionList = {
+  id: number;
+  name: string;
+}
 
 export interface GetAllAdminsResponse extends PaginationResponse {
   data: (BasicUserInfo & {

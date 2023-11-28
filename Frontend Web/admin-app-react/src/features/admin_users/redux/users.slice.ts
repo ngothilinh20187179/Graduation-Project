@@ -2,17 +2,21 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import USERS_KEY from "../constants/users.keys";
 import {
   AdminInformation,
+  CreateEditStaffInfo,
   RestricteAccount,
   UserAvatar,
   UsersState,
   createAdminInfoApi,
+  createStaffInfoApi,
   getAdminByIdApi,
   getAdminsApi,
   getMyAvatarApi,
+  getPositionListApi,
   getStaffByIdApi,
   getStaffsApi,
   restricteAccountApi,
   updateAdminInfoApi,
+  updateStaffInfoApi,
 } from "../admin_users";
 import { RequestParams } from "types/param.types";
 
@@ -83,6 +87,29 @@ export const getStaffById = createAsyncThunk(
   async (id: number) => {
     const response = await getStaffByIdApi(id);
     return response.data.data;
+  }
+);
+
+export const createStaffInfo = createAsyncThunk(
+  `${USERS_KEY}/createStaffInfo`,
+  async (data: CreateEditStaffInfo) => {
+    return createStaffInfoApi(data);
+  }
+);
+
+export const getPositionList = createAsyncThunk(
+  `${USERS_KEY}/getPositionList`,
+  async () => {
+    const response = await getPositionListApi();
+    return response.data;
+  }
+);
+
+export const updateStaffInfo = createAsyncThunk(
+  `${USERS_KEY}/updateStaffInfo`,
+  async (staffInfo: CreateEditStaffInfo) => {
+    const { id, ...fields } = staffInfo
+    return updateStaffInfoApi(Number(id), fields );
   }
 );
 

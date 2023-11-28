@@ -46,6 +46,22 @@ const STAFF_DETAIL_SCREEN: RouteItem = {
   ),
 };
 
+const CREATE_STAFF_SCREEN: RouteItem = {
+  id: "admin-create-staff",
+  path: UserRoutePaths.CREATE_STAFF,
+  component: lazy(
+    () => import("../screens/CreateStaffScreen/CreateStaffScreen")
+  ),
+};
+
+const EDIT_STAFF_SCREEN: RouteItem = {
+  id: "admin-edit-staff",
+  path: UserRoutePaths.EDIT_STAFF,
+  component: lazy(
+    () => import("../screens/EditStaffScreen/EditStaffScreen")
+  ),
+};
+
 export const USERS_ROUTES = [
   ADMIN_DETAIL_SCREEN,
   ADMINS_SCREEN,
@@ -53,4 +69,6 @@ export const USERS_ROUTES = [
   EDIT_ADMIN_SCREEN,
   STAFFS_SCREEN,
   STAFF_DETAIL_SCREEN,
+  CREATE_STAFF_SCREEN,
+  EDIT_STAFF_SCREEN,
 ];
