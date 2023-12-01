@@ -37,6 +37,9 @@ const UsersEndpoints = {
     }
     return `/students?search=${search}&page=${page}&pageSize=${pageSize}`;
   },
+  GET_STUDENT: (id: number) => `/student/${id}`,
+  EDIT_STUDENT: (id: number) => `/edit-student/${id}`,
+  CREATE_STUDENT: () => `/create-student`,
 };
 
 export default UsersEndpoints;

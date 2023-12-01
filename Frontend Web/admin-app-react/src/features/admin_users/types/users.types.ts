@@ -85,6 +85,19 @@ export type TeacherDetail = BasicUserInfo &
 
 export type CreateEditTeacherInfo = AdminInformation & TeacherInfo;
 
+export type StudentInfo = {
+  parentsName: string | null;
+  parentPhoneNumber: string | null;
+  note: string | null;
+}
+
+export type StudentDetail = BasicUserInfo &
+  PrivateUserInfo & StudentInfo & {
+    avatar: UserAvatar | null;
+};
+
+export type CreateEditStudentInfo = AdminInformation & StudentInfo;
+
 export type PositionList = {
   id: number;
   name: string;
@@ -112,4 +125,5 @@ export interface UsersState {
   teachers: GetAllAdminsResponse | null;
   teacher: TeacherDetail | null;
   students: GetAllAdminsResponse | null;
+  student: StudentDetail | null;
 }

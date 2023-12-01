@@ -95,7 +95,7 @@ namespace EnglishCenterManagement.Controllers
                 }
             }
 
-            StudentProfileDetailDto userMap = _mapper.Map<StudentProfileDetailDto>(getStudentById);
+            var userMap = _mapper.Map<StudentProfileDetailDto>(getStudentById);
             userMap = _mapper.Map<UserInfoModel, StudentProfileDetailDto>(getUserById, userMap);
             var avatar = _userRepository.GetUserAvatar(id);
             userMap.Avatar = _mapper.Map<AvatarDto>(avatar);
@@ -149,7 +149,7 @@ namespace EnglishCenterManagement.Controllers
         // POST: /create-student
         // TODO: check date time
         [HttpPost("create-student")]
-        [Authorize(Roles = nameof(RoleType.Staff))]
+        [Authorize(Roles = "Staff, Admin")]
         public ActionResult CreateStudent([FromBody] CreateStudentDto newStudent)
         {
             var user = GetUserByClaim();
@@ -245,9 +245,9 @@ namespace EnglishCenterManagement.Controllers
 
         // PUT: /student/{id}
         // TODO: check date time
-        [HttpPut("student/{id}")]
-        [Authorize(Roles = nameof(RoleType.Staff))]
-        public ActionResult UpdateStudentProfile([FromBody] CreateStudentDto updateStudent, int id)
+        [HttpPut("edit-student/{id}")]
+        [Authorize(Roles = "Staff, Admin")]
+        public ActionResult UpdateStudentProfile([FromBody] EditStudentDto updateStudent, int id)
         {
             var user = GetUserByClaim();
             if (user == null)
@@ -268,13 +268,7 @@ namespace EnglishCenterManagement.Controllers
             if (getStudentById == null || getUserById == null)
             {
                 return NotFound(new ApiReponse(638));
-            }
-
-            // check login name = pwd ?
-            if (updateStudent.Password == updateStudent.LoginName)
-            {
-                return BadRequest(new ApiReponse(609));
-            }
+            } 
 
             // Check login name exist except current user's login name (get user by name and userid != current userId)
             if (_userRepository.GetUserHasSameLoginName(getUserById.Id, updateStudent.LoginName) != null)
@@ -284,16 +278,31 @@ namespace EnglishCenterManagement.Controllers
 
             Validation validateUserInfoUtils = new Validation();
 
+            if (updateStudent.Password == null)
+            {
+                updateStudent.Password = getUserById.Password;
+            }
+            else
+            {
+                // check login name = pwd ?
+                if (updateStudent.Password == updateStudent.LoginName)
+                {
+                    return BadRequest(new ApiReponse(609));
+                }
+
+                // check pwd: Minimum eight characters, at least one uppercase & lowercase letter and one number
+                if (!validateUserInfoUtils.IsValidPassword(updateStudent.Password))
+                {
+                    return BadRequest(new ApiReponse(610));
+                }
+
+                updateStudent.Password = BCrypt.Net.BCrypt.HashPassword(updateStudent.Password);
+            }
+
             // Valid Phonenumber
             if (!validateUserInfoUtils.IsValidPhoneNumber(updateStudent.PhoneNumber))
             {
                 return BadRequest(new ApiReponse(614));
-            }
-
-            // check pwd: Minimum eight characters, at least one uppercase & lowercase letter and one number
-            if (!validateUserInfoUtils.IsValidPassword(updateStudent.Password))
-            {
-                return BadRequest(new ApiReponse(610));
             }
 
             // check gender
@@ -309,7 +318,7 @@ namespace EnglishCenterManagement.Controllers
                 {
                     return BadRequest(new ApiReponse(615));
                 }
-                if (_userRepository.GetUserHasSameEmail(user.Id, updateStudent.Email) != null)
+                if (_userRepository.GetUserHasSameEmail(id, updateStudent.Email) != null)
                 {
                     return Conflict(new ApiReponse(616));
                 }

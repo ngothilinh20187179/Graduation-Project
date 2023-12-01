@@ -9,22 +9,22 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import Title from "antd/es/typography/Title";
 import { getTimeUTC } from "helpers/utils.helper";
-import { UserPaths, getStaffById, getTeacherById } from "features/admin_users/admin_users";
-import styles from "./TeacherDetailScreen.module.scss";
+import { UserPaths, getStudentById } from "features/admin_users/admin_users";
+import styles from "./StudentDetailScreen.module.scss";
 
-const TeacherDetailScreen = () => {
+const StudentDetailScreen = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
-    users: { teacher },
+    users: { student },
   } = useAppSelector((state: RootState) => state);
 
   useEffect(() => {
     setIsLoading(true);
-    dispatch(getTeacherById(Number(id)))
+    dispatch(getStudentById(Number(id)))
       .then(unwrapResult)
       .finally(() => {
         setIsLoading(false);
@@ -44,17 +44,17 @@ const TeacherDetailScreen = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item
           className="cursor-pointer"
-          onClick={() => navigate(UserPaths.GET_TEACHERS())}
+          onClick={() => navigate(UserPaths.GET_STUDENTS())}
         >
-          Teachers
+          Students
         </Breadcrumb.Item>
-        <Breadcrumb.Item>Teacher Detail</Breadcrumb.Item>
+        <Breadcrumb.Item>Student Detail</Breadcrumb.Item>
       </Breadcrumb>
       <div className={styles.avatar}>
-        {teacher?.avatar ? (
+        {student?.avatar ? (
           <Image
             preview={false}
-            src={`data:${teacher.avatar.mediaType};base64,${teacher.avatar.data}`}
+            src={`data:${student.avatar.mediaType};base64,${student.avatar.data}`}
           />
         ) : (
           <Avatar size={200} icon={<UserOutlined />} />
@@ -62,51 +62,48 @@ const TeacherDetailScreen = () => {
       </div>
       <div className="ml-20">
         <Title title="edit" className="mt-30 mb-30 cursor-pointer" level={4}>
-          Teacher Information{" "}
+          Student Information{" "}
           <span>
-            <EditOutlined onClick={() => navigate(UserPaths.EDIT_TEACHER(Number(id)))} />
+            {/* <EditOutlined onClick={() => navigate(UserPaths.EDIT_STUDENT(Number(id)))} /> */}
           </span>
         </Title>
         <Descriptions>
           <Descriptions.Item className="font-16" label="Id">
-            {teacher?.id}
+            {student?.id}
           </Descriptions.Item>
           <Descriptions.Item label="Login Name">
-            {teacher?.loginName}
+            {student?.loginName}
           </Descriptions.Item>
           <Descriptions.Item label="First Name">
-            {teacher?.firstName}
+            {student?.firstName}
           </Descriptions.Item>
           <Descriptions.Item label="Last Name">
-            {teacher?.lastName}
+            {student?.lastName}
           </Descriptions.Item>
           <Descriptions.Item label="Gender">
-            {teacher?.gender === 0 ? "Male" : "Female"}
+            {student?.gender === 0 ? "Male" : "Female"}
           </Descriptions.Item>
           <Descriptions.Item label="Date Of Birth">
-            {teacher?.dateOfBirth}
+            {student?.dateOfBirth}
           </Descriptions.Item>
           <Descriptions.Item label="Telephone">
-            {teacher?.phoneNumber}
+            {student?.phoneNumber}
           </Descriptions.Item>
           <Descriptions.Item label="Address">
-            {teacher?.location}
+            {student?.location}
           </Descriptions.Item>
-          <Descriptions.Item label="Email">{teacher?.email}</Descriptions.Item>
-          <Descriptions.Item label="Graduate At">
-            {teacher?.graduateAt}
+          <Descriptions.Item label="Email">{student?.email}</Descriptions.Item>
+          <Descriptions.Item label="Parents Name">
+            {student?.parentsName}
           </Descriptions.Item>
-          <Descriptions.Item label="Graduation Time">
-            {teacher?.graduationTime}
+          <Descriptions.Item label="Parent's Phone Number">
+            {student?.parentPhoneNumber}
           </Descriptions.Item>
           <Descriptions.Item label="Note">
-            {teacher?.note}
-          </Descriptions.Item>
-          <Descriptions.Item label="Hour Salary">
-            {teacher?.hourlySalary} VNĐ/h
+            {student?.note}
           </Descriptions.Item>
           <Descriptions.Item label="Created On">
-            {getTimeUTC(teacher?.createdOn)}
+            {getTimeUTC(student?.createdOn)}
           </Descriptions.Item>
         </Descriptions>
       </div>
@@ -114,4 +111,4 @@ const TeacherDetailScreen = () => {
   );
 };
 
-export default memo(TeacherDetailScreen);
+export default memo(StudentDetailScreen);

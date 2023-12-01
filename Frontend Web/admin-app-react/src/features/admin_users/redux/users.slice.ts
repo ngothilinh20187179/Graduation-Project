@@ -3,12 +3,14 @@ import USERS_KEY from "../constants/users.keys";
 import {
   AdminInformation,
   CreateEditStaffInfo,
+  CreateEditStudentInfo,
   CreateEditTeacherInfo,
   RestricteAccount,
   UserAvatar,
   UsersState,
   createAdminInfoApi,
   createStaffInfoApi,
+  createStudentInfoApi,
   createTeacherInfoApi,
   getAdminByIdApi,
   getAdminsApi,
@@ -16,12 +18,14 @@ import {
   getPositionListApi,
   getStaffByIdApi,
   getStaffsApi,
+  getStudentByIdApi,
   getStudentsApi,
   getTeacherByIdApi,
   getTeachersApi,
   restricteAccountApi,
   updateAdminInfoApi,
   updateStaffInfoApi,
+  updateStudentInfoApi,
   updateTeacherInfoApi,
 } from "../admin_users";
 import { RequestParams } from "types/param.types";
@@ -35,6 +39,7 @@ const initialState: UsersState = {
   teachers: null,
   teacher: null,
   students: null,
+  student: null,
 };
 
 export const getAdmins = createAsyncThunk(
@@ -161,6 +166,29 @@ export const getStudents = createAsyncThunk(
   }
 );
 
+export const getStudentById = createAsyncThunk(
+  `${USERS_KEY}/getStudentById`,
+  async (id: number) => {
+    const response = await getStudentByIdApi(id);
+    return response.data.data;
+  }
+);
+
+export const updateStudentInfo = createAsyncThunk(
+  `${USERS_KEY}/updateStudentInfo`,
+  async (staffInfo: CreateEditStudentInfo) => {
+    const { id, ...fields } = staffInfo
+    return updateStudentInfoApi(Number(id), fields );
+  }
+);
+
+export const createStudentInfo = createAsyncThunk(
+  `${USERS_KEY}/createStudentInfo`,
+  async (data: CreateEditStudentInfo) => {
+    return createStudentInfoApi(data);
+  }
+);
+
 const usersSlice = createSlice({
   name: USERS_KEY,
   initialState,
@@ -216,6 +244,12 @@ const usersSlice = createSlice({
     });
     builder.addCase(getStudents.rejected, (state) => {
       state.students = null;
+    });
+    builder.addCase(getStudentById.fulfilled, (state, action) => {
+      state.student = action.payload;
+    });
+    builder.addCase(getStudentById.rejected, (state) => {
+      state.student = null;
     });
   },
 });

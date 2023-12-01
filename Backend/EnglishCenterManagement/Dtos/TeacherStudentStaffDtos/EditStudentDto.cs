@@ -2,7 +2,7 @@
 
 namespace EnglishCenterManagement.Dtos.TeacherStudentStaffDtos
 {
-    public class StudentProfileDetailDto : UserProfileDetailDto
+    public class EditStudentDto : EditUserInfo
     {
         public string? ParentsName { get; set; }
         public string? ParentPhoneNumber { get; set; }

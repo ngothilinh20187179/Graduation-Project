@@ -31,6 +31,7 @@ import {
   UserStatusType,
 } from "features/admin_auth/admin_auth";
 import {
+  UserPaths,
   getStudents,
   restricteAccount,
 } from "features/admin_users/admin_users";
@@ -94,7 +95,7 @@ const StudentScreen = () => {
                     </Typography>
                   </>
                 ),
-              //   onClick: () => navigate(UserPaths.GET_student(student.id))
+                onClick: () => navigate(UserPaths.GET_STUDENT(student.id))
               },
               {
                 key: "2",
@@ -108,7 +109,7 @@ const StudentScreen = () => {
                     </Typography>
                   </>
                 ),
-              //   onClick: () => navigate(UserPaths.EDIT_student(student.id))
+                onClick: () => navigate(UserPaths.EDIT_STUDENT(student.id))
               },
               {
                 key: "3",
@@ -208,9 +209,9 @@ const StudentScreen = () => {
         <Button
           type="primary"
           style={{ height: 40 }}
-          // onClick={() => navigate(UserPaths.CREATE_STUDENT())}
+          onClick={() => navigate(UserPaths.CREATE_STUDENT())}
         >
-          New student
+          New Student
         </Button>
       </div>
       <Table

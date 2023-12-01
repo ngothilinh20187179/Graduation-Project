@@ -211,7 +211,7 @@ import {
             style={{ height: 40 }}
             onClick={() => navigate(UserPaths.CREATE_TEACHER())}
           >
-            New teacher
+            New Teacher
           </Button>
         </div>
         <Table

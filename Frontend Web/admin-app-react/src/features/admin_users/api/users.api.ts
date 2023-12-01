@@ -3,7 +3,7 @@ import { api } from "api/api";
 import { RequestParams } from "types/param.types";
 import { UserStatusType } from "../constants/users.constants";
 import UsersEndpoints from "../constants/users.endpoints";
-import { AdminInformation, CreateEditStaffInfo, CreateEditTeacherInfo } from "../admin_users";
+import { AdminInformation, CreateEditStaffInfo, CreateEditStudentInfo, CreateEditTeacherInfo } from "../admin_users";
 
 export const getAdminByIdApi = (id: number): Promise<AxiosResponse> => {
   return api.get(UsersEndpoints.GET_ADMIN(id));
@@ -77,12 +77,29 @@ export const updateTeacherInfoApi = (
   return api.put(UsersEndpoints.EDIT_TEACHER(id), data);
 };
 
-export const getStudentsApi = (params: RequestParams): Promise<AxiosResponse> => {
-  return api.get(UsersEndpoints.GET_STUDENTS(params));
-};
-
 export const createTeacherInfoApi = (
   data: CreateEditTeacherInfo
 ): Promise<AxiosResponse> => {
   return api.post(UsersEndpoints.CREATE_TEACHER(), data);
+};
+
+export const getStudentsApi = (params: RequestParams): Promise<AxiosResponse> => {
+  return api.get(UsersEndpoints.GET_STUDENTS(params));
+};
+
+export const getStudentByIdApi = (id: number): Promise<AxiosResponse> => {
+  return api.get(UsersEndpoints.GET_STUDENT(id));
+};
+
+export const updateStudentInfoApi = (
+  id: number,
+  data: CreateEditStudentInfo
+): Promise<AxiosResponse> => {
+  return api.put(UsersEndpoints.EDIT_STUDENT(id), data);
+};
+
+export const createStudentInfoApi = (
+  data: CreateEditStudentInfo
+): Promise<AxiosResponse> => {
+  return api.post(UsersEndpoints.CREATE_STUDENT(), data);
 };

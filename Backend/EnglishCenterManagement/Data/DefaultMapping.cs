@@ -40,6 +40,8 @@ namespace EnglishCenterManagement.Data
             CreateMap<EditStaffDto, UserInfoModel>();
             CreateMap<EditTeacherDto, TeacherModel>();
             CreateMap<EditTeacherDto, UserInfoModel>();
+            CreateMap<EditStudentDto, StudentModel>();
+            CreateMap<EditStudentDto, UserInfoModel>();
             CreateMap<UserInfoModel, BasicStaffInfoDto>();
 
             CreateMap<RoomModel, RoomDto>();
@@ -70,7 +72,6 @@ namespace EnglishCenterManagement.Data
             CreateMap<UserInfoModel, ReceiversNotificationDto>();
             CreateMap<CreateNotificationDto, NotificationModel>();
             CreateMap<UserInfoModel, UserNotificationDto>();
-
 
             CreateMap<PositionModel, BasicPositionDto>();
         }
