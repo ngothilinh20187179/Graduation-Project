@@ -28,6 +28,9 @@ const UsersEndpoints = {
     }
     return `/teachers?search=${search}&page=${page}&pageSize=${pageSize}`;
   },
+  GET_TEACHER: (id: number) => `/teacher/${id}`,
+  EDIT_TEACHER: (id: number) => `/edit-teacher/${id}`,
+  CREATE_TEACHER: () => `/create-teacher`,
   GET_STUDENTS: ({ page, pageSize, search }: RequestParams) => {
     if (search === undefined || search === "") {
       return `/students?page=${page}&pageSize=${pageSize}`;

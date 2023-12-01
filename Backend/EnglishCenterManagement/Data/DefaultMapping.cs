@@ -38,6 +38,8 @@ namespace EnglishCenterManagement.Data
             CreateMap<CreateStaffDto, StaffModel>();
             CreateMap<EditStaffDto, StaffModel>();
             CreateMap<EditStaffDto, UserInfoModel>();
+            CreateMap<EditTeacherDto, TeacherModel>();
+            CreateMap<EditTeacherDto, UserInfoModel>();
             CreateMap<UserInfoModel, BasicStaffInfoDto>();
 
             CreateMap<RoomModel, RoomDto>();

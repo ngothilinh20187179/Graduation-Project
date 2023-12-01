@@ -254,7 +254,7 @@ namespace EnglishCenterManagement.Controllers
                 {
                     return BadRequest(new ApiReponse(615));
                 }
-                if (_userRepository.GetUserHasSameEmail(user.Id, updateStaff.Email) != null)
+                if (_userRepository.GetUserHasSameEmail(id, updateStaff.Email) != null)
                 {
                     return Conflict(new ApiReponse(616));
                 }

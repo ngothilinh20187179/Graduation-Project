@@ -3,11 +3,13 @@ import USERS_KEY from "../constants/users.keys";
 import {
   AdminInformation,
   CreateEditStaffInfo,
+  CreateEditTeacherInfo,
   RestricteAccount,
   UserAvatar,
   UsersState,
   createAdminInfoApi,
   createStaffInfoApi,
+  createTeacherInfoApi,
   getAdminByIdApi,
   getAdminsApi,
   getMyAvatarApi,
@@ -15,10 +17,12 @@ import {
   getStaffByIdApi,
   getStaffsApi,
   getStudentsApi,
+  getTeacherByIdApi,
   getTeachersApi,
   restricteAccountApi,
   updateAdminInfoApi,
   updateStaffInfoApi,
+  updateTeacherInfoApi,
 } from "../admin_users";
 import { RequestParams } from "types/param.types";
 
@@ -29,6 +33,7 @@ const initialState: UsersState = {
   staffs: null,
   staff: null,
   teachers: null,
+  teacher: null,
   students: null,
 };
 
@@ -125,6 +130,29 @@ export const getTeachers = createAsyncThunk(
   }
 );
 
+export const getTeacherById = createAsyncThunk(
+  `${USERS_KEY}/getTeacherById`,
+  async (id: number) => {
+    const response = await getTeacherByIdApi(id);
+    return response.data.data;
+  }
+);
+
+export const createTeacherInfo = createAsyncThunk(
+  `${USERS_KEY}/createTeacherInfo`,
+  async (data: CreateEditTeacherInfo) => {
+    return createTeacherInfoApi(data);
+  }
+);
+
+export const updateTeacherInfo = createAsyncThunk(
+  `${USERS_KEY}/updateTeacherInfo`,
+  async (staffInfo: CreateEditTeacherInfo) => {
+    const { id, ...fields } = staffInfo
+    return updateTeacherInfoApi(Number(id), fields );
+  }
+);
+
 export const getStudents = createAsyncThunk(
   `${USERS_KEY}/getStudents`,
   async (params: RequestParams) => {
@@ -176,6 +204,12 @@ const usersSlice = createSlice({
     });
     builder.addCase(getTeachers.rejected, (state) => {
       state.teachers = null;
+    });
+    builder.addCase(getTeacherById.fulfilled, (state, action) => {
+      state.teacher = action.payload;
+    });
+    builder.addCase(getTeacherById.rejected, (state) => {
+      state.teacher = null;
     });
     builder.addCase(getStudents.fulfilled, (state, action) => {
       state.students = action.payload;

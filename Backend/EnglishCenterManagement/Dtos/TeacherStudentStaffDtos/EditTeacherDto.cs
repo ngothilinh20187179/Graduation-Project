@@ -2,7 +2,7 @@
 
 namespace EnglishCenterManagement.Dtos.TeacherStudentStaffDtos
 {
-    public class TeacherProfileDetailDto : UserProfileDetailDto
+    public class EditTeacherDto : EditUserInfo
     {
         public string GraduateAt { get; set; } = string.Empty;
         public DateOnly GraduationTime { get; set; }

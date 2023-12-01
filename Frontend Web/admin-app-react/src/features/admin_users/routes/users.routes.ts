@@ -68,6 +68,30 @@ const TEACHERS_SCREEN: RouteItem = {
   component: lazy(() => import("../screens/TeacherScreen/TeacherScreen")),
 };
 
+const TEACHER_DETAIL_SCREEN: RouteItem = {
+  id: "admin-teacher-detail",
+  path: UserRoutePaths.GET_TEACHER,
+  component: lazy(
+    () => import("../screens/TeacherDetailScreen/TeacherDetailScreen")
+  ),
+};
+
+const CREATE_TEACHER_SCREEN: RouteItem = {
+  id: "admin-create-teacher",
+  path: UserRoutePaths.CREATE_TEACHER,
+  component: lazy(
+    () => import("../screens/CreateTeacherScreen/CreateTeacherScreen")
+  ),
+};
+
+const EDIT_TEACHER_SCREEN: RouteItem = {
+  id: "admin-edit-teacher",
+  path: UserRoutePaths.EDIT_TEACHER,
+  component: lazy(
+    () => import("../screens/EditTeacherScreen/EditTeacherScreen")
+  ),
+};
+
 const STUDENTS_SCREEN: RouteItem = {
   id: "admin-admins",
   path: UserRoutePaths.GET_STUDENTS,
@@ -84,5 +108,8 @@ export const USERS_ROUTES = [
   CREATE_STAFF_SCREEN,
   EDIT_STAFF_SCREEN,
   TEACHERS_SCREEN,
+  TEACHER_DETAIL_SCREEN,
+  CREATE_TEACHER_SCREEN,
+  EDIT_TEACHER_SCREEN,
   STUDENTS_SCREEN,
 ];

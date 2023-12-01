@@ -8,6 +8,9 @@ export const UserRoutePaths = {
   CREATE_STAFF: "/staff/create",
   EDIT_STAFF: "/staff/edit/:id",
   GET_TEACHERS: "/teachers",
+  GET_TEACHER: "/teacher/:id",
+  CREATE_TEACHER: "/teacher/create",
+  EDIT_TEACHER: "/teacher/edit/:id",
   GET_STUDENTS: "/students",
 };
 
@@ -21,5 +24,8 @@ export const UserPaths = {
   CREATE_STAFF: () => "/staff/create",
   EDIT_STAFF: (id: number) => `/staff/edit/${id}`,
   GET_TEACHERS: () => "/teachers",
+  GET_TEACHER: (id: number) => `/teacher/${id}`,
+  CREATE_TEACHER: () => "/teacher/create",
+  EDIT_TEACHER: (id: number) => `/teacher/edit/${id}`,
   GET_STUDENTS: () => "/students",
 };

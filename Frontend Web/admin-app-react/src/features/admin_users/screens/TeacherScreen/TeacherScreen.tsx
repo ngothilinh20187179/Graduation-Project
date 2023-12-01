@@ -31,6 +31,7 @@ import {
     UserStatusType,
   } from "features/admin_auth/admin_auth";
   import {
+    UserPaths,
     getTeachers,
     restricteAccount,
   } from "features/admin_users/admin_users";
@@ -94,7 +95,7 @@ import {
                       </Typography>
                     </>
                   ),
-                //   onClick: () => navigate(UserPaths.GET_TEACHER(teacher.id))
+                  onClick: () => navigate(UserPaths.GET_TEACHER(teacher.id))
                 },
                 {
                   key: "2",
@@ -108,7 +109,7 @@ import {
                       </Typography>
                     </>
                   ),
-                //   onClick: () => navigate(UserPaths.EDIT_TEACHER(teacher.id))
+                  onClick: () => navigate(UserPaths.EDIT_TEACHER(teacher.id))
                 },
                 {
                   key: "3",
@@ -208,7 +209,7 @@ import {
           <Button
             type="primary"
             style={{ height: 40 }}
-            // onClick={() => navigate(UserPaths.CREATE_TEACHER())}
+            onClick={() => navigate(UserPaths.CREATE_TEACHER())}
           >
             New teacher
           </Button>

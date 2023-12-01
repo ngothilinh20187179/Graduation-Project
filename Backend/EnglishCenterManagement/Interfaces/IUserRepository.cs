@@ -1,7 +1,5 @@
 ﻿using EnglishCenterManagement.Common.Response;
-using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace EnglishCenterManagement.Interfaces
 {
@@ -14,7 +12,7 @@ namespace EnglishCenterManagement.Interfaces
 
         UserInfoModel GetUserByLoginName(string loginName);
         UserInfoModel GetUserByUserId(int userId);
-        UserInfoModel GetUserHasSameEmail(int userId, string email);
+        UserInfoModel? GetUserHasSameEmail(int userId, string email);
         UserInfoModel GetUserHasSameLoginName(int userId, string loginName);
 
         bool CreateUserProfile(UserInfoModel user);

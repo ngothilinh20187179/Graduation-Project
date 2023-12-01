@@ -94,7 +94,7 @@ namespace EnglishCenterManagement.Controllers
         // POST: /create-teacher
         // TODO: check date of birth > current
         [HttpPost("create-teacher")]
-        [Authorize(Roles = nameof(RoleType.Staff))]
+        [Authorize(Roles = "Admin, Staff")]
         public ActionResult CreateTeacher([FromBody] CreateTeacherDto newTeacher)
         {
             var user = GetUserByClaim();
@@ -180,11 +180,11 @@ namespace EnglishCenterManagement.Controllers
             return StatusCode(StatusCodes.Status201Created);
         }
 
-        // PUT: /update-teacher/5
+        // PUT: /edit-teacher/5
         // TODO: check datetime
-        [HttpPut("update-teacher/{id}")]
-        [Authorize(Roles = nameof(RoleType.Staff))]
-        public ActionResult UpdateStaff([FromBody] CreateTeacherDto updateTeacher, int id)
+        [HttpPut("edit-teacher/{id}")]
+        [Authorize(Roles = "Admin, Staff")]
+        public ActionResult UpdateStaff([FromBody] EditTeacherDto updateTeacher, int id)
         {
             var user = GetUserByClaim();
             if (user == null)
@@ -206,12 +206,6 @@ namespace EnglishCenterManagement.Controllers
                 return NotFound(new ApiReponse(638));
             }
 
-            // check login name = pwd ?
-            if (updateTeacher.Password == updateTeacher.LoginName)
-            {
-                return BadRequest(new ApiReponse(609));
-            }
-
             // Check login name exist except current user's login name (get user by name and userid != current userId)
             if (_userRepository.GetUserHasSameLoginName(getUserById.Id, updateTeacher.LoginName) != null)
             {
@@ -220,16 +214,31 @@ namespace EnglishCenterManagement.Controllers
 
             Validation validateUserInfoUtils = new Validation();
 
+            if (updateTeacher.Password == null)
+            {
+                updateTeacher.Password = getUserById.Password;
+            }
+            else
+            {
+                // check login name = pwd ?
+                if (updateTeacher.Password == updateTeacher.LoginName)
+                {
+                    return BadRequest(new ApiReponse(609));
+                }
+
+                // check pwd: Minimum eight characters, at least one uppercase & lowercase letter and one number
+                if (!validateUserInfoUtils.IsValidPassword(updateTeacher.Password))
+                {
+                    return BadRequest(new ApiReponse(610));
+                }
+
+                updateTeacher.Password = BCrypt.Net.BCrypt.HashPassword(updateTeacher.Password);
+            }
+
             // Valid Phonenumber
             if (!validateUserInfoUtils.IsValidPhoneNumber(updateTeacher.PhoneNumber))
             {
                 return BadRequest(new ApiReponse(614));
-            }
-
-            // check pwd: Minimum eight characters, at least one uppercase & lowercase letter and one number
-            if (!validateUserInfoUtils.IsValidPassword(updateTeacher.Password))
-            {
-                return BadRequest(new ApiReponse(610));
             }
 
             // check gender
@@ -245,7 +254,7 @@ namespace EnglishCenterManagement.Controllers
                 {
                     return BadRequest(new ApiReponse(615));
                 }
-                if (_userRepository.GetUserHasSameEmail(user.Id, updateTeacher.Email) != null)
+                if (_userRepository.GetUserHasSameEmail(id, updateTeacher.Email) != null)
                 {
                     return Conflict(new ApiReponse(616));
                 }

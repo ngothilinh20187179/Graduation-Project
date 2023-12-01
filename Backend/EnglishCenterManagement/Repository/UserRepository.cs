@@ -39,7 +39,7 @@ namespace EnglishCenterManagement.Repository
         {
             return _context.Users.Where(p => p.Id == userId).FirstOrDefault();
         }
-        public UserInfoModel GetUserHasSameEmail(int userId, string email)
+        public UserInfoModel? GetUserHasSameEmail(int userId, string email)
         {
             return _context.Users.Where(p => p.Email == email && p.Id != userId).FirstOrDefault();
         }
