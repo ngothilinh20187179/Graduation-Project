@@ -47,7 +47,7 @@ const items: MenuProps["items"] = [
   getItem("Classes", "manageClassesKey", <BookOutlined />, [
     getItem("Subjects", ClassesPaths.SUBJECTS()),
     getItem("Rooms", ClassesPaths.ROOMS()),
-    getItem("Classes", "/classes"),
+    getItem("Classes", ClassesPaths.CLASSES()),
   ]),
   getItem("Statistical", "statisticalKey", <BarChartOutlined />),
   getItem("Settings", SettingPaths.SETTING(), <SettingOutlined />),

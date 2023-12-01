@@ -95,4 +95,6 @@ export interface UsersState {
   admin: UserProfile | null;
   staffs: GetAllStaffsResponse | null;
   staff: StaffDetail | null;
+  teachers: GetAllAdminsResponse | null;
+  students: GetAllAdminsResponse | null;
 }

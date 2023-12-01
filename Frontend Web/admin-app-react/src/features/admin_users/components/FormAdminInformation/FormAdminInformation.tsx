@@ -114,24 +114,32 @@ const FormAdminInformation = ({
               <Input />
             </Form.Item>
           </Col>
-          <Col xs={24} xl={8} style={{ maxWidth: 360 }}>
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[...passwordRules(mess.fe_4)]}
-            >
-              {/* <Input.Password allowClear placeholder={isEditScreen ? "Enter if you want to change the admin's password" : ""} /> */}
-              {isEditScreen ? (
+          <Col xs={24} xl={8} style={{ maxWidth: 320 }}>
+            {isEditScreen ? (
+              <Form.Item
+                label="Password"
+                name="password"
+                rules={[...passwordRules(mess.fe_4)]}
+              >
                 <Tooltip title="Enter if you want to change the admin's password">
                   <Input.Password
                     allowClear
                     placeholder="Enter if you want to change the admin's password"
                   />
                 </Tooltip>
-              ) : (
+              </Form.Item>
+            ) : (
+              <Form.Item
+                label="Password"
+                name="password"
+                rules={[
+                  ...requireRules(mess.fe_1),
+                  ...passwordRules(mess.fe_4),
+                ]}
+              >
                 <Input.Password allowClear />
-              )}
-            </Form.Item>
+              </Form.Item>
+            )}
           </Col>
         </Row>
         <Row gutter={[60, 0]}>

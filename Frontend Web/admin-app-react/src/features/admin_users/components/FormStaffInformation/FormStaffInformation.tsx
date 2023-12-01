@@ -73,9 +73,9 @@ const FormStaffInformation = ({
         ? dayjs(staffInfo?.dateOfBirth)
         : null,
       graduationTime: staffInfo?.graduationTime
-        ? dayjs(staffInfo?.dateOfBirth)
+        ? dayjs(staffInfo?.graduationTime)
         : null,
-      hireDate: staffInfo?.hireDate ? dayjs(staffInfo?.dateOfBirth) : null,
+      hireDate: staffInfo?.hireDate ? dayjs(staffInfo?.hireDate) : null,
     });
   }, [form, staffInfo]);
 

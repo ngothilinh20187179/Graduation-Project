@@ -61,3 +61,11 @@ export const updateStaffInfoApi = (
 ): Promise<AxiosResponse> => {
   return api.put(UsersEndpoints.EDIT_STAFF(id), data);
 };
+
+export const getTeachersApi = (params: RequestParams): Promise<AxiosResponse> => {
+  return api.get(UsersEndpoints.GET_TEACHERS(params));
+};
+
+export const getStudentsApi = (params: RequestParams): Promise<AxiosResponse> => {
+  return api.get(UsersEndpoints.GET_STUDENTS(params));
+};

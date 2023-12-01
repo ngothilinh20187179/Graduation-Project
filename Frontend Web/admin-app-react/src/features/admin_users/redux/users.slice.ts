@@ -14,6 +14,8 @@ import {
   getPositionListApi,
   getStaffByIdApi,
   getStaffsApi,
+  getStudentsApi,
+  getTeachersApi,
   restricteAccountApi,
   updateAdminInfoApi,
   updateStaffInfoApi,
@@ -25,7 +27,9 @@ const initialState: UsersState = {
   admins: null,
   admin: null,
   staffs: null,
-  staff: null
+  staff: null,
+  teachers: null,
+  students: null,
 };
 
 export const getAdmins = createAsyncThunk(
@@ -113,6 +117,22 @@ export const updateStaffInfo = createAsyncThunk(
   }
 );
 
+export const getTeachers = createAsyncThunk(
+  `${USERS_KEY}/getTeachers`,
+  async (params: RequestParams) => {
+    const response = await getTeachersApi(params);
+    return response.data.data;
+  }
+);
+
+export const getStudents = createAsyncThunk(
+  `${USERS_KEY}/getStudents`,
+  async (params: RequestParams) => {
+    const response = await getStudentsApi(params);
+    return response.data.data;
+  }
+);
+
 const usersSlice = createSlice({
   name: USERS_KEY,
   initialState,
@@ -150,6 +170,18 @@ const usersSlice = createSlice({
     });
     builder.addCase(getStaffById.rejected, (state) => {
       state.staff = null;
+    });
+    builder.addCase(getTeachers.fulfilled, (state, action) => {
+      state.teachers = action.payload;
+    });
+    builder.addCase(getTeachers.rejected, (state) => {
+      state.teachers = null;
+    });
+    builder.addCase(getStudents.fulfilled, (state, action) => {
+      state.students = action.payload;
+    });
+    builder.addCase(getStudents.rejected, (state) => {
+      state.students = null;
     });
   },
 });

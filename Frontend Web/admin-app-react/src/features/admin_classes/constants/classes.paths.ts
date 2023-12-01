@@ -5,6 +5,7 @@ export const ClassesRoutePaths = {
   ROOMS: "/rooms",
   CREATE_ROOM: "/rooms/create",
   EDIT_ROOM: "/rooms/update/:id",
+  CLASSES: "/classes",
 };
 
 export const ClassesPaths = {
@@ -14,4 +15,5 @@ export const ClassesPaths = {
   ROOMS: () => "/rooms",
   EDIT_ROOM: (id: number) => `/rooms/update/${id}`,
   CREATE_ROOM: () => "/rooms/create",
+  CLASSES: () => "/classes",
 };

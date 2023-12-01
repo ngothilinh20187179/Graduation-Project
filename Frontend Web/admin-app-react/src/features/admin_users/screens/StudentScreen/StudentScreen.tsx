@@ -5,7 +5,6 @@ import {
   UnlockOutlined,
   SnippetsOutlined,
   UserOutlined,
-  OrderedListOutlined,
 } from "@ant-design/icons";
 import {
   Avatar,
@@ -27,23 +26,22 @@ import { RootState } from "redux/root-reducer";
 import DropdownButton from "components/DropdownButton/DropdownButton";
 import { RequestParams } from "types/param.types";
 import {
-  COLUMNS_TABLE_STAFFS,
+    COLUMNS_TABLE_ADMINS,
   GenderType,
   UserStatusType,
 } from "features/admin_auth/admin_auth";
 import {
-  UserPaths,
-  getStaffs,
+  getStudents,
   restricteAccount,
 } from "features/admin_users/admin_users";
 import { unwrapResult } from "@reduxjs/toolkit";
 
-const StaffScreen = () => {
+const StudentScreen = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [staffIdSelected, setStaffIdSelected] = useState<number | null>(null);
-  const [staffStatusSelected, setStaffStatusSelected] =
+  const [studentIdSelected, setStudentIdSelected] = useState<number | null>(null);
+  const [studentStatusSelected, setStudentStatusSelected] =
     useState<UserStatusType | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [triggerReload, setTriggerReload] = useState<boolean>(false);
@@ -52,32 +50,32 @@ const StaffScreen = () => {
   const [search, setSearch] = useState<string>();
 
   const {
-    users: { staffs },
+    users: { students },
   } = useAppSelector((state: RootState) => state);
   
-  const staffList = useMemo(() => {
-    return staffs?.data?.map((staff, index) => ({
-      ...staff,
+  const studentList = useMemo(() => {
+    return students?.data?.map((student, index) => ({
+      ...student,
       index: index + 1,
-      avatar: staff?.avatar ? (
+      avatar: student?.avatar ? (
         <Image
           width={40}
           preview={false}
-          src={`data:${staff.avatar.mediaType};base64,${staff.avatar.data}`}
+          src={`data:${student.avatar.mediaType};base64,${student.avatar.data}`}
         />
       ) : (
         <Avatar size={40} icon={<UserOutlined />} />
       ),
       userStatus:
-        staff.userStatus === UserStatusType.UnLock ? (
+        student.userStatus === UserStatusType.UnLock ? (
           <Badge status="success" text="UnLock" />
         ) : (
           <Badge status="error" text="Lock" />
         ),
       gender:
-        staff.gender === GenderType.Female
+        student.gender === GenderType.Female
           ? "Female"
-          : staff.gender === GenderType.Male
+          : student.gender === GenderType.Male
           ? "Male"
           : "Unknown",
       action: (
@@ -96,7 +94,7 @@ const StaffScreen = () => {
                     </Typography>
                   </>
                 ),
-                onClick: () => navigate(UserPaths.GET_STAFF(staff.id))
+              //   onClick: () => navigate(UserPaths.GET_student(student.id))
               },
               {
                 key: "2",
@@ -110,13 +108,13 @@ const StaffScreen = () => {
                     </Typography>
                   </>
                 ),
-                onClick: () => navigate(UserPaths.EDIT_STAFF(staff.id))
+              //   onClick: () => navigate(UserPaths.EDIT_student(student.id))
               },
               {
                 key: "3",
                 label: (
                   <>
-                    {staff.userStatus === UserStatusType.UnLock ? (
+                    {student.userStatus === UserStatusType.UnLock ? (
                       <Typography>
                         <span>
                           <LockOutlined />
@@ -134,23 +132,9 @@ const StaffScreen = () => {
                   </>
                 ),
                 onClick: () => {
-                  setStaffIdSelected(Number(staff.id));
-                  setStaffStatusSelected(staff.userStatus);
+                  setStudentIdSelected(Number(student.id));
+                  setStudentStatusSelected(student.userStatus);
                 },
-              },
-              {
-                key: "4",
-                label: (
-                  <>
-                    <Typography style={{maxWidth: 130}}>
-                      <span>
-                        <OrderedListOutlined />
-                      </span>{" "}
-                      Decentralize authority
-                    </Typography>
-                  </>
-                ),
-                onClick: () => navigate(UserPaths.EDIT_STAFF(staff.id))
               },
             ],
           }}
@@ -159,7 +143,7 @@ const StaffScreen = () => {
         </DropdownButton>
       ),
     }));
-  }, [staffs?.data, navigate]);
+  }, [students?.data, navigate]);
 
   useEffect(() => {
     const params: RequestParams = {
@@ -168,22 +152,22 @@ const StaffScreen = () => {
       search,
     };
     setIsLoading(true);
-    dispatch(getStaffs(params))
+    dispatch(getStudents(params))
       .unwrap()
       .finally(() => setIsLoading(false));
   }, [dispatch, triggerReload, page, pageSize, search]);
 
   const handleLockOrUnLock = () => {
-    if (staffIdSelected === null || staffStatusSelected === null) return;
+    if (studentIdSelected === null || studentStatusSelected === null) return;
     setIsSubmitting(true);
     setIsLoading(true);
     let userStatusType =
-        staffStatusSelected === UserStatusType.Lock
+        studentStatusSelected === UserStatusType.Lock
         ? UserStatusType.UnLock
         : UserStatusType.Lock;
     dispatch(
       restricteAccount({
-        id: staffIdSelected,
+        id: studentIdSelected,
         userStatusType: userStatusType,
       })
     )
@@ -195,8 +179,8 @@ const StaffScreen = () => {
       .finally(() => {
         setIsSubmitting(false);
         setIsLoading(false);
-        setStaffIdSelected(null);
-        setStaffStatusSelected(null);
+        setStudentIdSelected(null);
+        setStudentStatusSelected(null);
       });
   };
 
@@ -209,12 +193,12 @@ const StaffScreen = () => {
         >
           <HomeOutlined />
         </Breadcrumb.Item>
-        <Breadcrumb.Item>Staffs</Breadcrumb.Item>
+        <Breadcrumb.Item>Students</Breadcrumb.Item>
       </Breadcrumb>
       <div className="flex-space-between-center">
-        <Typography>Total: There are {staffs?.totalRecords} staffs</Typography>
+        <Typography>Total: There are {students?.totalRecords} students</Typography>
         <Search
-          placeholder="staffs's first name"
+          placeholder="students's first name"
           allowClear
           enterButton
           size="large"
@@ -224,9 +208,9 @@ const StaffScreen = () => {
         <Button
           type="primary"
           style={{ height: 40 }}
-          onClick={() => navigate(UserPaths.CREATE_STAFF())}
+          // onClick={() => navigate(UserPaths.CREATE_STUDENT())}
         >
-          New Staff
+          New student
         </Button>
       </div>
       <Table
@@ -234,29 +218,29 @@ const StaffScreen = () => {
         rowKey="id"
         size="small"
         loading={isLoading}
-        columns={COLUMNS_TABLE_STAFFS()}
-        dataSource={staffList}
+        columns={COLUMNS_TABLE_ADMINS()}
+        dataSource={studentList}
         pagination={false}
         className="mt-20"
         scroll={{ y: 320, x: 400 }}
       />
       <Pagination
         className="flex-justify-center mt-20"
-        current={staffs?.pageNumber}
+        current={students?.pageNumber}
         onChange={(newPage) => setPage(newPage)}
-        total={Number(staffs?.totalPages) * 10}
+        total={Number(students?.totalPages) * 10}
       />
       <Modal
         centered
         title={
-            staffStatusSelected === UserStatusType.UnLock
-            ? "Are you sure you want to lock this staff?"
-            : "Are you sure you want to unlock this staff?"
+            studentStatusSelected === UserStatusType.UnLock
+            ? "Are you sure you want to lock this student?"
+            : "Are you sure you want to unlock this student?"
         }
-        open={!!staffIdSelected}
+        open={!!studentIdSelected}
         onCancel={() => {
-          setStaffIdSelected(null);
-          setStaffStatusSelected(null);
+          setStudentIdSelected(null);
+          setStudentStatusSelected(null);
         }}
         onOk={handleLockOrUnLock}
         okButtonProps={{
@@ -267,4 +251,4 @@ const StaffScreen = () => {
   );
 };
 
-export default memo(StaffScreen);
+export default memo(StudentScreen);

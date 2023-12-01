@@ -83,7 +83,7 @@ namespace EnglishCenterManagement.Controllers
                 return NotFound(new ApiReponse(636));
             }
 
-            TeacherProfileDetailDto userMap = _mapper.Map<TeacherProfileDetailDto>(getTeacherById);
+            var userMap = _mapper.Map<TeacherProfileDetailDto>(getTeacherById);
             userMap = _mapper.Map<UserInfoModel, TeacherProfileDetailDto>(getUserById, userMap);
             var avatar = _userRepository.GetUserAvatar(id);
             userMap.Avatar = _mapper.Map<AvatarDto>(avatar);

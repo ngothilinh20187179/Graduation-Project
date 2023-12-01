@@ -183,7 +183,7 @@ namespace EnglishCenterManagement.Controllers
         // TODO: check datetime
         [HttpPut("edit-staff/{id}")]
         [Authorize(Roles = nameof(RoleType.Admin))]
-        public ActionResult UpdateStaff([FromBody] CreateStaffDto updateStaff, int id)
+        public ActionResult UpdateStaff([FromBody] EditStaffDto updateStaff, int id)
         {
             var user = GetUserByClaim();
             if (user == null)
@@ -205,12 +205,6 @@ namespace EnglishCenterManagement.Controllers
                 return NotFound(new ApiReponse(638));
             }
 
-            // check login name = pwd ?
-            if (updateStaff.Password == updateStaff.LoginName)
-            {
-                return BadRequest(new ApiReponse(609));
-            }
-
             // Check login name exist except current user's login name (get user by name and userid != current userId)
             if (_userRepository.GetUserHasSameLoginName(getUserById.Id, updateStaff.LoginName) != null)
             {
@@ -220,16 +214,31 @@ namespace EnglishCenterManagement.Controllers
 
             Validation validateUserInfoUtils = new Validation();
 
+            if (updateStaff.Password == null)
+            {
+                updateStaff.Password = getUserById.Password;
+            }
+            else
+            {
+                // check login name = pwd ?
+                if (updateStaff.Password == updateStaff.LoginName)
+                {
+                    return BadRequest(new ApiReponse(609));
+                }
+
+                // check pwd: Minimum eight characters, at least one uppercase & lowercase letter and one number
+                if (!validateUserInfoUtils.IsValidPassword(updateStaff.Password))
+                {
+                    return BadRequest(new ApiReponse(610));
+                }
+
+                updateStaff.Password = BCrypt.Net.BCrypt.HashPassword(updateStaff.Password);
+            }
+
             // Valid Phonenumber
             if (!validateUserInfoUtils.IsValidPhoneNumber(updateStaff.PhoneNumber))
             {
                 return BadRequest(new ApiReponse(614));
-            }
-
-            // check pwd: Minimum eight characters, at least one uppercase & lowercase letter and one number
-            if (!validateUserInfoUtils.IsValidPassword(updateStaff.Password))
-            {
-                return BadRequest(new ApiReponse(610));
             }
 
             // check gender
@@ -251,7 +260,6 @@ namespace EnglishCenterManagement.Controllers
                 }
             }
 
-            updateStaff.Password = BCrypt.Net.BCrypt.HashPassword(updateStaff.Password);
             var updatedUserProfileMap = _mapper.Map(updateStaff, getUserById);
             var updatedStaffProfileMap = _mapper.Map(updateStaff, getStaffById);
             _userRepository.UpdateUserProfile(updatedUserProfileMap);

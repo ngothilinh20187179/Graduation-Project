@@ -22,6 +22,18 @@ const UsersEndpoints = {
   CREATE_STAFF: () => `/create-staff`,
   GET_LIST_POSITION: () => `position_list`,
   EDIT_STAFF: (id: number) => `/edit-staff/${id}`,
+  GET_TEACHERS: ({ page, pageSize, search }: RequestParams) => {
+    if (search === undefined || search === "") {
+      return `/teachers?page=${page}&pageSize=${pageSize}`;
+    }
+    return `/teachers?search=${search}&page=${page}&pageSize=${pageSize}`;
+  },
+  GET_STUDENTS: ({ page, pageSize, search }: RequestParams) => {
+    if (search === undefined || search === "") {
+      return `/students?page=${page}&pageSize=${pageSize}`;
+    }
+    return `/students?search=${search}&page=${page}&pageSize=${pageSize}`;
+  },
 };
 
 export default UsersEndpoints;

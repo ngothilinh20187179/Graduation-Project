@@ -132,14 +132,14 @@ export const COLUMNS_TABLE_STAFFS = () => [
     dataIndex: "userStatus",
     key: "userStatus",
     ellipsis: true,
-    width: "80px",
+    width: "70px",
   },
   {
     title: "Gender",
     dataIndex: "gender",
     key: "gender",
     ellipsis: true,
-    width: "60px",
+    width: "70px",
   },
   {
     title: "Phone Number",
@@ -152,6 +152,6 @@ export const COLUMNS_TABLE_STAFFS = () => [
     title: "Action",
     dataIndex: "action",
     key: "action",
-    width: "100px",
+    width: "90px",
   }
 ]

@@ -62,6 +62,18 @@ const EDIT_STAFF_SCREEN: RouteItem = {
   ),
 };
 
+const TEACHERS_SCREEN: RouteItem = {
+  id: "admin-admins",
+  path: UserRoutePaths.GET_TEACHERS,
+  component: lazy(() => import("../screens/TeacherScreen/TeacherScreen")),
+};
+
+const STUDENTS_SCREEN: RouteItem = {
+  id: "admin-admins",
+  path: UserRoutePaths.GET_STUDENTS,
+  component: lazy(() => import("../screens/StudentScreen/StudentScreen")),
+};
+
 export const USERS_ROUTES = [
   ADMIN_DETAIL_SCREEN,
   ADMINS_SCREEN,
@@ -71,4 +83,6 @@ export const USERS_ROUTES = [
   STAFF_DETAIL_SCREEN,
   CREATE_STAFF_SCREEN,
   EDIT_STAFF_SCREEN,
+  TEACHERS_SCREEN,
+  STUDENTS_SCREEN,
 ];
