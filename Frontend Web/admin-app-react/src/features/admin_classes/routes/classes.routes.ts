@@ -46,6 +46,18 @@ const EDIT_ROOM_SCREEN: RouteItem = {
   ),
 };
 
+const CLASSES_SCREEN: RouteItem = {
+  id: "admin-classes",
+  path: ClassesRoutePaths.CLASSES,
+  component: lazy(() => import("../screens/ClassScreen/ClassScreen")),
+};
+
+const CLASS_DETAIL_SCREEN: RouteItem = {
+  id: "admin-class-detail",
+  path: ClassesRoutePaths.GET_CLASS,
+  component: lazy(() => import("../screens/ClassDetailScreen/ClassDetailScreen")),
+};
+
 export const CLASSES_ROUTES = [
   SUBJECTS_SCREEN,
   EDIT_SUBJECT_SCREEN,
@@ -53,4 +65,6 @@ export const CLASSES_ROUTES = [
   ROOMS_SCREEN,
   CREATE_ROOM_SCREEN,
   EDIT_ROOM_SCREEN,
+  CLASSES_SCREEN,
+  CLASS_DETAIL_SCREEN,
 ];

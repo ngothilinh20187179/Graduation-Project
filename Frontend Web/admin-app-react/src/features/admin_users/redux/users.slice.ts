@@ -20,6 +20,7 @@ import {
   getStaffsApi,
   getStudentByIdApi,
   getStudentsApi,
+  getStudentsInClassApi,
   getTeacherByIdApi,
   getTeachersApi,
   restricteAccountApi,
@@ -174,6 +175,14 @@ export const getStudentById = createAsyncThunk(
   }
 );
 
+export const getStudentsInClass = createAsyncThunk(
+  `${USERS_KEY}/getStudentsInClass`,
+  async (id: number) => {
+    const response = await getStudentsInClassApi(id);
+    return response.data.data;
+  }
+);
+
 export const updateStudentInfo = createAsyncThunk(
   `${USERS_KEY}/updateStudentInfo`,
   async (staffInfo: CreateEditStudentInfo) => {
@@ -250,6 +259,13 @@ const usersSlice = createSlice({
     });
     builder.addCase(getStudentById.rejected, (state) => {
       state.student = null;
+    });
+    
+    builder.addCase(getStudentsInClass.fulfilled, (state, action) => {
+      state.students = action.payload;
+    });
+    builder.addCase(getStudentsInClass.rejected, (state) => {
+      state.students = null;
     });
   },
 });

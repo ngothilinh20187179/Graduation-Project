@@ -91,6 +91,10 @@ export const getStudentByIdApi = (id: number): Promise<AxiosResponse> => {
   return api.get(UsersEndpoints.GET_STUDENT(id));
 };
 
+export const getStudentsInClassApi = (id: number): Promise<AxiosResponse> => {
+  return api.get(UsersEndpoints.GET_STUDENTS_IN_CLASS(id));
+};
+
 export const updateStudentInfoApi = (
   id: number,
   data: CreateEditStudentInfo

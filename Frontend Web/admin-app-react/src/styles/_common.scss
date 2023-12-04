@@ -106,7 +106,7 @@
 }
 
 //gap
-@for $gap from 1 through 50 {
+@for $gap from 1 through 500 {
   .gap-#{$gap} {
     gap: #{$gap}px !important;
   }

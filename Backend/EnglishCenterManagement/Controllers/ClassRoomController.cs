@@ -38,7 +38,6 @@ namespace EnglishCenterManagement.Controllers
         }
 
         #region CLASS
-        // TODO: GET BY STATUS CLASS
         // GET: /classes
         [HttpGet("classes")]
         public ActionResult<PagedResponse> GetAllClasses(string? search, int page = 1, int pageSize = 20)
@@ -53,8 +52,8 @@ namespace EnglishCenterManagement.Controllers
             return Ok(new ApiReponse(listClasses));
         }
 
-        // GET: /classes/5
-        [HttpGet("classes/{id}")]
+        // GET: /class/5
+        [HttpGet("class/{id}")]
         [Authorize]
         public ActionResult<ClassRoomDetailDto> GetClassById(int id)
         {

@@ -103,8 +103,8 @@ namespace EnglishCenterManagement.Controllers
             return Ok(new ApiReponse(userMap));
         }
 
-        // GET: /classes/5/students
-        [HttpGet("classes/{id}/students")]
+        // GET: /class/5/students
+        [HttpGet("class/{id}/students")]
         [Authorize(Roles = "Student, Teacher, Staff, Admin")]
         public ActionResult<PagedResponse> GetAllStudentsInClass(int id, string? search, int page = 1, int pageSize = 20)
         {

@@ -1,5 +1,6 @@
 import { PaginationResponse } from "types/pagination.types";
-import { RoomStatusType, SubjectStatusType } from "../constants/classes.constants";
+import { ClassPeriodType, ClassStatusType, DayOfWeek, RoomStatusType, SubjectStatusType } from "../constants/classes.constants";
+import { BasicUserInfo, UserAvatar } from "features/admin_users/admin_users";
 
 export type Subject = {
   id?: number;
@@ -33,7 +34,45 @@ export interface GetRoomResponse {
   data: Room
 }
 
+export type Class = {
+  id?: number;
+  className: string;
+  classStartDate: string;
+  classEndDate: string | null;
+  numberOfStudents: number;
+  numberOfSessions: number;
+  credit: number;
+};
+
+export interface GetAllClassesResponse extends PaginationResponse {
+  data: Class[];
+}
+
+export type ClassSchedules = {
+  id: number;
+  period: ClassPeriodType;
+  dayOfWeek: DayOfWeek;
+  roomId: number;
+  roomName: string;
+}
+
+export type BasicTeacherInfo = BasicUserInfo & {
+  avatar: UserAvatar | null;
+}
+
+export type GetClassResponse = {
+  data: Class & {
+    note?: string;
+    classStatus: ClassStatusType;
+    subject: Subject;
+    classSchedules: ClassSchedules[];
+    teachers?: BasicTeacherInfo[];
+  };
+}
+
 export interface ClassesState {
+  classes: GetAllClassesResponse | null;
+  classDetail: GetClassResponse | null;
   subjects: GetAllSubjectsResponse | null;
   subject: GetSubjectResponse | null;
   rooms: GetAllRoomsResponse | null;

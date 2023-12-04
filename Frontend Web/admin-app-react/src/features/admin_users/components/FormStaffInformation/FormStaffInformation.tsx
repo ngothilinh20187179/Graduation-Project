@@ -60,7 +60,6 @@ const FormStaffInformation = ({
       setLoading(true);
       dispatch(getPositionList())
         .unwrap()
-        .then()
         .then((body) => {
           setData(body.data);
           setLoading(false);

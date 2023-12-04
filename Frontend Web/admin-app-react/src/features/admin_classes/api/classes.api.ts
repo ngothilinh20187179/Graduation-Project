@@ -4,6 +4,18 @@ import ClassesEndpoints from "../constants/classes.endpoints";
 import { RequestParams } from "types/param.types";
 import { Room, Subject } from "../admin_classes";
 
+export const getClassesApi = (
+  params: RequestParams
+): Promise<AxiosResponse> => {
+  return api.get(ClassesEndpoints.GET_CLASSES(params));
+};
+
+export const getClassApi = (
+  id: number
+): Promise<AxiosResponse> => {
+  return api.get(ClassesEndpoints.GET_CLASS(id));
+};
+
 export const getSubjectsApi = (
   params: RequestParams
 ): Promise<AxiosResponse> => {

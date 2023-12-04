@@ -1,13 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import CLASSES_KEY from "../constants/classes.keys";
-import { ClassesState, Room, Subject, createRoomApi, createSubjectApi, deleteRoomApi, deleteSubjectApi, getRoomApi, getRoomsApi, getSubjectApi, getSubjectsApi, updateRoomApi, updateSubjectApi } from "../admin_classes";
+import { ClassesState, Room, Subject, createRoomApi, createSubjectApi, deleteRoomApi, deleteSubjectApi, getClassApi, getClassesApi, getRoomApi, getRoomsApi, getSubjectApi, getSubjectsApi, updateRoomApi, updateSubjectApi } from "../admin_classes";
 import { RequestParams } from "types/param.types";
 
 const initialState: ClassesState = {
+  classes: null,
   subjects: null,
   subject: null,
   rooms: null,
-  room: null
+  room: null,
+  classDetail: null
 };
 
 export const getSubjects = createAsyncThunk(
@@ -86,6 +88,23 @@ export const deleteRoom = createAsyncThunk(
   }
 );
 
+export const getClasses = createAsyncThunk(
+  `${CLASSES_KEY}/getClasses`,
+  async (params: RequestParams) => {
+    const response = await getClassesApi(params);
+    return response.data.data;
+  }
+);
+
+export const getClass = createAsyncThunk(
+  `${CLASSES_KEY}/getClass`,
+  async (id: number) => {
+    const response = await getClassApi(id);
+    return response.data;
+  }
+);
+
+
 const classesSlice = createSlice({
   name: CLASSES_KEY,
   initialState,
@@ -114,6 +133,18 @@ const classesSlice = createSlice({
     });
     builder.addCase(getRoom.rejected, (state) => {
       state.room = null;
+    });
+    builder.addCase(getClasses.fulfilled, (state, action) => {
+      state.classes = action.payload;
+    });
+    builder.addCase(getClasses.rejected, (state) => {
+      state.classes = null;
+    });
+    builder.addCase(getClass.fulfilled, (state, action) => {
+      state.classDetail = action.payload;
+    });
+    builder.addCase(getClass.rejected, (state) => {
+      state.classDetail = null;
     });
   },
 });
