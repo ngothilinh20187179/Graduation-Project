@@ -75,15 +75,38 @@
   align-items: center;
 }
 
+.flex-align-end {
+  display: flex;
+  align-items: flex-end !important;
+}
+
 //Fonts
-@for $size from 1 through 50 {
+@for $size from 1 through 100 {
   .font-#{$size} {
     font-size: #{$size}px !important;
   }
 }
 
+// Margin
+@each $abbr, $name in ("t": "top", "r": "right", "b": "bottom", "l": "left") {
+  @for $i from 1 through 500 {
+    .m#{$abbr}-#{$i} {
+      margin-#{$name}: #{$i}px !important;
+    }
+  }
+}
+
+// Padding
+@each $abbr, $name in ("t": "top", "r": "right", "b": "bottom", "l": "left") {
+  @for $i from 1 through 500 {
+    .p#{$abbr}-#{$i} {
+      padding-#{$name}: #{$i}px !important;
+    }
+  }
+}
+
 //gap
-@for $gap from 1 through 50 {
+@for $gap from 1 through 500 {
   .gap-#{$gap} {
     gap: #{$gap}px !important;
   }
@@ -136,4 +159,17 @@ $positions: "static", "relative", "absolute", "fixed", "sticky";
 .text-overflow {
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+//link
+.text-link {
+  text-decoration: underline !important;
+  text-underline-offset: 2px;
+  color: black;
+}
+
+.text-link-blue {
+  color: $dark-blue;
+  text-decoration: none;
+  font-size: 18px;
 }

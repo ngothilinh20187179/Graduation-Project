@@ -1,8 +1,14 @@
+import DefaultLayout from "components/Layout/DefaultLayout/DefaultLayout";
 import { Route } from "react-router-dom";
-import { RouteComponent, RouteItem } from "types/route.types";
+import {
+  RouteComponent,
+  RouteItem,
+  RouteWrapperConfig,
+} from "types/route.types";
 
 export const routeWrapper = (
   { id, path, component }: RouteItem,
+  { isPrivateRoutes }: RouteWrapperConfig | undefined = {}
 ) => {
   const Component = component as RouteComponent;
 
@@ -10,7 +16,15 @@ export const routeWrapper = (
     <Route
       key={id}
       path={path}
-      element={<Component />}
+      element={
+        isPrivateRoutes ? (
+          <DefaultLayout>
+            <Component />
+          </DefaultLayout>
+        ) : (
+          <Component />
+        )
+      }
     />
   );
 };

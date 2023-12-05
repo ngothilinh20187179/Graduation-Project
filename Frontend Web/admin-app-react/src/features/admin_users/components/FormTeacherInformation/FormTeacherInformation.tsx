@@ -8,7 +8,6 @@ import {
   Row,
   Select,
   Space,
-  Tooltip,
   Typography,
 } from "antd";
 import { useForm } from "antd/es/form/Form";
@@ -127,12 +126,10 @@ const FormTeacherInformation = ({
                 name="password"
                 rules={[...passwordRules(mess.fe_4)]}
               >
-                <Tooltip title="Enter if you want to change the teacher's password">
                   <Input.Password
                     allowClear
                     placeholder="Enter if you want to change the teacher's password"
                   />
-                </Tooltip>
               </Form.Item>
             ) : (
               <Form.Item

@@ -1,7 +1,24 @@
 {
   "fe_0": "Please input your login name!",
   "fe_1": "Please input your password!",
-  "fe_2": "The connection has timed out",
-  "fe_3": "Server error",
-  "fe_4": "You are not staff"
+  "fe_2": "The connection has timed out!",
+  "fe_3": "Server error!",
+  "fe_4": "Invalid password. Use at least 8 characters, 1 uppercase, 1 number.",
+  "fe_5": "Password and old password cannot be the same!",
+  "fe_6": "Password and confirm password does not match!",
+  "fe_7": "Please input your first name!",
+  "fe_8": "Please input your last name!",
+  "fe_9": "Please input your phone number!",
+  "fe_10": "Invalid email!",
+  "fe_11": "Invalid phone number. Maximum 10 number characters.",
+  "fe_12": "Please input your subject name!",
+  "fe_13": "Please input your description!",
+  "fe_14": "Please input your room name!",
+  "fe_15": "Please input your notification's title",
+  "fe_16": "Please input your notification's content",
+  "fe_17": "Please input Graduate At field",
+  "fe_18": "Please input time of graduation",
+  "fe_19": "Please input hourly salary",
+  "fe_20": "Please input hire date",
+  "fe_21": "Please input year of working"
 }

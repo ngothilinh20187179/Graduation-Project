@@ -272,7 +272,7 @@ namespace EnglishCenterManagement.Controllers
         #region
         // GET: /position_list
         [HttpGet("position_list")]
-        [Authorize(Roles = "Admin, Staff")]
+        [Authorize(Roles = nameof(RoleType.Admin))]
         public ActionResult<ICollection<PositionModel>> GetBasicPositionList()
         {
             var user = GetUserByClaim();

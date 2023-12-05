@@ -10,3 +10,7 @@ export const loginApi = (data: LoginRequestBody): Promise<AxiosResponse> => {
 export const refreshTokenApi = (data: TokenInfo): Promise<AxiosResponse> => {
   return api.post(AuthEndpoints.REFRESH_TOKEN(), data);
 };
+
+export const logoutApi = (): Promise<AxiosResponse> => {
+  return api.post(AuthEndpoints.LOGOUT());
+};

@@ -21,10 +21,14 @@ const errorInterceptor = async (axiosError: AxiosError) => {
     });
     return Promise.reject(axiosError);
   }
+  if (axiosError.code === AXIOS_ERROR_CODE.ERR_NETWORK) {
+    router.navigate(AuthPathsEnum.REFUSED_CONNECTION);
+  }
   const statusCode = axiosError?.response?.status;
 
   switch (statusCode) {
     case 400: // Bad request
+    case 409: // Conflict
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore:next-line
       const { message } = axiosError.response?.data;

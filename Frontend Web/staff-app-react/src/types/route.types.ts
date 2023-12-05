@@ -7,3 +7,7 @@ export type RouteItem = {
   path: string;
   component: RouteComponent;
 };
+
+export type RouteWrapperConfig = {
+  isPrivateRoutes?: boolean;
+};

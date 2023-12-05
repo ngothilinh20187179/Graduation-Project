@@ -6,13 +6,14 @@ import {
   LoginResponse,
   TokenInfo,
 } from "../types/auth.types";
-import { loginApi, refreshTokenApi } from "../staff_auth";
+import { loginApi, logoutApi, refreshTokenApi } from "../staff_auth";
 import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
 
 const initialState: AuthState = {
   tokenInfo: null,
   role: null,
+  userId: null,
 };
 
 export const login = createAsyncThunk(
@@ -30,6 +31,11 @@ export const refreshToken = createAsyncThunk(
     return response.data.data;
   }
 );
+
+export const logout = createAsyncThunk(`${AUTH_KEY}/logout`, async () => {
+  const response = await logoutApi();
+  return response.data.data;
+});
 
 const authSlice = createSlice({
   name: AUTH_KEY,
@@ -52,13 +58,14 @@ const authSlice = createSlice({
         state.tokenInfo = action.payload;
         state.role = action.payload.role;
         localStorage.setItem("accessToken", action.payload.accessToken);
+        localStorage.setItem("userId", action.payload.userId);
       }
     );
 
     // REFRESH TOKEN
     builder.addCase(refreshToken.pending, (state) => {
       state.tokenInfo = null;
-      localStorage.clear();
+      // localStorage.clear();
     });
     builder.addCase(
       refreshToken.fulfilled,
@@ -67,6 +74,10 @@ const authSlice = createSlice({
         localStorage.setItem("accessToken", action.payload.accessToken);
       }
     );
+    builder.addCase(logout.pending, (state) => {
+      state.tokenInfo = null;
+      localStorage.clear();
+    });
   },
 });
 

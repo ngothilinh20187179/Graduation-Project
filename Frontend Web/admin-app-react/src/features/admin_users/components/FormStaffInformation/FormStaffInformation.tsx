@@ -9,7 +9,6 @@ import {
   Select,
   Space,
   Spin,
-  Tooltip,
   Typography,
 } from "antd";
 import { useForm } from "antd/es/form/Form";
@@ -151,12 +150,10 @@ const FormStaffInformation = ({
                 name="password"
                 rules={[...passwordRules(mess.fe_4)]}
               >
-                <Tooltip title="Enter if you want to change the staff's password">
                   <Input.Password
                     allowClear
                     placeholder="Enter if you want to change the staff's password"
                   />
-                </Tooltip>
               </Form.Item>
             ) : (
               <Form.Item
