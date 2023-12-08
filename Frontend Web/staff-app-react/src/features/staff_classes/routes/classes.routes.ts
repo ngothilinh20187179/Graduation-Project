@@ -58,6 +58,14 @@ const CLASS_DETAIL_SCREEN: RouteItem = {
   component: lazy(() => import("../screens/ClassDetailScreen/ClassDetailScreen")),
 };
 
+const CREATE_CLASS_SCREEN: RouteItem = {
+  id: "staff-classes-create-class",
+  path: ClassesRoutePaths.CREATE_CLASS,
+  component: lazy(
+    () => import("../screens/CreateClassScreen/CreateClassScreen")
+  ),
+};
+
 export const CLASSES_ROUTES = [
   SUBJECTS_SCREEN,
   EDIT_SUBJECT_SCREEN,
@@ -67,4 +75,5 @@ export const CLASSES_ROUTES = [
   EDIT_ROOM_SCREEN,
   CLASSES_SCREEN,
   CLASS_DETAIL_SCREEN,
+  CREATE_CLASS_SCREEN,
 ];

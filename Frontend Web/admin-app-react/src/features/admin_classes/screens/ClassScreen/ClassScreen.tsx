@@ -12,6 +12,7 @@ import {
   ClassesPaths,
   getClasses,
 } from "features/admin_classes/admin_classes";
+import { numberWithCommas } from "helpers/utils.helper";
 
 const ClassScreen = () => {
   const dispatch = useAppDispatch();
@@ -29,7 +30,7 @@ const ClassScreen = () => {
     return classes?.data?.map((item, index) => ({
       ...item,
       index: index + 1,
-      credit: `${item.credit} (VNĐ)`,
+      credit: `${numberWithCommas(item.credit)} (VNĐ)`,
       action: (
         <Button
           onClick={() => navigate(ClassesPaths.GET_CLASS(Number(item.id)))}

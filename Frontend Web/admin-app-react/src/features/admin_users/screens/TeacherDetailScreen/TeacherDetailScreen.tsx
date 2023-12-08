@@ -8,7 +8,7 @@ import { RootState } from "redux/root-reducer";
 import { unwrapResult } from "@reduxjs/toolkit";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import Title from "antd/es/typography/Title";
-import { getTimeUTC } from "helpers/utils.helper";
+import { getTimeUTC, numberWithCommas } from "helpers/utils.helper";
 import { UserPaths, getStaffById, getTeacherById } from "features/admin_users/admin_users";
 import styles from "./TeacherDetailScreen.module.scss";
 
@@ -103,7 +103,7 @@ const TeacherDetailScreen = () => {
             {teacher?.note}
           </Descriptions.Item>
           <Descriptions.Item label="Hour Salary">
-            {teacher?.hourlySalary} VNĐ/h
+            {numberWithCommas(Number(teacher?.hourlySalary))} VNĐ/h
           </Descriptions.Item>
           <Descriptions.Item label="Created On">
             {getTimeUTC(teacher?.createdOn)}

@@ -44,6 +44,16 @@ namespace EnglishCenterManagement.Controllers
             return Ok(new ApiReponse(listSubjects));
         }
 
+        // GET: /open-subjects
+        [HttpGet("open-subjects")]
+        public ActionResult<ICollection<BasicSubjectDto>> GetOpenSubjects()
+        {
+            var listSubjects = _subjectRoomRepository.GetOpenSubjects();
+            var mappedListSubjects = _mapper.Map<List<BasicSubjectDto>>(listSubjects);
+
+            return Ok(new ApiReponse(mappedListSubjects));
+        }
+
         // GET: /subject/5
         [HttpGet("subject/{id}")]
         public ActionResult<SubjectDto> GetSubjectById(int id)

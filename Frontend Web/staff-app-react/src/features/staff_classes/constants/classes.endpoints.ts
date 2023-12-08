@@ -8,6 +8,7 @@ const ClassesEndpoints = {
     return `/classes?search=${search}&page=${page}&pageSize=${pageSize}`;
   },
   GET_CLASS: (id: number) => `/class/${id}`,
+  CREATE_CLASS_INFO: () => `/create-class`,
   GET_SUBJECTS: ({ page, pageSize, search }: RequestParams) => {
     if (search === undefined || search === "") {
       return `/subjects?page=${page}&pageSize=${pageSize}`;
@@ -15,6 +16,7 @@ const ClassesEndpoints = {
     return `/subjects?search=${search}&page=${page}&pageSize=${pageSize}`;
   },
   GET_SUBJECT: (id: number) => `/subject/${id}`,
+  GET_OPEN_SUBJECTS: () => `/open-subjects`,
   CREATE_SUBJECT: () => `create-subject`,
   UPDATE_SUBJECT: (id: number) =>  `update-subject/${id}`,
   DELETE_SUBJECT: (id: number) => `/remove-subject/${id}`,

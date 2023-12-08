@@ -8,6 +8,7 @@ namespace EnglishCenterManagement.Dtos.ClassRoomDtos
         public DateOnly ClassStartDate { get; set; }
         public DateOnly? ClassEndDate { get; set; }
         public int NumberOfStudents { get; set; }
+        public int NumberOfSessions { get; set; }
         public double Credit { get; set; }
         public string? Note { get; set; }
         public ClassStatusType ClassStatus { get; set; } = ClassStatusType.NotStart;

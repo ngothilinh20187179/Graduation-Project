@@ -18,6 +18,7 @@ namespace EnglishCenterManagement.Interfaces
 
         // room
         PagedResponse GetAllRooms(string? search, RoomStatusType? roomStatus, int page, int pageSize);
+        ICollection<SubjectModel> GetOpenSubjects();
         RoomModel GetRoomById(int id);
         bool CheckRoomExists(string name);
         bool CheckRoomExists(int id, string name);

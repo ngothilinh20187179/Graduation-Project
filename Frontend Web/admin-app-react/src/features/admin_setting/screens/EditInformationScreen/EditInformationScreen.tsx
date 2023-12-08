@@ -1,7 +1,6 @@
 import { Breadcrumb } from "antd";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import {
-  SettingPaths,
   changeInformation,
   getMyProfile,
 } from "features/admin_setting/admin_setting";
@@ -41,12 +40,6 @@ const EditInformationScreen = () => {
           onClick={() => navigate(TopPaths.TOP())}
         >
           <HomeOutlined />
-        </Breadcrumb.Item>
-        <Breadcrumb.Item
-          className="cursor-pointer"
-          onClick={() => navigate(SettingPaths.SETTING())}
-        >
-          Settings
         </Breadcrumb.Item>
         <Breadcrumb.Item>Change Information</Breadcrumb.Item>
       </Breadcrumb>

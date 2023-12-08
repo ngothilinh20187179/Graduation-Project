@@ -43,6 +43,7 @@ import {
   COLUMNS_TABLE_ADMINS,
 } from "features/admin_auth/admin_auth";
 import DropdownButton from "components/DropdownButton/DropdownButton";
+import { numberWithCommas } from "helpers/utils.helper";
 
 const ClassDetailScreen = () => {
   const navigate = useNavigate();
@@ -296,7 +297,7 @@ const ClassDetailScreen = () => {
           {classDetail?.data.numberOfStudents}
         </Descriptions.Item>
         <Descriptions.Item label="Credit">
-          {classDetail?.data.credit} VNĐ
+          {numberWithCommas(Number(classDetail?.data.credit))} VNĐ
         </Descriptions.Item>
         <Descriptions.Item label="Note">
           {classDetail?.data.note}

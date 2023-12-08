@@ -20,5 +20,9 @@
   "fe_18": "Please input time of graduation",
   "fe_19": "Please input hourly salary",
   "fe_20": "Please input hire date",
-  "fe_21": "Please input year of working"
+  "fe_21": "Please input year of working",
+  "fe_22": "Please input class name!",
+  "fe_23": "Please input number of students!",
+  "fe_24": "Please input number of sessions!",
+  "fe_25": "Please input credit!"
 }

@@ -15,7 +15,6 @@ import { useForm } from "antd/es/form/Form";
 import { SubmitButton } from "components/SubmitButton";
 import {
   CreateEditStaffInfo,
-  PositionList,
   StaffDetail,
   UserPaths,
   getPositionList,
@@ -35,6 +34,7 @@ import { AxiosResponse } from "axios";
 import { GenderType } from "features/admin_auth/admin_auth";
 import dayjs from "dayjs";
 import { useAppDispatch } from "redux/store";
+import { PositionList } from "features/admin_position/admin_position";
 
 const FormStaffInformation = ({
   isEditScreen = false,

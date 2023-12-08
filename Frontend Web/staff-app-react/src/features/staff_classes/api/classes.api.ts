@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import { api } from "api/api";
 import ClassesEndpoints from "../constants/classes.endpoints";
 import { RequestParams } from "types/param.types";
-import { Room, Subject } from "../staff_classes";
+import { CreateEditClassInfo, Room, Subject } from "../staff_classes";
 
 export const getClassesApi = (
   params: RequestParams
@@ -16,10 +16,20 @@ export const getClassApi = (
   return api.get(ClassesEndpoints.GET_CLASS(id));
 };
 
+export const createClassInfoApi = (
+  data: CreateEditClassInfo
+): Promise<AxiosResponse> => {
+  return api.post(ClassesEndpoints.CREATE_CLASS_INFO(), data);
+};
+
 export const getSubjectsApi = (
   params: RequestParams
 ): Promise<AxiosResponse> => {
   return api.get(ClassesEndpoints.GET_SUBJECTS(params));
+};
+
+export const getOpenSubjectsApi = (): Promise<AxiosResponse> => {
+  return api.get(ClassesEndpoints.GET_OPEN_SUBJECTS());
 };
 
 export const getSubjectApi = (

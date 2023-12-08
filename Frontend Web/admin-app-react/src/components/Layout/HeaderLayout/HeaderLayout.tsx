@@ -12,12 +12,14 @@ import {
   AuditOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
+  KeyOutlined,
 } from "@ant-design/icons";
 import { logout } from "features/admin_auth/redux/auth.slice";
 import { AuthPathsEnum } from "features/admin_auth/admin_auth";
 import { useNavigate } from "react-router-dom";
 import { getMyAvatar } from "features/admin_users/admin_users";
 import { SettingPaths } from "features/admin_setting/admin_setting";
+import { TopPaths } from "features/admin_top/admin_top";
 
 const HeaderLayout = ({
   collapsed,
@@ -63,10 +65,16 @@ const HeaderLayout = ({
               key: "1",
               label: "My Profile",
               icon: <AuditOutlined />,
-              onClick: () => navigate(SettingPaths.MY_PROFILE()),
+              onClick: () => navigate(TopPaths.TOP()),
             },
             {
               key: "2",
+              label: "Change Password",
+              icon: <KeyOutlined />,
+              onClick: () => navigate(SettingPaths.CHANGE_PASSWORD()),
+            },
+            {
+              key: "3",
               label: "Logout",
               icon: <LogoutOutlined />,
               onClick: () => handleLogout(),

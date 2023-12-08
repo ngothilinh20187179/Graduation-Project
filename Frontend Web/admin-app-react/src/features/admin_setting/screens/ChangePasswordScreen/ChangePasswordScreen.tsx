@@ -41,12 +41,6 @@ const ChangePasswordScreen = () => {
         >
           <HomeOutlined />
         </Breadcrumb.Item>
-        <Breadcrumb.Item
-          className="cursor-pointer"
-          onClick={() => navigate(SettingPaths.SETTING())}
-        >
-          Settings
-        </Breadcrumb.Item>
         <Breadcrumb.Item>Change Password</Breadcrumb.Item>
       </Breadcrumb>
 

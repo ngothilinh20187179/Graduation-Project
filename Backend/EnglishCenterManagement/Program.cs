@@ -42,6 +42,7 @@ builder.Services.AddScoped<ISubjectRoomRepository, SubjectRoomRepository>();
 builder.Services.AddScoped<ITeacherStudentRepository, TeacherStudentRepository>();
 builder.Services.AddScoped<IExaminationRepository, ExaminationRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IPositionPermissionRepository, PositionPermissionRepository>();
 
 // Add DataContext
 builder.Services.AddDbContext<DataContext>(options =>

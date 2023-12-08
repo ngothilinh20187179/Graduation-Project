@@ -1,61 +1,59 @@
-import {
-  HomeOutlined,
-  SnippetsOutlined,
-  DeleteOutlined,
-  EditOutlined,
-} from "@ant-design/icons";
 import { Breadcrumb, Button, Pagination, Table, Typography } from "antd";
+import { TopPaths } from "features/admin_top/admin_top";
 import { memo, useEffect, useMemo, useState } from "react";
-import { useAppDispatch, useAppSelector } from "redux/store";
 import { useNavigate } from "react-router-dom";
-import { TopPaths } from "features/staff_top/staff_top";
+import { HomeOutlined } from "@ant-design/icons";
 import Search from "antd/es/input/Search";
+import { useAppDispatch, useAppSelector } from "redux/store";
 import { RootState } from "redux/root-reducer";
 import { RequestParams } from "types/param.types";
-import {
-  COLUMNS_TABLE_CLASSES,
-  ClassesPaths,
-  getClasses,
-} from "features/staff_classes/staff_classes";
+import { getPositions } from "features/admin_position/redux/position.slice";
+import { COLUMNS_TABLE_POSITIONS } from "features/admin_position/admin_position";
 import DropdownButton from "components/DropdownButton/DropdownButton";
+import {
+  EditOutlined,
+  OrderedListOutlined
+} from "@ant-design/icons";
+import { numberWithCommas } from "helpers/utils.helper";
 
-const ClassScreen = () => {
-  const dispatch = useAppDispatch();
+const PositionScreen = () => {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(20);
   const [search, setSearch] = useState<string>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const {
-    classes: { classes },
+    positions: { positions },
   } = useAppSelector((state: RootState) => state);
+  
+  useEffect(() => {
+    const params: RequestParams = {
+      page,
+      pageSize,
+      search,
+    };
+    setIsLoading(true);
+    dispatch(getPositions(params))
+      .unwrap()
+      .finally(() => setIsLoading(false));
+  }, [dispatch, page, pageSize, search]);
 
-  const classList = useMemo(() => {
-    return classes?.data?.map((item, index) => ({
-      ...item,
+  const positionList = useMemo(() => {
+    return positions?.data?.map((position, index) => ({
+      ...position,
       index: index + 1,
-      credit: `${item.credit} (VNĐ)`,
+      salaryMin: `${numberWithCommas(position.salaryMin)} (VNĐ)`,
+      salaryMax: `${numberWithCommas(position.salaryMax)} (VNĐ)`,
+      hourlyRate: `${numberWithCommas(position.hourlyRate)} (VNĐ)`,
       action: (
         <DropdownButton
           menuProps={{
             items: [
               {
                 key: "1",
-                label: (
-                  <>
-                    <Typography>
-                      <span>
-                        <SnippetsOutlined />
-                      </span>{" "}
-                      Detail
-                    </Typography>
-                  </>
-                ),
-                onClick: () => navigate(ClassesPaths.GET_CLASS(Number(item.id))),
-              },
-              {
-                key: "2",
                 label: (
                   <>
                     <Typography>
@@ -67,6 +65,19 @@ const ClassScreen = () => {
                   </>
                 ),
               },
+              {
+                key: "2",
+                label: (
+                  <>
+                    <Typography style={{maxWidth: 130}}>
+                      <span>
+                        <OrderedListOutlined />
+                      </span>{" "}
+                      Decentralize authority
+                    </Typography>
+                  </>
+                ),
+              },
             ],
           }}
         >
@@ -74,20 +85,9 @@ const ClassScreen = () => {
         </DropdownButton>
       ),
     }));
-  }, [classes?.data, navigate]);
+  }, [positions?.data, navigate]);
 
-  useEffect(() => {
-    const params: RequestParams = {
-      page,
-      pageSize,
-      search,
-    };
-    setIsLoading(true);
-    dispatch(getClasses(params))
-      .unwrap()
-      .finally(() => setIsLoading(false));
-  }, [dispatch, page, pageSize, search]);
-
+  
   return (
     <div className="pt-30 pl-55 pr-55">
       <Breadcrumb className="pb-20 font-18">
@@ -97,14 +97,12 @@ const ClassScreen = () => {
         >
           <HomeOutlined />
         </Breadcrumb.Item>
-        <Breadcrumb.Item>Classes</Breadcrumb.Item>
+        <Breadcrumb.Item>Positions</Breadcrumb.Item>
       </Breadcrumb>
       <div className="flex-space-between-center">
-        <Typography>
-          Total: There are {classes?.totalRecords} classes
-        </Typography>
+        <Typography>Total: There are {positions?.totalRecords} positions</Typography>
         <Search
-          placeholder="classname"
+          placeholder="position's name"
           allowClear
           enterButton
           size="large"
@@ -114,9 +112,8 @@ const ClassScreen = () => {
         <Button
           type="primary"
           style={{ height: 40 }}
-          onClick={() => navigate(ClassesPaths.CREATE_CLASS())}
         >
-          New Class
+          New Position
         </Button>
       </div>
       <Table
@@ -124,20 +121,20 @@ const ClassScreen = () => {
         rowKey="id"
         size="small"
         loading={isLoading}
-        columns={COLUMNS_TABLE_CLASSES()}
-        dataSource={classList}
+        columns={COLUMNS_TABLE_POSITIONS()}
+        dataSource={positionList}
         pagination={false}
         className="mt-20"
         scroll={{ y: 320, x: 400 }}
       />
       <Pagination
         className="flex-justify-center mt-20"
-        current={classes?.pageNumber}
+        current={positions?.pageNumber}
         onChange={(newPage) => setPage(newPage)}
-        total={Number(classes?.totalPages) * 10}
+        total={Number(positions?.totalPages) * 10}
       />
     </div>
   );
 };
 
-export default memo(ClassScreen);
+export default memo(PositionScreen);

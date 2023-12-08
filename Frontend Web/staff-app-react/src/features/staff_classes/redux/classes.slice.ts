@@ -2,14 +2,17 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import CLASSES_KEY from "../constants/classes.keys";
 import {
   ClassesState,
+  CreateEditClassInfo,
   Room,
   Subject,
+  createClassInfoApi,
   createRoomApi,
   createSubjectApi,
   deleteRoomApi,
   deleteSubjectApi,
   getClassApi,
   getClassesApi,
+  getOpenSubjectsApi,
   getRoomApi,
   getRoomsApi,
   getSubjectApi,
@@ -33,6 +36,14 @@ export const getSubjects = createAsyncThunk(
   async (params: RequestParams) => {
     const response = await getSubjectsApi(params);
     return response.data.data;
+  }
+);
+
+export const getOpenSubjects = createAsyncThunk(
+  `${CLASSES_KEY}/getOpenSubjects`,
+  async () => {
+    const response = await getOpenSubjectsApi();
+    return response.data;
   }
 );
 
@@ -117,6 +128,13 @@ export const getClass = createAsyncThunk(
   async (id: number) => {
     const response = await getClassApi(id);
     return response.data;
+  }
+);
+
+export const createClassInfo = createAsyncThunk(
+  `${CLASSES_KEY}/createClassInfo`,
+  async (data: CreateEditClassInfo) => {
+    return createClassInfoApi(data);
   }
 );
 

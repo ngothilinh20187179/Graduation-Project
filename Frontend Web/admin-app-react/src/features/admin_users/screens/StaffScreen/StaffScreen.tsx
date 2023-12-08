@@ -5,7 +5,6 @@ import {
   UnlockOutlined,
   SnippetsOutlined,
   UserOutlined,
-  OrderedListOutlined,
 } from "@ant-design/icons";
 import {
   Avatar,
@@ -137,20 +136,6 @@ const StaffScreen = () => {
                   setStaffIdSelected(Number(staff.id));
                   setStaffStatusSelected(staff.userStatus);
                 },
-              },
-              {
-                key: "4",
-                label: (
-                  <>
-                    <Typography style={{maxWidth: 130}}>
-                      <span>
-                        <OrderedListOutlined />
-                      </span>{" "}
-                      Decentralize authority
-                    </Typography>
-                  </>
-                ),
-                onClick: () => navigate(UserPaths.EDIT_STAFF(staff.id))
               },
             ],
           }}

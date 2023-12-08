@@ -10,6 +10,12 @@ export type Subject = {
   note: string | null;
 };
 
+export type BasicSubjects = {
+  id: number;
+  subjectName: string;
+  subjectDescription: string;
+};
+
 export interface GetAllSubjectsResponse extends PaginationResponse {
   data: Subject[];
 }
@@ -69,6 +75,11 @@ export type GetClassResponse = {
     teachers?: BasicTeacherInfo[];
   };
 }
+
+export type CreateEditClassInfo = Class & {
+  note: string | null;
+  classStatus: ClassStatusType;
+} 
 
 export interface ClassesState {
   classes: GetAllClassesResponse | null;

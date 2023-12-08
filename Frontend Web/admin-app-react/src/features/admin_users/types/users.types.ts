@@ -98,11 +98,6 @@ export type StudentDetail = BasicUserInfo &
 
 export type CreateEditStudentInfo = AdminInformation & StudentInfo;
 
-export type PositionList = {
-  id: number;
-  name: string;
-}
-
 export interface GetAllAdminsResponse extends PaginationResponse {
   data: (BasicUserInfo & {
     avatar: UserAvatar | null;

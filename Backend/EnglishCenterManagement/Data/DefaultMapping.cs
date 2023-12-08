@@ -47,6 +47,7 @@ namespace EnglishCenterManagement.Data
             CreateMap<RoomModel, RoomDto>();
             CreateMap<CreateUpdateRoomDto, RoomModel>();
             CreateMap<SubjectModel, SubjectDto>();
+            CreateMap<SubjectModel, BasicSubjectDto>();
             CreateMap<CreateUpdateSubjectDto, SubjectModel>();
 
             CreateMap<ClassModel, BasicClassRoomInfoDto>();
@@ -74,6 +75,7 @@ namespace EnglishCenterManagement.Data
             CreateMap<UserInfoModel, UserNotificationDto>();
 
             CreateMap<PositionModel, BasicPositionDto>();
+            CreateMap<PositionModel, PositionInfoDto>();
         }
     }
 }

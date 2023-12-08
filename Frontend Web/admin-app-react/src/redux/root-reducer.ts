@@ -4,6 +4,8 @@ import { classesReducer } from "features/admin_classes/admin_classes";
 import CLASSES_KEY from "features/admin_classes/constants/classes.keys";
 import { notificationReducer } from "features/admin_notification/admin_notification";
 import NOTIFICATION_KEY from "features/admin_notification/constants/notification.keys";
+import POSITIONS_KEY from "features/admin_position/constants/positions.keys";
+import { positionsReducer } from "features/admin_position/redux/position.slice";
 import { settingReducer } from "features/admin_setting/admin_setting";
 import SETTING_KEY from "features/admin_setting/constants/setting.keys";
 import { usersReducer } from "features/admin_users/admin_users";
@@ -15,7 +17,8 @@ const rootReducer = combineReducers({
   [AUTH_KEY]: authReducer,
   [SETTING_KEY]: settingReducer,
   [CLASSES_KEY]: classesReducer,
-  [NOTIFICATION_KEY]: notificationReducer
+  [NOTIFICATION_KEY]: notificationReducer,
+  [POSITIONS_KEY]: positionsReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

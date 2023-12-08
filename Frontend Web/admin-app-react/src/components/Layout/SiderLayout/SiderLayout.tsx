@@ -5,18 +5,18 @@ import styles from "./SiderLayout.module.scss";
 import cx from "classnames";
 import {
   DingdingOutlined,
-  SettingOutlined,
+  ApartmentOutlined,
   UserOutlined,
   BellOutlined,
   BookOutlined,
   BarChartOutlined,
 } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
-import { SettingPaths } from "features/admin_setting/admin_setting";
 import { TopPaths } from "features/admin_top/admin_top";
 import { UserPaths } from "features/admin_users/admin_users";
 import { ClassesPaths } from "features/admin_classes/admin_classes";
 import { NotificationPaths } from "features/admin_notification/admin_notification";
+import { PositionPaths } from "features/admin_position/admin_position";
 
 // TODO: còn 1 vđ là khi navigate ở các screen khác thì sider ko update
 
@@ -50,7 +50,8 @@ const items: MenuProps["items"] = [
     getItem("Classes", ClassesPaths.CLASSES()),
   ]),
   getItem("Statistical", "statisticalKey", <BarChartOutlined />),
-  getItem("Settings", SettingPaths.SETTING(), <SettingOutlined />),
+  getItem("Position", PositionPaths.POSITIONS(), <ApartmentOutlined />),
+  // getItem("Settings", SettingPaths.SETTING(), <SettingOutlined />),
 ];
 
 const SiderLayout = ({ collapsed }: { collapsed: boolean }) => {

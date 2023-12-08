@@ -99,6 +99,10 @@ namespace EnglishCenterManagement.Repository
 
             return new PagedResponse(data, totalSubjects, page, pageSize);
         }
+        public ICollection<SubjectModel> GetOpenSubjects()
+        {
+            return _context.Subjects.ToList();
+        }
         public SubjectModel GetSubjectById(int id)
         {
             return _context.Subjects.Where(x => x.Id == id).FirstOrDefault();
