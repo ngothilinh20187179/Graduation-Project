@@ -34,6 +34,10 @@ namespace EnglishCenterManagement.Repository
 
             return new PagedResponse(data, totalPositions, page, pageSize);
         }
+        public PositionModel GetPositionById(int id)
+        {
+            return _context.Positions.Where(x => x.Id == id).FirstOrDefault();
+        }
         public bool CreatePosition(PositionModel position)
         {
             _context.Add(position);
@@ -43,6 +47,14 @@ namespace EnglishCenterManagement.Repository
         {
             _context.Update(position);
             return SaveChange();
+        }
+        public bool CheckPositionNameExists(string name)
+        {
+            return _context.Positions.Any(x => x.Name == name);
+        }
+        public bool CheckPositionNameExists(int id, string name)
+        {
+            return _context.Positions.Any(x => x.Name == name && x.Id != id);
         }
         public bool SaveChange()
         {

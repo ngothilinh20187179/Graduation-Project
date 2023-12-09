@@ -7,19 +7,23 @@ export type PositionList = {
 }
 
 export type Position = {
-  id: number;
+  id?: number;
   name: string;
   salaryMin: number;
   salaryMax: number;
   hourlyRate: number;
-  createdOn: string;
+  createdOn?: string;
 }
 
 export interface GetAllPositionResponse extends PaginationResponse {
   data: Position[];
 }
 
+export interface GetPositionResponse {
+  data: Position
+}
+
 export interface PositionsState {
   positions: GetAllPositionResponse | null;
-
+  position: GetPositionResponse | null;
 }

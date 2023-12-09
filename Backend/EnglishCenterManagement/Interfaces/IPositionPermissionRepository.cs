@@ -6,8 +6,11 @@ namespace EnglishCenterManagement.Interfaces
     public interface IPositionPermissionRepository
     {
         PagedResponse GetAllPositions(string? search, int page, int pageSize);
+        PositionModel GetPositionById(int id);
         bool CreatePosition(PositionModel position);
         bool UpdatePosition(PositionModel position);
+        bool CheckPositionNameExists(string name);
+        bool CheckPositionNameExists(int id, string name);
         bool SaveChange();
     }
 }

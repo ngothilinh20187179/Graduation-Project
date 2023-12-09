@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "redux/store";
 import { RootState } from "redux/root-reducer";
 import { RequestParams } from "types/param.types";
 import { getPositions } from "features/admin_position/redux/position.slice";
-import { COLUMNS_TABLE_POSITIONS } from "features/admin_position/admin_position";
+import { COLUMNS_TABLE_POSITIONS, PositionPaths } from "features/admin_position/admin_position";
 import DropdownButton from "components/DropdownButton/DropdownButton";
 import {
   EditOutlined,
@@ -64,6 +64,8 @@ const PositionScreen = () => {
                     </Typography>
                   </>
                 ),
+                onClick: () =>
+                  navigate(PositionPaths.EDIT_POSITION(Number(position.id))),
               },
               {
                 key: "2",
@@ -112,6 +114,7 @@ const PositionScreen = () => {
         <Button
           type="primary"
           style={{ height: 40 }}
+          onClick={() => navigate(PositionPaths.CREATE_POSITION())}
         >
           New Position
         </Button>

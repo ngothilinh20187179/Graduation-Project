@@ -76,6 +76,7 @@ namespace EnglishCenterManagement.Data
 
             CreateMap<PositionModel, BasicPositionDto>();
             CreateMap<PositionModel, PositionInfoDto>();
+            CreateMap<CreateUpdatePositionDto, PositionModel>();
         }
     }
 }
