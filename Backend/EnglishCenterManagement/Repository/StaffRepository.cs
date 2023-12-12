@@ -60,10 +60,6 @@ namespace EnglishCenterManagement.Repository
             return position.Name;
         }
 
-        public ICollection<PositionModel> GetBasicPositionList()
-        {
-            return _context.Positions.ToList();
-        }
 
         public bool SaveChange()
         {

@@ -79,6 +79,8 @@ const PositionScreen = () => {
                     </Typography>
                   </>
                 ),
+                onClick: () =>
+                navigate(PositionPaths.DECENTRALIZE_AUTHORITY(Number(position.id)), { state: { positionName: position.name } }),
               },
             ],
           }}

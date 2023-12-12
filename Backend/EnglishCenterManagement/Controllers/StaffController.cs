@@ -269,29 +269,6 @@ namespace EnglishCenterManagement.Controllers
         }
         #endregion
 
-        #region
-        // GET: /position_list
-        [HttpGet("position_list")]
-        [Authorize(Roles = nameof(RoleType.Admin))]
-        public ActionResult<ICollection<PositionModel>> GetBasicPositionList()
-        {
-            var user = GetUserByClaim();
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-            if (user.UserStatus == UserStatusType.Lock)
-            {
-                return Unauthorized(new ApiReponse(999));
-            }
-
-            var positionList = _staffRepository.GetBasicPositionList();
-            var mapPositionList = _mapper.Map<List<BasicPositionDto>>(positionList);
-
-            return Ok(new ApiReponse(mapPositionList));
-        }
-        #endregion
-
         private UserInfoModel? GetUserByClaim()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;

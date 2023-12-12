@@ -51,10 +51,6 @@ export const createStaffInfoApi = (
   return api.post(UsersEndpoints.CREATE_STAFF(), data);
 };
 
-export const getPositionListApi = (): Promise<AxiosResponse> => {
-  return api.get(UsersEndpoints.GET_LIST_POSITION());
-};
-
 export const updateStaffInfoApi = (
   id: number,
   data: CreateEditStaffInfo

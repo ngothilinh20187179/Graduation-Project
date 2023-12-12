@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import POSITIONS_KEY from "../constants/positions.keys";
-import { Position, PositionsState } from "../types/position.types";
+import { DecentralizeAuthority, Position, PositionsState } from "../types/position.types";
 import { RequestParams } from "types/param.types";
-import { createPositionApi, getPositionApi, getPositionsApi, updatePositionApi } from "../api/position.api";
+import { createPositionApi, decentralizeAuthorityApi, getPermissionIdListByPositionIdApi, getPermissionListApi, getPositionApi, getPositionListApi, getPositionsApi, updatePositionApi } from "../api/position.api";
 
 const initialState: PositionsState = {
   positions: null,
@@ -39,6 +39,39 @@ export const updatePosition = createAsyncThunk(
     return updatePositionApi(Number(id), fields );
   }
 );
+
+export const getPositionList = createAsyncThunk(
+  `${POSITIONS_KEY}/getPositionList`,
+  async () => {
+    const response = await getPositionListApi();
+    return response.data;
+  }
+);
+
+export const getPermissionList = createAsyncThunk(
+  `${POSITIONS_KEY}/getPermissionList`,
+  async () => {
+    const response = await getPermissionListApi();
+    return response.data;
+  }
+);
+
+export const getPermissionIdListByPositionId = createAsyncThunk(
+  `${POSITIONS_KEY}/getPermissionIdListByPositionId`,
+  async (id: number) => {
+    const response = await getPermissionIdListByPositionIdApi(id);
+    return response.data;
+  }
+);
+
+export const decentralizeAuthority = createAsyncThunk(
+  `${POSITIONS_KEY}/decentralizeAuthority`,
+  async (data: DecentralizeAuthority) => {
+    const { id, listPermissionId } = data
+    return decentralizeAuthorityApi(id, listPermissionId );
+  }
+);
+
 
 const positionsSlice = createSlice({
   name: POSITIONS_KEY,

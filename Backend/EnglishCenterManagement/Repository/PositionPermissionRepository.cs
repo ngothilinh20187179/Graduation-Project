@@ -12,6 +12,8 @@ namespace EnglishCenterManagement.Repository
         {
             _context = context;
         }
+
+        // position
         public PagedResponse GetAllPositions(string? search, int page, int pageSize)
         {
             var allPositions = _context.Positions.AsQueryable();
@@ -34,6 +36,10 @@ namespace EnglishCenterManagement.Repository
 
             return new PagedResponse(data, totalPositions, page, pageSize);
         }
+        public ICollection<PositionModel> GetBasicPositionList()
+        {
+            return _context.Positions.ToList();
+        }
         public PositionModel GetPositionById(int id)
         {
             return _context.Positions.Where(x => x.Id == id).FirstOrDefault();
@@ -55,6 +61,32 @@ namespace EnglishCenterManagement.Repository
         public bool CheckPositionNameExists(int id, string name)
         {
             return _context.Positions.Any(x => x.Name == name && x.Id != id);
+        }
+
+        // permission
+        public ICollection<PermissionModel> GetAllPermissions()
+        {
+            return _context.Permissions.ToList();
+        }
+        public PermissionModel GetPermissionById(int id)
+        {
+            return _context.Permissions.Where(x => x.Id == id).FirstOrDefault();
+        }
+
+        // permission-position
+        public ICollection<PermissionPositionModel> GetPermissionPositionByPositionId(int id)
+        {
+            return _context.PermissionPositions.Where(x => x.PositionId == id).ToList();
+        }
+        public bool DeletePositionPermission(PermissionPositionModel positionPermission)
+        {
+            _context.Remove(positionPermission);
+            return SaveChange();
+        }
+        public bool CreatePositionPermission(PermissionPositionModel positionPermission)
+        {
+            _context.Add(positionPermission);
+            return SaveChange();
         }
         public bool SaveChange()
         {

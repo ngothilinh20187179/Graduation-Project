@@ -1,7 +1,11 @@
 import { PaginationResponse } from "types/pagination.types";
 
-
 export type PositionList = {
+  id: number;
+  name: string;
+}
+
+export type PermissionList = {
   id: number;
   name: string;
 }
@@ -21,6 +25,11 @@ export interface GetAllPositionResponse extends PaginationResponse {
 
 export interface GetPositionResponse {
   data: Position
+}
+
+export type DecentralizeAuthority = {
+  id: number;
+  listPermissionId: number[];
 }
 
 export interface PositionsState {

@@ -24,8 +24,17 @@ const CREATE_POSITION_SCREEN: RouteItem = {
   ),
 };
 
+const DECENTRALIZE_AUTHORITY_SCREEN: RouteItem = {
+  id: "admin-decentralize-authority-position",
+  path: PositionRoutePaths.DECENTRALIZE_AUTHORITY,
+  component: lazy(
+    () => import("../screens/DecentralizeAuthorityScreen/DecentralizeAuthorityScreen")
+  ),
+};
+
 export const POSITION_ROUTES = [
     POSITION_SCREEN,
     EDIT_POSITION_SCREEN,
-    CREATE_POSITION_SCREEN
+    CREATE_POSITION_SCREEN,
+    DECENTRALIZE_AUTHORITY_SCREEN
 ];

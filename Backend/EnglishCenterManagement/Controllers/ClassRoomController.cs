@@ -228,11 +228,13 @@ namespace EnglishCenterManagement.Controllers
 
             return StatusCode(StatusCodes.Status201Created);
         }
+       
+        // TODO PUT: edit-class/id
         #endregion
 
         #region CLASS - REFERENCE
-        
-        // TODO: CHECK SCHEDULE
+
+        // TODO: CHECK SCHEDULE // add thủ công
         [HttpPost("add-teacher-to-class")]
         [Authorize(Roles = nameof(RoleType.Staff))]
         public ActionResult AddTeacherToClass([FromBody] AddTeacherClassDto addTeacherClassDto)
@@ -277,9 +279,9 @@ namespace EnglishCenterManagement.Controllers
 
             return StatusCode(StatusCodes.Status201Created);
         }
-
+        
+        // TODO: sắp xếp tkb
         // TODO: => cần API get room trống tại period và dayofweek nào đó (ko tính các class đã end hay stop)
-        // TODO PUT: edit-class/id
         // TODO DELETE: /remove-student/5
         // TODO POST: /add-student-class
         #endregion

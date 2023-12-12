@@ -17,7 +17,6 @@ import {
   CreateEditStaffInfo,
   StaffDetail,
   UserPaths,
-  getPositionList,
 } from "features/admin_users/admin_users";
 import { getTimeUTC } from "helpers/utils.helper";
 import {
@@ -34,7 +33,7 @@ import { AxiosResponse } from "axios";
 import { GenderType } from "features/admin_auth/admin_auth";
 import dayjs from "dayjs";
 import { useAppDispatch } from "redux/store";
-import { PositionList } from "features/admin_position/admin_position";
+import { PositionList, getPositionList } from "features/admin_position/admin_position";
 
 const FormStaffInformation = ({
   isEditScreen = false,
@@ -76,7 +75,7 @@ const FormStaffInformation = ({
         : null,
       hireDate: staffInfo?.hireDate ? dayjs(staffInfo?.hireDate) : null,
     });
-  }, [form, staffInfo]);
+  }, [form, staffInfo, dispatch, isEditScreen]);
 
   const handleSubmit = () => {
     setIsSubmitting(true);

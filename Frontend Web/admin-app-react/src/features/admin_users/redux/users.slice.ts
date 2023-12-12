@@ -15,7 +15,6 @@ import {
   getAdminByIdApi,
   getAdminsApi,
   getMyAvatarApi,
-  getPositionListApi,
   getStaffByIdApi,
   getStaffsApi,
   getStudentByIdApi,
@@ -109,14 +108,6 @@ export const createStaffInfo = createAsyncThunk(
   `${USERS_KEY}/createStaffInfo`,
   async (data: CreateEditStaffInfo) => {
     return createStaffInfoApi(data);
-  }
-);
-
-export const getPositionList = createAsyncThunk(
-  `${USERS_KEY}/getPositionList`,
-  async () => {
-    const response = await getPositionListApi();
-    return response.data;
   }
 );
 

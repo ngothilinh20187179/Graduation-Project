@@ -17,23 +17,14 @@ namespace EnglishCenterManagement.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
-        private readonly IClassRoomRepository _classRoomRepository;
-        private readonly ISubjectRoomRepository _subjectRoomRepository;
-        private readonly ITeacherStudentRepository _teacherStudentRepository;
         private readonly IExaminationRepository _examinationRepository;
         public ExaminationController (
             IMapper mapper,
-            IClassRoomRepository classRoomRepository,
-            ISubjectRoomRepository subjectRoomRepository,
             IUserRepository userRepository,
-            ITeacherStudentRepository teacherStudentRepository, 
             IExaminationRepository examinationRepository)
         {
             _mapper = mapper;
             _userRepository = userRepository;
-            _classRoomRepository = classRoomRepository;
-            _subjectRoomRepository = subjectRoomRepository;
-            _teacherStudentRepository = teacherStudentRepository;
             _examinationRepository = examinationRepository;
         }
         #region Quiz

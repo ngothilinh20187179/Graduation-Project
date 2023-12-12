@@ -10,6 +10,5 @@ namespace EnglishCenterManagement.Interfaces
         bool CreateStaffProfile(StaffModel newStaff);
         bool UpdateStaffProfile(StaffModel updateStaff);
         string GetStaffPositionName(int id);
-        public ICollection<PositionModel> GetBasicPositionList();
     }
 }

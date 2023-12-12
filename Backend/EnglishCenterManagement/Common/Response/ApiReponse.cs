@@ -71,6 +71,7 @@
             [649] = "You are not receiver of this notification",
             [650] = "Position not exists",
             [651] = "Position already exists",
+            [652] = "Permission not exists",
 
             [999] = "Your account has been locked",
             [1000] = "You don't have permission to access"

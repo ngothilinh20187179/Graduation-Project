@@ -15,7 +15,7 @@ import {
 } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { SubmitButton } from "components/SubmitButton";
-import { requireRule, requireRules } from "helpers/validations.helper";
+import { requireRules } from "helpers/validations.helper";
 import { memo, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import mess from "messages/messages.json";
@@ -46,7 +46,7 @@ const CreateNotificationScreen = () => {
         setLoading(false);
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [dispatch]);
 
   const onChange = (e: CheckboxChangeEvent) => {
     setIsSentToAllUser(e.target.checked);
@@ -56,9 +56,7 @@ const CreateNotificationScreen = () => {
   const handleSendNotification = () => {
     var receiverIds: number[] = [];
     if(isSentToAllUser === true) {
-      data.map((receiver) => {
-        receiverIds.push(Number(receiver.id));
-      })
+      data.map((receiver) => receiverIds.push(Number(receiver.id)))
     }
     else {
       receiverIds = form.getFieldValue("receivers");

@@ -26,3 +26,24 @@ export const updatePositionApi = (
 ): Promise<AxiosResponse> => {
   return api.put(PositionEndpoints.UPDATE_POSITION(id), data);
 };
+
+export const getPositionListApi = (): Promise<AxiosResponse> => {
+  return api.get(PositionEndpoints.GET_LIST_POSITION());
+};
+
+export const getPermissionListApi = (): Promise<AxiosResponse> => {
+  return api.get(PositionEndpoints.GET_LIST_PERMISSION());
+};
+
+export const getPermissionIdListByPositionIdApi = (
+  id: number
+): Promise<AxiosResponse> => {
+  return api.get(PositionEndpoints.GET_PERMISSIONID_BY_POSITIONID(id));
+};
+
+export const decentralizeAuthorityApi = (
+  id: number,
+  listPermissionId: number[]
+): Promise<AxiosResponse> => {
+  return api.put(PositionEndpoints.DECENTRALIZE_AUTHORITY(id), listPermissionId);
+};

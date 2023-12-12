@@ -11,6 +11,12 @@ namespace EnglishCenterManagement.Interfaces
         bool UpdatePosition(PositionModel position);
         bool CheckPositionNameExists(string name);
         bool CheckPositionNameExists(int id, string name);
+        ICollection<PositionModel> GetBasicPositionList();
+        ICollection<PermissionModel> GetAllPermissions();
+        PermissionModel GetPermissionById(int id);
+        bool DeletePositionPermission(PermissionPositionModel positionPermission);
+        bool CreatePositionPermission(PermissionPositionModel positionPermission);
+        ICollection<PermissionPositionModel> GetPermissionPositionByPositionId(int id);
         bool SaveChange();
     }
 }

@@ -20,7 +20,6 @@ const UsersEndpoints = {
   },
   GET_STAFF: (id: number) => `/staff/${id}`,
   CREATE_STAFF: () => `/create-staff`,
-  GET_LIST_POSITION: () => `position_list`,
   EDIT_STAFF: (id: number) => `/edit-staff/${id}`,
   GET_TEACHERS: ({ page, pageSize, search }: RequestParams) => {
     if (search === undefined || search === "") {
