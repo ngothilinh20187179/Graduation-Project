@@ -2,6 +2,8 @@ import AUTH_KEY from "features/staff_auth/constants/auth.keys";
 import { authReducer } from "features/staff_auth/redux/auth.slice";
 import CLASSES_KEY from "features/staff_classes/constants/classes.keys";
 import { classesReducer } from "features/staff_classes/staff_classes";
+import FINANCE_KEY from "features/staff_finance/constants/finance.keys";
+import { financeReducer } from "features/staff_finance/staff_finance";
 import NOTIFICATION_KEY from "features/staff_notification/constants/notification.keys";
 import { notificationReducer } from "features/staff_notification/staff_notification";
 import SETTING_KEY from "features/staff_setting/constants/setting.keys";
@@ -16,6 +18,7 @@ const rootReducer = combineReducers({
   [CLASSES_KEY]: classesReducer,
   [NOTIFICATION_KEY]: notificationReducer,
   [SETTING_KEY]: settingReducer,
+  [FINANCE_KEY]: financeReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

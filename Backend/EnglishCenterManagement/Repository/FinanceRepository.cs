@@ -36,7 +36,7 @@ namespace EnglishCenterManagement.Repository
 
             return new PagedResponse(data, totalSpendings, page, pageSize);
         }
-        public SpendingModel GetAllSpendingById(int id)
+        public SpendingModel GetSpendingById(int id)
         {
             return _context.Spendings.Where(x => x.Id == id).FirstOrDefault();
         }

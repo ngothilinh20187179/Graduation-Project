@@ -51,17 +51,11 @@ export const COLUMNS_TABLE_SPENDINGS = () => [
     key: "status",
     ellipsis: true,
     width: "100px",
-    // filters: [
-    //   { text: 'Pending', value: SpendingStatusType.Pending },
-    //   { text: 'Approval', value: SpendingStatusType.Approval },
-    //   { text: 'Reject', value: SpendingStatusType.Reject },
-    // ],
-    // filterMultiple: false,
   },
   {
     title: "Action",
     dataIndex: "action",
     key: "action",
-    width: "180px",
+    width: "110px",
   },
 ];

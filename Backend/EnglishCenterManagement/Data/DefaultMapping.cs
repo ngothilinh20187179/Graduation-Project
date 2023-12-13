@@ -82,6 +82,7 @@ namespace EnglishCenterManagement.Data
             CreateMap<PermissionPositionDto, PermissionPositionModel>();
 
             CreateMap<SpendingModel, SpendingDto>();
+            CreateMap<CreateUpdateSpendingDto, SpendingModel>();
         }
     }
 }

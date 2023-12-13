@@ -1,4 +1,4 @@
-import { Tooltip, Typography } from "antd";
+import { Breadcrumb, Tooltip } from "antd";
 import { NotificationPaths } from "features/staff_notification/staff_notification";
 import { memo } from "react";
 import { Link } from "react-router-dom";
@@ -6,12 +6,22 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 import styles from "./NotificationScreen.module.scss";
 import cx from "classnames";
 import { useNavigate } from "react-router-dom";
+import { TopPaths } from "features/staff_top/staff_top";
+import { HomeOutlined } from "@ant-design/icons";
 
 const NotificationScreen = () => {
   const navigate = useNavigate();
   return (
     <div className="pl-55 pt-30">
-      <Typography className="font-24">Notifications</Typography>
+      <Breadcrumb className="font-18">
+        <Breadcrumb.Item
+          className="cursor-pointer"
+          onClick={() => navigate(TopPaths.TOP())}
+        >
+          <HomeOutlined />
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>Notifications</Breadcrumb.Item>
+      </Breadcrumb>
       <ul>
         <li className="pt-20 pb-20">
           <Link

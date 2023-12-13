@@ -129,7 +129,7 @@ const SpendingScreen = () => {
 
   return (
     <>
-      <div className="pt-30 pl-55 pr-55">
+      <div className="pt-30 pl-55 pr-20">
         <Breadcrumb className="pb-20 font-18">
           <Breadcrumb.Item
             className="cursor-pointer"

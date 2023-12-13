@@ -9,12 +9,14 @@ import {
   BellOutlined,
   DollarOutlined,
   BookOutlined,
+  ScheduleOutlined,
 } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { TopPaths } from "features/staff_top/staff_top";
 import { ClassesPaths } from "features/staff_classes/staff_classes";
 import { UserPaths } from "features/staff_users/staff_users";
 import { NotificationPaths } from "features/staff_notification/staff_notification";
+import { FinancePaths } from "features/staff_finance/staff_finance";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -44,8 +46,8 @@ const items: MenuProps["items"] = [
     getItem("Rooms", ClassesPaths.ROOMS()),
     getItem("Classes", ClassesPaths.CLASSES()),
   ]),
-  getItem("Schedule", "/schedule", <DollarOutlined />),
-  getItem("Finances", "/finances", <DollarOutlined />),
+  getItem("Schedule", "/schedule", <ScheduleOutlined />),
+  getItem("Finances", FinancePaths.FINANCE(), <DollarOutlined />),
 ];
 
 const SiderLayout = ({ collapsed }: { collapsed: boolean }) => {

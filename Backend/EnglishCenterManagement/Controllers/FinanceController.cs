@@ -63,6 +63,91 @@ namespace EnglishCenterManagement.Controllers
             return Ok(new ApiReponse(listSpendings));
         }
 
+        // GET: /spending/5
+        [HttpGet("spending/{id}")]
+        [Authorize(Roles = "Staff")]
+        public ActionResult<SpendingDto> GetSpendingById(int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+            var getSpendingById = _financeRepository.GetSpendingById(id);
+            if (getSpendingById == null)
+            {
+                return NotFound(new ApiReponse(653));
+            }
+
+            var spendingMap = _mapper.Map<SpendingDto>(getSpendingById);
+
+            return Ok(new ApiReponse(spendingMap));
+        }
+
+        // POST: /create-spending
+        [HttpPost("create-spending")]
+        [Authorize(Roles = nameof(RoleType.Staff))]
+        public ActionResult CreateSpending([FromBody] CreateUpdateSpendingDto newSpending)
+        {
+            if (newSpending == null) return BadRequest(new ApiReponse(600));
+
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            var mappedSpending = _mapper.Map<SpendingModel>(newSpending);
+            mappedSpending.StaffId = user.Id;
+            if (!_financeRepository.CreateSpending(mappedSpending))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
+        // PUT: /update-spending
+        [HttpPut("update-spending/{id}")]
+        [Authorize(Roles = nameof(RoleType.Staff))]
+        public ActionResult UpdateSpending(int id, [FromBody] CreateUpdateSpendingDto updatedSpending)
+        {
+            if (updatedSpending == null) return BadRequest(new ApiReponse(600));
+
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            var getSpendingById = _financeRepository.GetSpendingById(id);
+            if (getSpendingById == null)
+            {
+                return NotFound(new ApiReponse(653));
+            }
+
+            var mappedSpending = _mapper.Map(updatedSpending, getSpendingById);
+            if (!_financeRepository.UpdateSpending(mappedSpending))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        // PUT: /accept-or-reject-spending/5
         [HttpPut("accept-or-reject-spending/{id}")]
         [Authorize(Roles = nameof(RoleType.Admin))]
         public ActionResult AcceptOrRejectSpending([FromBody] SpendingStatusType status, int id)
@@ -80,7 +165,7 @@ namespace EnglishCenterManagement.Controllers
             {
                 return BadRequest();
             }
-            var spending = _financeRepository.GetAllSpendingById(id);
+            var spending = _financeRepository.GetSpendingById(id);
             if (spending == null)
             {
                 return NotFound(new ApiReponse(653));
@@ -90,7 +175,39 @@ namespace EnglishCenterManagement.Controllers
 
             return StatusCode(StatusCodes.Status204NoContent);
         }
+        
+        // DELETE: /remove-spending
+        [HttpDelete("remove-spending/{id}")]
+        [Authorize(Roles = "Staff")]
+        public ActionResult DeleteSpending(int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+            var getSpendingById = _financeRepository.GetSpendingById(id);
+            if (getSpendingById == null)
+            {
+                return NotFound(new ApiReponse(653));
+            }
 
+            if (getSpendingById.Status != SpendingStatusType.Pending)
+            {
+                return BadRequest();
+            }
+
+            if (!_financeRepository.DeleteSpending(getSpendingById))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return NoContent();
+        }
 
         private UserInfoModel? GetUserByClaim()
         {
