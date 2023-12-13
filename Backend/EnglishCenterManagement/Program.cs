@@ -43,6 +43,7 @@ builder.Services.AddScoped<ITeacherStudentRepository, TeacherStudentRepository>(
 builder.Services.AddScoped<IExaminationRepository, ExaminationRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IPositionPermissionRepository, PositionPermissionRepository>();
+builder.Services.AddScoped<IFinanceRepository, FinanceRepository>();
 
 // Add DataContext
 builder.Services.AddDbContext<DataContext>(options =>

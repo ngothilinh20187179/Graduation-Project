@@ -2,6 +2,7 @@
 using EnglishCenterManagement.Dtos.AuthenticationDtos;
 using EnglishCenterManagement.Dtos.ClassRoomDtos;
 using EnglishCenterManagement.Dtos.ExaminationDtos;
+using EnglishCenterManagement.Dtos.FinanceDtos;
 using EnglishCenterManagement.Dtos.NotificationsDtos;
 using EnglishCenterManagement.Dtos.PositionPermissionDtos;
 using EnglishCenterManagement.Dtos.SubjectRoomDtos;
@@ -79,6 +80,8 @@ namespace EnglishCenterManagement.Data
             CreateMap<CreateUpdatePositionDto, PositionModel>();
             CreateMap<PermissionModel, BasicPermissionDto>();
             CreateMap<PermissionPositionDto, PermissionPositionModel>();
+
+            CreateMap<SpendingModel, SpendingDto>();
         }
     }
 }

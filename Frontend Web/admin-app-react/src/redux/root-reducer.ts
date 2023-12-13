@@ -8,6 +8,8 @@ import POSITIONS_KEY from "features/admin_position/constants/positions.keys";
 import { positionsReducer } from "features/admin_position/redux/position.slice";
 import { settingReducer } from "features/admin_setting/admin_setting";
 import SETTING_KEY from "features/admin_setting/constants/setting.keys";
+import { spendingReducer } from "features/admin_spending/admin_spending";
+import SPENDINGS_KEY from "features/admin_spending/constants/spending.keys";
 import { usersReducer } from "features/admin_users/admin_users";
 import USERS_KEY from "features/admin_users/constants/users.keys";
 import { combineReducers } from "redux";
@@ -19,6 +21,7 @@ const rootReducer = combineReducers({
   [CLASSES_KEY]: classesReducer,
   [NOTIFICATION_KEY]: notificationReducer,
   [POSITIONS_KEY]: positionsReducer,
+  [SPENDINGS_KEY]: spendingReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

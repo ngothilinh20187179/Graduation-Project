@@ -72,6 +72,7 @@
             [650] = "Position not exists",
             [651] = "Position already exists",
             [652] = "Permission not exists",
+            [653] = "Spending not exist",
 
             [999] = "Your account has been locked",
             [1000] = "You don't have permission to access"
