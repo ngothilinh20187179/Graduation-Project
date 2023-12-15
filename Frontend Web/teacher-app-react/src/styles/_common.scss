@@ -1,0 +1,175 @@
+@import "./colors";
+
+.no-wrap {
+  white-space: nowrap;
+}
+
+.pre-wrap {
+  white-space: pre-wrap;
+}
+
+.no-wrap-hidden {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+// flex
+.flex {
+  display: flex;
+}
+
+.flex-align-center {
+  display: flex;
+  align-items: center !important;
+}
+
+.flex-start {
+  display: flex;
+  align-items: flex-start !important;
+}
+
+.flex-space-between {
+  display: flex;
+  justify-content: space-between !important;
+}
+
+.flex-space-around {
+  display: flex;
+  justify-content: space-around !important;
+}
+
+.flex-space-evenly {
+  display: flex;
+  justify-content: space-evenly !important;
+}
+
+.flex-justify-start {
+  display: flex;
+  justify-content: flex-start !important;
+}
+
+.flex-justify-center {
+  display: flex;
+  justify-content: center !important;
+}
+
+.flex-justify-end {
+  display: flex;
+  justify-content: flex-end !important;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-space-between-center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-align-end {
+  display: flex;
+  align-items: flex-end !important;
+}
+
+//Fonts
+@for $size from 1 through 100 {
+  .font-#{$size} {
+    font-size: #{$size}px !important;
+  }
+}
+
+// Margin
+@each $abbr, $name in ("t": "top", "r": "right", "b": "bottom", "l": "left") {
+  @for $i from 1 through 500 {
+    .m#{$abbr}-#{$i} {
+      margin-#{$name}: #{$i}px !important;
+    }
+  }
+}
+
+// Padding
+@each $abbr, $name in ("t": "top", "r": "right", "b": "bottom", "l": "left") {
+  @for $i from 1 through 500 {
+    .p#{$abbr}-#{$i} {
+      padding-#{$name}: #{$i}px !important;
+    }
+  }
+}
+
+//gap
+@for $gap from 1 through 500 {
+  .gap-#{$gap} {
+    gap: #{$gap}px !important;
+  }
+}
+
+// Cursor
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+$positions: "static", "relative", "absolute", "fixed", "sticky";
+@each $position in $positions {
+  .position-#{$position} {
+    position: #{to-lower-case(#{$position})} !important;
+  }
+}
+
+.position-center {
+  position: absolute !important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// text-decoration
+.text-underline {
+  text-decoration: underline !important;
+}
+
+//width
+.width-fit-content {
+  width: fit-content !important;
+}
+
+.full-width {
+  width: 100% !important;
+}
+
+// height
+.full-height {
+  height: 100vh !important;
+}
+
+//border
+.border-solid {
+  border: 1px solid;
+  padding: 0 8px;
+}
+
+.text-overflow {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+//link
+.text-link {
+  text-decoration: underline !important;
+  text-underline-offset: 2px;
+  color: black;
+}
+
+.text-link-blue {
+  color: $dark-blue;
+  text-decoration: none;
+  font-size: 18px;
+}

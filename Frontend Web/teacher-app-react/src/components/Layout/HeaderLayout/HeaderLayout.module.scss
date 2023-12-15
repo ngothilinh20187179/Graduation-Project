@@ -1,0 +1,14 @@
+@import "styles/_colors.scss";
+.header {
+    background-color: $dark-grey;
+    padding-inline: 30px;
+    height: 75px;
+    :global {
+        .ant-btn {
+            height: 45px;
+        }
+        .ant-image-img {
+            border-radius: 50%;
+        }
+    }
+}
