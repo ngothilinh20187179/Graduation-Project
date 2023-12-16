@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Common.Response;
+using EnglishCenterManagement.Dtos.ClassRoomDtos;
 using EnglishCenterManagement.Dtos.FinanceDtos;
+using EnglishCenterManagement.Dtos.PositionPermissionDtos;
 using EnglishCenterManagement.Dtos.SubjectRoomDtos;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
@@ -22,17 +24,20 @@ namespace EnglishCenterManagement.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IFinanceRepository _financeRepository;
         private readonly IStaffRepository _staffRepository;
+        private readonly IClassRoomRepository _classRoomRepository;
         public FinanceController(
             IMapper mapper,
             IFinanceRepository financeRepository,
             IUserRepository userRepository,
-            IStaffRepository staffRepository
+            IStaffRepository staffRepository,
+            IClassRoomRepository classRoomRepository
             )
         {
             _mapper = mapper;
             _userRepository = userRepository;
             _financeRepository = financeRepository;
             _staffRepository = staffRepository;
+            _classRoomRepository = classRoomRepository;
         }
         // GET: /spendings
         [HttpGet("spendings")]
@@ -207,6 +212,32 @@ namespace EnglishCenterManagement.Controllers
             }
 
             return NoContent();
+        }
+
+        // GET: /my-tuition-debt
+        [HttpGet("my-tuition-debt")]
+        [Authorize(Roles = nameof(RoleType.Student))]
+        public ActionResult<ICollection<MyTuitionDebtInformationDto>> GetMyTuitionDebtInformation()
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            var myTuitionDebtInformation = _financeRepository.GetMyTuitionDebtInformation(user.Id);
+            var mapMyTuitionDebtInformation = _mapper.Map<List<MyTuitionDebtInformationDto>>(myTuitionDebtInformation);
+            mapMyTuitionDebtInformation.ForEach((item) =>
+            {
+                var classInfo = _classRoomRepository.GetClassById(item.ClassId);
+                item.ClassInfo = _mapper.Map<BasicClassRoomInfoDto>(classInfo);
+            });
+
+            return Ok(new ApiReponse(mapMyTuitionDebtInformation));
         }
 
         private UserInfoModel? GetUserByClaim()

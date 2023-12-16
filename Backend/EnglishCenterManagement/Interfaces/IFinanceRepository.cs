@@ -11,6 +11,7 @@ namespace EnglishCenterManagement.Interfaces
         bool CreateSpending(SpendingModel spending);
         bool UpdateSpending(SpendingModel spending);
         bool DeleteSpending(SpendingModel spending);
+        ICollection<StudentClassModel> GetMyTuitionDebtInformation(int studentId);
         bool SaveChange();
     }
 }

@@ -55,6 +55,10 @@ namespace EnglishCenterManagement.Repository
             _context.Remove(spending);
             return SaveChange();
         }
+        public ICollection<StudentClassModel> GetMyTuitionDebtInformation(int studentId)
+        {
+            return _context.StudentClasses.Where(x => x.StudentId == studentId && x.IsPaidTuition == false).ToList();
+        }
         public bool SaveChange()
         {
             return _context.SaveChanges() > 0;

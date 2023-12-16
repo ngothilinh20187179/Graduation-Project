@@ -61,7 +61,7 @@ namespace EnglishCenterManagement.Controllers
         // GET: /position_list
         [HttpGet("position_list")]
         [Authorize(Roles = nameof(RoleType.Admin))]
-        public ActionResult<ICollection<PositionModel>> GetBasicPositionList()
+        public ActionResult<ICollection<BasicPositionDto>> GetBasicPositionList()
         {
             var user = GetUserByClaim();
             if (user == null)
