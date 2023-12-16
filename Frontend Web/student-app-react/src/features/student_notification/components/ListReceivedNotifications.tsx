@@ -229,13 +229,6 @@ const ListReceivedNotifications = () => {
                 />
               </Tooltip>
             )}
-            <Tooltip title="Reply">
-              <RollbackOutlined className={cx(styles.replyIcon, "font-18")}
-                onClick={() =>
-                  navigate(NotificationPaths.CREATE_NOTIFICATIONS())
-                }
-              />
-            </Tooltip>
             </div>}
           >
             <div className="flex-space-between flex-start">
