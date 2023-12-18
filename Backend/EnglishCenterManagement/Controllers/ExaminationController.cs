@@ -342,9 +342,37 @@ namespace EnglishCenterManagement.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
          
-        [HttpGet("my-mark")]
+        [HttpGet("my-online-test-scores")]
         [Authorize(Roles = nameof(RoleType.Student))]
-        public ActionResult<PagedResponse> GetMyMarks(int page = 1, int pageSize = 20) 
+        public ActionResult<PagedResponse> GetMyOnlineTestScores(int page = 1, int pageSize = 20) 
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
+
+            var listQuizMarks = _examinationRepository.GetQuizMarksByStudentId(user.Id, page, pageSize);
+            var mappedListQuizMarks = _mapper.Map<List<QuizMarkDto>>(listQuizMarks.Data);
+            mappedListQuizMarks.ForEach(item =>
+            {
+                item.NameQuiz = _examinationRepository.GetQuizNameById(item.QuizId);
+            });
+            listQuizMarks.Data = mappedListQuizMarks;
+
+            return Ok(new ApiReponse(listQuizMarks));
+        }
+
+        [HttpGet("my-offline-test-scores")]
+        [Authorize(Roles = nameof(RoleType.Student))]
+        public ActionResult<PagedResponse> GetMyOfflineTestScores(int page = 1, int pageSize = 20)
         {
             var user = GetUserByClaim();
             if (user == null)
@@ -361,12 +389,7 @@ namespace EnglishCenterManagement.Controllers
 
             var listMarks = _examinationRepository.GetMarksByStudentId(user.Id, page, pageSize);
             var mappedListMarks = _mapper.Map<List<MarkDto>>(listMarks.Data);
-            mappedListMarks.ForEach(item =>
-            {
-                item.Name = _examinationRepository.GetQuizNameById(item.QuizId);
-            });
             listMarks.Data = mappedListMarks;
-
             return Ok(new ApiReponse(listMarks));
         }
 

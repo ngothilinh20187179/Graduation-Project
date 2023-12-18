@@ -1,5 +1,6 @@
 import { AUTH_ROUTES } from "features/student_auth/student_auth";
 import { FINANCE_ROUTES } from "features/student_finance/routes/finance.routes";
+import { LEARNING_ROUTES } from "features/student_learning/student_learning";
 import { NOTIFICATION_ROUTES } from "features/student_notification/student_notification";
 import { SETTING_ROUTES } from "features/student_setting/routes/setting.routes";
 import { TOP_ROUTES } from "features/student_top/routes/top.routes";
@@ -13,4 +14,5 @@ export const LIST_PRIVATE_ROUTES = [
   ...NOTIFICATION_ROUTES,
   ...SETTING_ROUTES,
   ...FINANCE_ROUTES,
+  ...LEARNING_ROUTES
 ];

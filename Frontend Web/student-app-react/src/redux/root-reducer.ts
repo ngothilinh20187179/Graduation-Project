@@ -2,6 +2,8 @@ import AUTH_KEY from "features/student_auth/constants/auth.keys";
 import { authReducer } from "features/student_auth/redux/auth.slice";
 import FINANCE_KEY from "features/student_finance/constants/finance.keys";
 import { financeReducer } from "features/student_finance/redux/finance.slice";
+import LEARNING_KEY from "features/student_learning/constants/learning.keys";
+import { learningReducer } from "features/student_learning/redux/notification.slice";
 import NOTIFICATION_KEY from "features/student_notification/constants/notification.keys";
 import { notificationReducer } from "features/student_notification/student_notification";
 import SETTING_KEY from "features/student_setting/constants/setting.keys";
@@ -16,6 +18,7 @@ const rootReducer = combineReducers({
   [SETTING_KEY]: settingReducer,
   [USERS_KEY]: usersReducer,
   [FINANCE_KEY]: financeReducer,
+  [LEARNING_KEY]: learningReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

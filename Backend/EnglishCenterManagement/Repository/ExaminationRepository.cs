@@ -167,9 +167,25 @@ namespace EnglishCenterManagement.Repository
             _context.Add(mark);
             return SaveChange();
         }
+        public PagedResponse GetQuizMarksByStudentId(int studentId, int page, int pageSize)
+        {
+            var marks = _context.Marks.Where(x => x.StudentId == studentId && x.QuizId != null).AsQueryable();
+
+            #region Sorting
+            marks = marks.OrderByDescending(u => u.CreatedOn);
+            #endregion
+
+            #region Paginated
+            var data = marks.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var totalClasses = marks.Count();
+            #endregion
+
+            return new PagedResponse(data, totalClasses, page, pageSize);
+        }
+
         public PagedResponse GetMarksByStudentId(int studentId, int page, int pageSize)
         {
-            var marks = _context.Marks.Where(x => x.StudentId == studentId).AsQueryable();
+            var marks = _context.Marks.Where(x => x.StudentId == studentId && x.QuizId == null).AsQueryable();
 
             #region Sorting
             marks = marks.OrderByDescending(u => u.CreatedOn);

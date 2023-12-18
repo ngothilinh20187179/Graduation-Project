@@ -20,14 +20,12 @@ import {
   CheckCircleTwoTone,
   EyeOutlined,
   CheckOutlined,
-  RollbackOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { Card, Space } from "antd";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { RequestParams } from "types/param.types";
 import {
-  NotificationPaths,
   ReadStatusType,
   confirmReadNotification,
   deleteNotification,
@@ -38,17 +36,15 @@ import {
 import { ReceivedNotification } from "../types/notification.types";
 import { getTimeUTC } from "helpers/utils.helper";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { useNavigate } from "react-router-dom";
 import { RootState } from "redux/root-reducer";
 
 const ListReceivedNotifications = () => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [loadingDetailNoti, setLoadingDetailNoti] = useState(false);
   const [data, setData] = useState<ReceivedNotification[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(20);
+  const pageSize = 20;
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);

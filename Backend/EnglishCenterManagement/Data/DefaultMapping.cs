@@ -64,6 +64,7 @@ namespace EnglishCenterManagement.Data
             CreateMap<CreateQuestionDto, QuestionModel>();
             CreateMap<CreateAnswerDto, AnswerModel>();
             CreateMap<MarkModel, MarkDto>();
+            CreateMap<MarkModel, QuizMarkDto>();
             CreateMap<CreateMarkDto, MarkModel>();
             CreateMap<ClassModel, AssignClassDto>();
 
