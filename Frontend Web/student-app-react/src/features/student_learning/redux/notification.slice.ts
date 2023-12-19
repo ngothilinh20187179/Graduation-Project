@@ -1,12 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RequestParams } from "types/param.types";
 import LEARNING_KEY from "../constants/learning.keys";
-import { LearningState, getAllOfflineTestScoresApi, getAllOnlineTestScoresApi, getMyTestsApi } from "../student_learning";
+import { LearningState, getAllOfflineTestScoresApi, getAllOnlineTestScoresApi, getClassApi, getClassesApi, getMyTestsApi } from "../student_learning";
 
 const initialState: LearningState = {
   offlineTestScores: null,
   onlineTestScores: null,
   myTests: null,
+  classes: null,
+  classDetail: null
 };
 
 export const getAllOnlineTestScores = createAsyncThunk(
@@ -33,6 +35,22 @@ export const getMyTests = createAsyncThunk(
   }
 );
 
+export const getClasses = createAsyncThunk(
+  `${LEARNING_KEY}/getClasses`,
+  async (params: RequestParams) => {
+    const response = await getClassesApi(params);
+    return response.data.data;
+  }
+);
+
+export const getClass = createAsyncThunk(
+  `${LEARNING_KEY}/getClass`,
+  async (id: number) => {
+    const response = await getClassApi(id);
+    return response.data;
+  }
+);
+
 const learningSlice = createSlice({
   name: LEARNING_KEY,
   initialState,
@@ -55,6 +73,18 @@ const learningSlice = createSlice({
     });
     builder.addCase(getMyTests.rejected, (state) => {
       state.myTests = null;
+    });
+    builder.addCase(getClasses.fulfilled, (state, action) => {
+      state.classes = action.payload;
+    });
+    builder.addCase(getClasses.rejected, (state) => {
+      state.classes = null;
+    });
+    builder.addCase(getClass.fulfilled, (state, action) => {
+      state.classDetail = action.payload;
+    });
+    builder.addCase(getClass.rejected, (state) => {
+      state.classDetail = null;
     });
   },
 });

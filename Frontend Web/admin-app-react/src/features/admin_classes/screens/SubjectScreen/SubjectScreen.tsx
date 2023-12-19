@@ -39,7 +39,7 @@ const SubjectScreen = () => {
   const [triggerReload, setTriggerReload] = useState<boolean>(false);
 
   const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(20);
+  const pageSize = 20;
   const [search, setSearch] = useState<string>();
 
   const {

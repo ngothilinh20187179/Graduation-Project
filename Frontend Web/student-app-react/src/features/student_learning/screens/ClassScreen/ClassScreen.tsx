@@ -1,18 +1,14 @@
 import { HomeOutlined, SnippetsOutlined } from "@ant-design/icons";
-import { Breadcrumb, Button, Pagination, Table, Typography } from "antd";
+import { Badge, Breadcrumb, Button, Pagination, Table, Typography } from "antd";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { useNavigate } from "react-router-dom";
-import { TopPaths } from "features/admin_top/admin_top";
 import Search from "antd/es/input/Search";
 import { RootState } from "redux/root-reducer";
 import { RequestParams } from "types/param.types";
-import {
-  COLUMNS_TABLE_CLASSES,
-  ClassesPaths,
-  getClasses,
-} from "features/admin_classes/admin_classes";
 import { numberWithCommas } from "helpers/utils.helper";
+import { COLUMNS_TABLE_CLASSES, ClassStatusType, LearningPaths } from "features/student_learning/student_learning";
+import { getClasses } from "features/student_learning/redux/notification.slice";
 
 const ClassScreen = () => {
   const dispatch = useAppDispatch();
@@ -23,7 +19,7 @@ const ClassScreen = () => {
   const [search, setSearch] = useState<string>();
 
   const {
-    classes: { classes },
+    learning: { classes },
   } = useAppSelector((state: RootState) => state);
 
   const classList = useMemo(() => {
@@ -31,9 +27,17 @@ const ClassScreen = () => {
       ...item,
       index: index + 1,
       credit: `${numberWithCommas(item.credit)} (VNĐ)`,
+      classStatus:
+        item.classStatus === ClassStatusType.InProgress ? (
+          <Badge status="processing" text="In Progress" />
+        ) : item.classStatus === ClassStatusType.End ? (
+          <Badge status="success" text="End" />
+        ) : item.classStatus === ClassStatusType.Stop ? (
+          <Badge status="error" text="Stop" />
+        ) : (<Badge status="default" text="Not Start" />),
       action: (
         <Button
-          onClick={() => navigate(ClassesPaths.GET_CLASS(Number(item.id)))}
+          onClick={() => navigate(LearningPaths.GET_CLASS(Number(item.id)))}
         >
           <Typography>
             <span>
@@ -59,12 +63,9 @@ const ClassScreen = () => {
   }, [dispatch, page, pageSize, search]);
 
   return (
-    <div className="pt-30 pl-55 pr-55">
+    <div className="pt-30 pl-40 pr-30">
       <Breadcrumb className="pb-20 font-18">
-        <Breadcrumb.Item
-          className="cursor-pointer"
-          onClick={() => navigate(TopPaths.TOP())}
-        >
+        <Breadcrumb.Item>
           <HomeOutlined />
         </Breadcrumb.Item>
         <Breadcrumb.Item>Classes</Breadcrumb.Item>

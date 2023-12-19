@@ -48,7 +48,7 @@ const ListReceivedNotifications = () => {
   const [loadingDetailNoti, setLoadingDetailNoti] = useState(false);
   const [data, setData] = useState<ReceivedNotification[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(20);
+  const pageSize = 20;
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);

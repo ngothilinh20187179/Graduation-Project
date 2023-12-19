@@ -11,5 +11,6 @@ namespace EnglishCenterManagement.Dtos.ClassRoomDtos
         public int NumberOfStudents { get; set; }
         public int NumberOfSessions { get; set; }
         public double Credit { get; set; }
+        public ClassStatusType ClassStatus { get; set; }
     }
 }

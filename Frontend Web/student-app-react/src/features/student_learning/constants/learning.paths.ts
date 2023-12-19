@@ -3,6 +3,8 @@ export const LearningRoutePaths = {
   MARKS: "/my-offline-test-score",
   QUIZ_MARKS: "/my-online-test-scores",
   MY_TESTS: "/my-tests",
+  CLASSES: "/classes",
+  GET_CLASS: "/classes/:id",
 };
 
 export const LearningPaths = {
@@ -10,4 +12,6 @@ export const LearningPaths = {
   MARKS: () => "/my-offline-test-score",
   QUIZ_MARKS: () => "/my-online-test-scores",
   MY_TESTS: () => "/my-tests",
+  CLASSES: () => "/classes",
+  GET_CLASS: (id: number) => `/classes/${id}`,
 };

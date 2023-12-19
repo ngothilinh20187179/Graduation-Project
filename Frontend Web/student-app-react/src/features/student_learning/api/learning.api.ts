@@ -20,3 +20,15 @@ export const getMyTestsApi = (
 ): Promise<AxiosResponse> => {
   return api.get(LearningEndpoints.GET_MY_TESTS(params));
 };
+
+export const getClassesApi = (
+  params: RequestParams
+): Promise<AxiosResponse> => {
+  return api.get(LearningEndpoints.GET_MY_CLASSES(params));
+};
+
+export const getClassApi = (
+  id: number
+): Promise<AxiosResponse> => {
+  return api.get(LearningEndpoints.GET_MY_CLASS_DETAIL(id));
+};

@@ -58,7 +58,7 @@ const ClassDetailScreen = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [triggerReload, setTriggerReload] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(20);
+  const pageSize = 20;
   const [classSchedules, setClassSchedules] = useState<ClassSchedules[]>([]);
   const [teachers, setTeachers] = useState<BasicTeacherInfo[]>([]);
 

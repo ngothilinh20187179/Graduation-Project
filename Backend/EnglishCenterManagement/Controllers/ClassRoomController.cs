@@ -106,6 +106,32 @@ namespace EnglishCenterManagement.Controllers
 
             return Ok(listClassesBySubject);
         }
+        
+        // GET: /my-classes
+        [HttpGet("my-classes")]
+        [Authorize(Roles = nameof(RoleType.Student))]
+        public ActionResult<PagedResponse> GetMyClasses(string? search, int page = 1, int pageSize = 20)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
+
+            var listClassesOfStudent = _classRoomRepository.GetAllClassesOfStudent(search, user.Id, page, pageSize);
+            var mappedListClasses = _mapper.Map<List<BasicClassRoomInfoDto>>(listClassesOfStudent.Data);
+            listClassesOfStudent.Data = mappedListClasses;
+
+            return Ok(new ApiReponse(listClassesOfStudent));
+        }
 
         // GET: /student/5/classes
         [HttpGet("student/{id}/classes")]

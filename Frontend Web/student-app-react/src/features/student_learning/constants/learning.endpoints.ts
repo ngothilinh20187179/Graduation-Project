@@ -13,6 +13,13 @@ const LearningEndpoints = {
     }
     return `/my-quizzes?search=${search}&page=${page}&pageSize=${pageSize}`;
   },
+  GET_MY_CLASSES: ({ page, pageSize, search }: RequestParams) => {
+    if (search === undefined || search === "") {
+      return `/my-classes?page=${page}&pageSize=${pageSize}`;
+    }
+    return `/my-classes?search=${search}&page=${page}&pageSize=${pageSize}`;
+  },
+  GET_MY_CLASS_DETAIL: (id: number) => `/class/${id}`,
 };
 
 export default LearningEndpoints;
