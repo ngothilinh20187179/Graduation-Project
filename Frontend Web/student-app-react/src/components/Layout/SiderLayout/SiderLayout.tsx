@@ -37,7 +37,7 @@ function getItem(
 const items: MenuProps["items"] = [
   getItem("Schedule", "/schedule", <ScheduleOutlined />),
   getItem("Classes", "/classes", <BookOutlined />),
-  getItem("Tests", "/test", <FormOutlined />),
+  getItem("Tests", LearningPaths.MY_TESTS(), <FormOutlined />),
   getItem("Transcript", LearningPaths.TRANSCRIPT(), <FileDoneOutlined />),
   getItem("Tuition Debt", FinancePaths.TUITION_DEBT(), <DollarOutlined />),
   getItem("Notifications", NotificationPaths.NOTIFICATION(), <BellOutlined />),

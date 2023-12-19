@@ -21,8 +21,15 @@ const OFFLINE_TEST_SCORES_SCREEN: RouteItem = {
   component: lazy(() => import("../screens/OfflineTestScoresScreen/OfflineTestScoresScreen")),
 }; 
 
+const MY_TEST_SCREEN: RouteItem = {
+  id: "student-tests",
+  path: LearningRoutePaths.MY_TESTS,
+  component: lazy(() => import("../screens/MyTestsScreen/MyTestsScreen")),
+}; 
+
 export const LEARNING_ROUTES = [
   LEARNING_SCREEN,
   ONLINE_TEST_SCORES_SCREEN,
-  OFFLINE_TEST_SCORES_SCREEN
+  OFFLINE_TEST_SCORES_SCREEN,
+  MY_TEST_SCREEN
 ];

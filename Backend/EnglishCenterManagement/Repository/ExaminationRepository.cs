@@ -3,6 +3,7 @@ using EnglishCenterManagement.Data;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
+using System.Linq;
 
 namespace EnglishCenterManagement.Repository
 {
@@ -86,7 +87,8 @@ namespace EnglishCenterManagement.Repository
         public PagedResponse GetMyQuizzes(string? search, int studentId, int page, int pageSize)
         {
             var enrolledClassIds = _context.StudentClasses.Where(x => x.StudentId == studentId).Select(x => x.ClassId).ToList();
-            var quizIdsInClass = _context.QuizClasses.Where(x => enrolledClassIds.Contains(x.ClassId)).Select(x => x.QuizId).ToList();
+            var didQuizIds = _context.Marks.Where(x => x.StudentId == studentId && x.QuizId != null).Select(x => x.QuizId).ToList();
+            var quizIdsInClass = _context.QuizClasses.Where(x => enrolledClassIds.Contains(x.ClassId) && !didQuizIds.Contains(x.QuizId)).Select(x => x.QuizId).ToList();
             var myQuizzes = _context.Quizzes.Where(x => quizIdsInClass.Contains(x.Id)).AsQueryable();
            
             #region Filtering

@@ -14,3 +14,9 @@ export const getAllOfflineTestScoresApi = (
 ): Promise<AxiosResponse> => {
   return api.get(LearningEndpoints.GET_MY_OFFLINE_TEST_SCORES(params));
 };
+
+export const getMyTestsApi = (
+  params: RequestParams
+): Promise<AxiosResponse> => {
+  return api.get(LearningEndpoints.GET_MY_TESTS(params));
+};
