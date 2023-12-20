@@ -1,14 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RequestParams } from "types/param.types";
 import LEARNING_KEY from "../constants/learning.keys";
-import { LearningState, getAllOfflineTestScoresApi, getAllOnlineTestScoresApi, getClassApi, getClassesApi, getMyTestsApi } from "../student_learning";
+import { LearningState, getAllOfflineTestScoresApi, getAllOnlineTestScoresApi, getClassApi, getClassesApi, getMyTestsApi, getQuizApi } from "../student_learning";
 
 const initialState: LearningState = {
   offlineTestScores: null,
   onlineTestScores: null,
   myTests: null,
   classes: null,
-  classDetail: null
+  classDetail: null,
+  quiz: null
 };
 
 export const getAllOnlineTestScores = createAsyncThunk(
@@ -51,6 +52,14 @@ export const getClass = createAsyncThunk(
   }
 );
 
+export const getQuiz = createAsyncThunk(
+  `${LEARNING_KEY}/getQuiz`,
+  async (id: number) => {
+    const response = await getQuizApi(id);
+    return response.data;
+  }
+);
+
 const learningSlice = createSlice({
   name: LEARNING_KEY,
   initialState,
@@ -85,6 +94,12 @@ const learningSlice = createSlice({
     });
     builder.addCase(getClass.rejected, (state) => {
       state.classDetail = null;
+    });
+    builder.addCase(getQuiz.fulfilled, (state, action) => {
+      state.quiz = action.payload;
+    });
+    builder.addCase(getQuiz.rejected, (state) => {
+      state.quiz = null;
     });
   },
 });

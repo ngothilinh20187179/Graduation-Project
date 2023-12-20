@@ -8,7 +8,7 @@ import { RootState } from "redux/root-reducer";
 import { RequestParams } from "types/param.types";
 import { numberWithCommas } from "helpers/utils.helper";
 import { COLUMNS_TABLE_CLASSES, ClassStatusType, LearningPaths } from "features/student_learning/student_learning";
-import { getClasses } from "features/student_learning/redux/notification.slice";
+import { getClasses } from "features/student_learning/redux/learning.slice";
 
 const ClassScreen = () => {
   const dispatch = useAppDispatch();

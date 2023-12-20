@@ -5,6 +5,7 @@ export const LearningRoutePaths = {
   MY_TESTS: "/my-tests",
   CLASSES: "/classes",
   GET_CLASS: "/classes/:id",
+  GET_QUIZ: "/my-tests/:id",
 };
 
 export const LearningPaths = {
@@ -14,4 +15,5 @@ export const LearningPaths = {
   MY_TESTS: () => "/my-tests",
   CLASSES: () => "/classes",
   GET_CLASS: (id: number) => `/classes/${id}`,
+  GET_QUIZ: (id: number) => `/my-tests/${id}`,
 };

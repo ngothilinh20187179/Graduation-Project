@@ -1,22 +1,27 @@
 import { memo, useEffect, useMemo, useState } from "react";
 import { HomeOutlined } from "@ant-design/icons";
-import { Breadcrumb, Pagination, Table, Typography } from "antd";
-import { COLUMNS_TABLE_TESTS } from "features/student_learning/student_learning";
+import { Breadcrumb, Button, Pagination, Table, Typography } from "antd";
+import {
+  COLUMNS_TABLE_TESTS,
+  LearningPaths,
+} from "features/student_learning/student_learning";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { RootState } from "redux/root-reducer";
 import { RequestParams } from "types/param.types";
-import { getMyTests } from "features/student_learning/redux/notification.slice";
+import { getMyTests } from "features/student_learning/redux/learning.slice";
 import { getTimeUTC } from "helpers/utils.helper";
 import Search from "antd/es/input/Search";
+import { useNavigate } from "react-router-dom";
 
 const MyTestsScreen = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const pageSize = 20;
   const [search, setSearch] = useState<string>();
-  
+
   const {
     learning: { myTests },
   } = useAppSelector((state: RootState) => state);
@@ -25,9 +30,16 @@ const MyTestsScreen = () => {
     return myTests?.data?.map((myTest, index) => ({
       ...myTest,
       index: index + 1,
-      created: getTimeUTC(myTest?.created)
+      created: getTimeUTC(myTest?.created),
+      action: (
+        <Button
+          onClick={() => navigate(LearningPaths.GET_QUIZ(Number(myTest.id)))}
+        >
+          Begin Test
+        </Button>
+      ),
     }));
-  }, [myTests?.data]);
+  }, [myTests?.data, navigate]);
 
   useEffect(() => {
     const params: RequestParams = {
@@ -40,7 +52,7 @@ const MyTestsScreen = () => {
       .finally(() => setIsLoading(false));
   }, [dispatch, page, pageSize, search]);
 
-  console.log(myTests?.data)
+  console.log(myTests?.data);
 
   return (
     <div className="pl-55 pt-30 pr-55">

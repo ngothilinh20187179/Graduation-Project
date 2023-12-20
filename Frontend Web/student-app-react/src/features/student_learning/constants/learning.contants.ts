@@ -156,7 +156,7 @@ export const COLUMNS_TABLE_TESTS = () => [
     dataIndex: "action",
     key: "action",
     ellipsis: true,
-    width: "100px",
+    width: "110px",
   },
 ];
 

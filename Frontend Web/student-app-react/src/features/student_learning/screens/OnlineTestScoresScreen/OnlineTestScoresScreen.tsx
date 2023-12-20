@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { RequestParams } from "types/param.types";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { RootState } from "redux/root-reducer";
-import { getAllOnlineTestScores } from "features/student_learning/redux/notification.slice";
+import { getAllOnlineTestScores } from "features/student_learning/redux/learning.slice";
 import { getTimeUTC } from "helpers/utils.helper";
 
 const OnlineTestScoresScreen = () => {

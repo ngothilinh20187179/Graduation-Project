@@ -20,6 +20,7 @@ const LearningEndpoints = {
     return `/my-classes?search=${search}&page=${page}&pageSize=${pageSize}`;
   },
   GET_MY_CLASS_DETAIL: (id: number) => `/class/${id}`,
+  GET_THE_TEST: (id: number) => `/quiz/${id}`,
 };
 
 export default LearningEndpoints;

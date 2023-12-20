@@ -32,3 +32,9 @@ export const getClassApi = (
 ): Promise<AxiosResponse> => {
   return api.get(LearningEndpoints.GET_MY_CLASS_DETAIL(id));
 };
+
+export const getQuizApi = (
+  id: number
+): Promise<AxiosResponse> => {
+  return api.get(LearningEndpoints.GET_THE_TEST(id));
+};

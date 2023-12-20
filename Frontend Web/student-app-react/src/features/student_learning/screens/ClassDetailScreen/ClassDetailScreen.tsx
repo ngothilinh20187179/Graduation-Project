@@ -17,7 +17,7 @@ import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import Title from "antd/es/typography/Title";
 import { numberWithCommas } from "helpers/utils.helper";
 import { BasicTeacherInfo, ClassSchedules, DayOfWeek, LearningPaths } from "features/student_learning/student_learning";
-import { getClass } from "features/student_learning/redux/notification.slice";
+import { getClass } from "features/student_learning/redux/learning.slice";
 
 const ClassDetailScreen = () => {
   const navigate = useNavigate();
