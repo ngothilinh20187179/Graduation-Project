@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RequestParams } from "types/param.types";
 import LEARNING_KEY from "../constants/learning.keys";
-import { LearningState, getAllOfflineTestScoresApi, getAllOnlineTestScoresApi, getClassApi, getClassesApi, getMyTestsApi, getQuizApi } from "../student_learning";
+import { LearningState, QuizSubmit, getAllOfflineTestScoresApi, getAllOnlineTestScoresApi, getClassApi, getClassesApi, getMyTestsApi, getQuizApi, submitExamApi } from "../student_learning";
 
 const initialState: LearningState = {
   offlineTestScores: null,
@@ -57,6 +57,14 @@ export const getQuiz = createAsyncThunk(
   async (id: number) => {
     const response = await getQuizApi(id);
     return response.data;
+  }
+);
+
+export const submitExam = createAsyncThunk(
+  `${LEARNING_KEY}/submitExam`,
+  async (data: QuizSubmit) => {
+    const response = await submitExamApi(data);
+    return response.data.data;
   }
 );
 

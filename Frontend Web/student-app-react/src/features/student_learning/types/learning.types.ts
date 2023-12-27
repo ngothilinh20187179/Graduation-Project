@@ -119,6 +119,16 @@ export type GetQuizResponse = {
   data: Quiz;
 };
 
+export type QuizSubmit = {
+  id: number;
+  questions: QuestionResult[];
+};
+
+export type QuestionResult = {
+  questionId: number;
+  answerIds: number[];
+};
+
 export interface LearningState {
   onlineTestScores: GetAllOnlineTestScores | null;
   offlineTestScores: GetAllOfflineTestScores | null;

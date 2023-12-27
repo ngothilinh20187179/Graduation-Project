@@ -1,12 +1,12 @@
 @import "styles/_colors.scss";
 
 .sliderLayout {
-  background-color: $light-black !important;
+  background-color: $dark-blue !important;
   min-width: 115px !important;
 
   :global {
     .ant-menu {
-      background-color: $light-black;
+      background-color: $dark-blue;
       & .ant-menu-title-content,
       .ant-typography {
         font-size: 16px;

@@ -2,6 +2,7 @@ import { AxiosResponse } from "axios";
 import { api } from "api/api";
 import { RequestParams } from "types/param.types";
 import LearningEndpoints from "../constants/learning.endpoints";
+import { QuizSubmit } from "../types/learning.types";
 
 export const getAllOnlineTestScoresApi = (
   params: RequestParams
@@ -37,4 +38,8 @@ export const getQuizApi = (
   id: number
 ): Promise<AxiosResponse> => {
   return api.get(LearningEndpoints.GET_THE_TEST(id));
+};
+
+export const submitExamApi = (data: QuizSubmit): Promise<AxiosResponse> => {
+  return api.post(LearningEndpoints.SUBMIT_QUIZ(), data);
 };

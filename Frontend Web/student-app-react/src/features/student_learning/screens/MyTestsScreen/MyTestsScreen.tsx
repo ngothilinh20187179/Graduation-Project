@@ -52,8 +52,6 @@ const MyTestsScreen = () => {
       .finally(() => setIsLoading(false));
   }, [dispatch, page, pageSize, search]);
 
-  console.log(myTests?.data);
-
   return (
     <div className="pl-55 pt-30 pr-55">
       <Breadcrumb className="pb-20 font-18">
