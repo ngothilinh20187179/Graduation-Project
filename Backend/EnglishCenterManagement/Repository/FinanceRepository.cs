@@ -59,6 +59,29 @@ namespace EnglishCenterManagement.Repository
         {
             return _context.StudentClasses.Where(x => x.StudentId == studentId && x.IsPaidTuition == false).ToList();
         }
+        public PagedResponse GetStudentTuitionInformation(bool? isPaidTuition, int page, int pageSize)
+        {
+            var allStudentTuitions = _context.StudentClasses.AsQueryable();
+
+            #region Filtering
+            if (isPaidTuition.HasValue)
+            {
+                allStudentTuitions = allStudentTuitions.Where(u => u.IsPaidTuition == isPaidTuition);
+            }
+            #endregion
+
+            #region Sorting
+            allStudentTuitions = allStudentTuitions.OrderByDescending(u => u.Id);
+            #endregion
+
+            #region Paginated
+            var data = allStudentTuitions.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var total = allStudentTuitions.Count();
+            #endregion
+
+            return new PagedResponse(data, total, page, pageSize);
+        }
+
         public bool SaveChange()
         {
             return _context.SaveChanges() > 0;

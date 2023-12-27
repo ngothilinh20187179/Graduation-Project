@@ -26,10 +26,16 @@ const CREATE_SPENDING_SCREEN: RouteItem = {
   component: lazy(() => import("../screens/CreateSpending/CreateSpending")),
 };
 
+const STUDENT_TUITION_SCREEN: RouteItem = {
+  id: "staff-student-tuition",
+  path: FinanceRoutePaths.TUITION,
+  component: lazy(() => import("../screens/StudentTuitionScreen/StudentTuitionScreen")),
+};
 
 export const FINANCE_ROUTES = [
   FINANCE_SCREEN,
   SPENDING_SCREEN,
   EDIT_SPENDING_SCREEN,
   CREATE_SPENDING_SCREEN,
+  STUDENT_TUITION_SCREEN,
 ];

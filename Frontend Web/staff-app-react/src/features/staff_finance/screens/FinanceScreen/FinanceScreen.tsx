@@ -36,6 +36,14 @@ const FinanceScreen = () => {
             Salary
           </Link>
         </li>
+        <li className="pb-20">
+          <Link
+            to={FinancePaths.TUITION()}
+            className="text-link-blue"
+          >
+            Student Tuition
+          </Link>
+        </li>
       </ul>
     </div>
   );

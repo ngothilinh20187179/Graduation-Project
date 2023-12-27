@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RequestParams } from "types/param.types";
 import { AcceptOrRejectSpending, CreateEditSpending, FinanceState } from "../types/spending.types";
-import { acceptOrRejectSpendingApi, createSpendingApi, deleteSpendingApi, getSpendingByIdApi, getSpendingsApi, updateSpendingApi } from "../api/finance.api";
+import { acceptOrRejectSpendingApi, createSpendingApi, deleteSpendingApi, getSpendingByIdApi, getSpendingsApi, getStudentTuitionInformationApi, updateSpendingApi } from "../api/finance.api";
 import FINANCE_KEY from "../constants/finance.keys";
 
 const initialState: FinanceState = {
   spendings: null,
   spending: null,
+  studentTuition: null,
 };
 
 export const getSpendings = createAsyncThunk(
@@ -56,6 +57,14 @@ export const deleteSpending = createAsyncThunk(
   }
 );
 
+export const getStudentTuitionInformation = createAsyncThunk(
+  `${FINANCE_KEY}/getStudentTuitionInformation`,
+  async (params: RequestParams) => {
+    const response = await getStudentTuitionInformationApi(params);
+    return response.data.data;
+  }
+);
+
 const financeSlice = createSlice({
   name: FINANCE_KEY,
   initialState,
@@ -72,6 +81,12 @@ const financeSlice = createSlice({
     });
     builder.addCase(getSpendingById.rejected, (state) => {
       state.spending = null;
+    });
+    builder.addCase(getStudentTuitionInformation.fulfilled, (state, action) => {
+      state.studentTuition = action.payload;
+    });
+    builder.addCase(getStudentTuitionInformation.rejected, (state) => {
+      state.studentTuition = null;
     });
   },
 });

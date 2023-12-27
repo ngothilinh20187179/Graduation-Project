@@ -85,6 +85,7 @@ namespace EnglishCenterManagement.Data
             CreateMap<SpendingModel, SpendingDto>();
             CreateMap<CreateUpdateSpendingDto, SpendingModel>();
             CreateMap<StudentClassModel, MyTuitionDebtInformationDto>();
+            CreateMap<StudentClassModel, StudentTuitionInformationDto>();
         }
     }
 }

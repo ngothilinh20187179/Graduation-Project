@@ -3,15 +3,13 @@ using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Common.Response;
 using EnglishCenterManagement.Dtos.ClassRoomDtos;
 using EnglishCenterManagement.Dtos.FinanceDtos;
-using EnglishCenterManagement.Dtos.PositionPermissionDtos;
-using EnglishCenterManagement.Dtos.SubjectRoomDtos;
+using EnglishCenterManagement.Dtos.UserInfoDtos;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
 using EnglishCenterManagement.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 using System.Security.Claims;
 
 namespace EnglishCenterManagement.Controllers
@@ -238,6 +236,37 @@ namespace EnglishCenterManagement.Controllers
             });
 
             return Ok(new ApiReponse(mapMyTuitionDebtInformation));
+        }
+
+        [HttpGet("student-tuition")]
+        [Authorize(Roles = nameof(RoleType.Staff))]
+        public ActionResult<PagedResponse> GetStudentTuitionInformation(bool? isPaidTuition, int page = 1, int pageSize = 20)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
+
+            var studentTuitionInformation = _financeRepository.GetStudentTuitionInformation(isPaidTuition, page, pageSize);
+            var mapStudentTuitionInformation = _mapper.Map<List<StudentTuitionInformationDto>>(studentTuitionInformation.Data);
+            mapStudentTuitionInformation.ForEach((item) =>
+            {
+                var getStudentById = _userRepository.GetUserByUserId(item.StudentId);
+                item.StudentInfo = _mapper.Map<BasicUserInfoDto>(getStudentById);
+                var classInfo = _classRoomRepository.GetClassById(item.ClassId);
+                item.ClassInfo = _mapper.Map<BasicClassRoomInfoDto>(classInfo);
+            });
+            studentTuitionInformation.Data = mapStudentTuitionInformation;
+
+            return Ok(new ApiReponse(studentTuitionInformation));
         }
 
         private UserInfoModel? GetUserByClaim()

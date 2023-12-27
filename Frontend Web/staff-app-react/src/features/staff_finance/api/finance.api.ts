@@ -40,3 +40,9 @@ export const acceptOrRejectSpendingApi = (
 export const deleteSpendingApi = (id: number): Promise<AxiosResponse> => {
   return api.delete(SpendingEndpoints.DELETE_SPENDING(id));
 };
+
+export const getStudentTuitionInformationApi = (
+  params: RequestParams
+): Promise<AxiosResponse> => {
+  return api.get(SpendingEndpoints.GET_STUDENT_TUITION(params));
+};

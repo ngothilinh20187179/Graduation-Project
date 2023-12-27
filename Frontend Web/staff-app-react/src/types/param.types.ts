@@ -6,4 +6,5 @@ export type RequestParams = {
     search?: string;
     isMarked?: boolean;
     spendingStatus?: SpendingStatusType | null;
+    isPaidTuition?: boolean | null;
 };

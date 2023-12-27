@@ -3,6 +3,7 @@ export const FinanceRoutePaths = {
   SPENDING: "/spendings",
   EDIT_SPENDING: "/spendings/update/:id",
   CREATE_SPENDING: "/spendings/create",
+  TUITION: "/student-tuition"
 };
 
 export const FinancePaths = {
@@ -10,4 +11,5 @@ export const FinancePaths = {
   SPENDING: () => "/spendings",
   EDIT_SPENDING: (id: number) => `/spendings/update/${id}`,
   CREATE_SPENDING: () => "/spendings/create",
+  TUITION: () => "/student-tuition",
 };

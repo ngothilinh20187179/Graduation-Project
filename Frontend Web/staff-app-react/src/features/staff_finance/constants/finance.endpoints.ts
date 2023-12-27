@@ -12,6 +12,12 @@ const FinanceEndpoints = {
   UPDATE_SPENDING: (id: number) =>  `update-spending/${id}`,
   ACCEPT_OR_REJECT_SPENDING: (id: number) => `/accept-or-reject-spending/${id}`,
   DELETE_SPENDING: (id: number) => `/remove-spending/${id}`,
+  GET_STUDENT_TUITION: ({isPaidTuition, page, pageSize }: RequestParams) => {
+    if (isPaidTuition === undefined || isPaidTuition === null) {
+      return `/student-tuition?page=${page}&pageSize=${pageSize}`;
+    }
+    return `/student-tuition?isPaidTuition=${isPaidTuition}&page=${page}&pageSize=${pageSize}`;
+  },
 };
 
 export default FinanceEndpoints;
