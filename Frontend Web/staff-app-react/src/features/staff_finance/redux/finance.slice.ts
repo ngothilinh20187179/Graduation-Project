@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RequestParams } from "types/param.types";
-import { AcceptOrRejectSpending, CreateEditSpending, FinanceState } from "../types/spending.types";
-import { acceptOrRejectSpendingApi, createSpendingApi, deleteSpendingApi, getSpendingByIdApi, getSpendingsApi, getStudentTuitionInformationApi, updateSpendingApi } from "../api/finance.api";
+import { AcceptOrRejectSpending, CreateEditSpending, FinanceState, TakeNoteTuition } from "../types/spending.types";
+import { acceptOrRejectSpendingApi, confirmPaymentApi, createSpendingApi, deleteSpendingApi, getSpendingByIdApi, getSpendingsApi, getStudentTuitionInformationApi, takeNoteTuitionApi, updateSpendingApi } from "../api/finance.api";
 import FINANCE_KEY from "../constants/finance.keys";
 
 const initialState: FinanceState = {
@@ -62,6 +62,21 @@ export const getStudentTuitionInformation = createAsyncThunk(
   async (params: RequestParams) => {
     const response = await getStudentTuitionInformationApi(params);
     return response.data.data;
+  }
+);
+
+export const confirmPayment = createAsyncThunk(
+  `${FINANCE_KEY}/confirmPayment`,
+  async (id: number) => {
+    return confirmPaymentApi(id);
+  }
+);
+
+export const takeNoteTuition = createAsyncThunk(
+  `${FINANCE_KEY}/takeNoteTuition`,
+  async (data: TakeNoteTuition) => {
+    const { id, note } = data;
+    return takeNoteTuitionApi(Number(id), note);
   }
 );
 

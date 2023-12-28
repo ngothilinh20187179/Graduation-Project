@@ -106,6 +106,6 @@ export const COLUMNS_TABLE_TUITION = () => [
     title: "Action",
     dataIndex: "action",
     key: "action",
-    width: "110px",
+    width: "100px",
   },
 ];

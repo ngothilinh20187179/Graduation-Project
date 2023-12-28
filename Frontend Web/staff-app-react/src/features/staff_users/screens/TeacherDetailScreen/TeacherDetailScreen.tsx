@@ -9,7 +9,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import Title from "antd/es/typography/Title";
 import { getTimeUTC } from "helpers/utils.helper";
-import { UserPaths, getStaffById, getTeacherById } from "features/staff_users/staff_users";
+import { UserPaths, getTeacherById } from "features/staff_users/staff_users";
 import styles from "./TeacherDetailScreen.module.scss";
 
 const TeacherDetailScreen = () => {

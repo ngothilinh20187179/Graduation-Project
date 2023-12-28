@@ -8,8 +8,8 @@ const FinanceEndpoints = {
     return `/spendings?spendingStatus=${spendingStatus}&page=${page}&pageSize=${pageSize}`;
   },
   GET_SPENDING: (id: number) => `/spending/${id}`,
-  CREATE_SPENDING: () => `create-spending`,
-  UPDATE_SPENDING: (id: number) =>  `update-spending/${id}`,
+  CREATE_SPENDING: () => `/create-spending`,
+  UPDATE_SPENDING: (id: number) =>  `/update-spending/${id}`,
   ACCEPT_OR_REJECT_SPENDING: (id: number) => `/accept-or-reject-spending/${id}`,
   DELETE_SPENDING: (id: number) => `/remove-spending/${id}`,
   GET_STUDENT_TUITION: ({isPaidTuition, page, pageSize }: RequestParams) => {
@@ -18,6 +18,8 @@ const FinanceEndpoints = {
     }
     return `/student-tuition?isPaidTuition=${isPaidTuition}&page=${page}&pageSize=${pageSize}`;
   },
+  CONFIRM_PAYMENT: () =>  `/confirm-payment`,
+  TAKE_NOTE_TUITION: (id: number) =>  `/take-note-student-tuition/${id}`,
 };
 
 export default FinanceEndpoints;

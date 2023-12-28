@@ -11,9 +11,7 @@ export const getSpendingsApi = (
   return api.get(SpendingEndpoints.GET_SPENDINGS(params));
 };
 
-export const getSpendingByIdApi = (
-  id: number
-): Promise<AxiosResponse> => {
+export const getSpendingByIdApi = (id: number): Promise<AxiosResponse> => {
   return api.get(SpendingEndpoints.GET_SPENDING(id));
 };
 
@@ -45,4 +43,15 @@ export const getStudentTuitionInformationApi = (
   params: RequestParams
 ): Promise<AxiosResponse> => {
   return api.get(SpendingEndpoints.GET_STUDENT_TUITION(params));
+};
+
+export const confirmPaymentApi = (id: number): Promise<AxiosResponse> => {
+  return api.put(SpendingEndpoints.CONFIRM_PAYMENT(), id);
+};
+
+export const takeNoteTuitionApi = (
+  id: number,
+  note: string | null
+): Promise<AxiosResponse> => {
+  return api.put(SpendingEndpoints.TAKE_NOTE_TUITION(id), note);
 };

@@ -2,7 +2,7 @@ import { Avatar, Breadcrumb, Descriptions, Image } from "antd";
 import { TopPaths } from "features/staff_top/staff_top";
 import { memo, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { HomeOutlined, UserOutlined, EditOutlined } from "@ant-design/icons";
+import { HomeOutlined, UserOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { RootState } from "redux/root-reducer";
 import { unwrapResult } from "@reduxjs/toolkit";

@@ -55,6 +55,10 @@ namespace EnglishCenterManagement.Repository
             _context.Remove(spending);
             return SaveChange();
         }
+        public StudentClassModel GetStudentClassById(int id)
+        {
+            return _context.StudentClasses.Where(x => x.Id == id).FirstOrDefault();
+        }
         public ICollection<StudentClassModel> GetMyTuitionDebtInformation(int studentId)
         {
             return _context.StudentClasses.Where(x => x.StudentId == studentId && x.IsPaidTuition == false).ToList();
@@ -81,7 +85,11 @@ namespace EnglishCenterManagement.Repository
 
             return new PagedResponse(data, total, page, pageSize);
         }
-
+        public bool UpdateStudentClass(StudentClassModel studentClass)
+        {
+            _context.Update(studentClass);
+            return SaveChange();
+        }
         public bool SaveChange()
         {
             return _context.SaveChanges() > 0;

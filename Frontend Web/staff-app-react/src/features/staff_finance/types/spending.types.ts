@@ -44,6 +44,11 @@ export interface GetAllStudentTuitionResponse extends PaginationResponse {
   data: StudentTuition[];
 }
 
+export type TakeNoteTuition = {
+  id: number;
+  note: string | null;
+}
+
 export interface FinanceState {
   spendings: GetAllSpendingsResponse | null;
   spending: Spending | null;

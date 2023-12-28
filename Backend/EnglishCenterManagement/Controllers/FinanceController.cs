@@ -269,6 +269,56 @@ namespace EnglishCenterManagement.Controllers
             return Ok(new ApiReponse(studentTuitionInformation));
         }
 
+        // PUT: /confirm-payment
+        [HttpPut("confirm-payment")]
+        [Authorize(Roles = nameof(RoleType.Staff))]
+        public ActionResult ConfirmPayment([FromBody] int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+            var tuition = _financeRepository.GetStudentClassById(id);
+            if (tuition == null)
+            {
+                return NotFound();
+            }
+            tuition.IsPaidTuition = true;
+            _financeRepository.UpdateStudentClass(tuition);
+
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        // PUT: /take-note-student-tuition/5
+        [HttpPut("take-note-student-tuition/{id}")]
+        [Authorize(Roles = nameof(RoleType.Staff))] 
+        public ActionResult TakeNoteStudentTuition([FromBody] string note, int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+            var tuition = _financeRepository.GetStudentClassById(id);
+            if (tuition == null)
+            {
+                return NotFound();
+            }
+            tuition.Note = note;
+            _financeRepository.UpdateStudentClass(tuition);
+
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
         private UserInfoModel? GetUserByClaim()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
