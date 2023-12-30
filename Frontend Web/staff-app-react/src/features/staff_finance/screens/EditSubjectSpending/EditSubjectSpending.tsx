@@ -8,7 +8,7 @@ import { RootState } from "redux/root-reducer";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import { FinancePaths, getSpendingById, updateSpending } from "features/staff_finance/staff_finance";
 import FormCreateEditSpending from "features/staff_finance/components/FormCreateEditSpending/FormCreateEditSpending";
-import { CreateEditSpending } from "features/staff_finance/types/spending.types";
+import { CreateEditSpending } from "features/staff_finance/types/finance.types";
 
 const EditSubjectSpending = () => {
   const dispatch = useAppDispatch();

@@ -7,4 +7,5 @@ export type RequestParams = {
     isMarked?: boolean;
     spendingStatus?: SpendingStatusType | null;
     isPaidTuition?: boolean | null;
+    isPaid?: boolean | null;
 };

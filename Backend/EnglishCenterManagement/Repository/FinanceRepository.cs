@@ -113,6 +113,29 @@ namespace EnglishCenterManagement.Repository
 
             return new PagedResponse(data, total, page, pageSize);
         }
+        public PagedResponse GetStaffSalaries(bool? isPaid, int page, int pageSize, int staffId)
+        {
+            var allStaffSalaries = _context.StaffSalaries.AsQueryable();
+            allStaffSalaries = allStaffSalaries.Where(u => u.StaffId == staffId);
+
+            #region Filtering
+            if (isPaid.HasValue)
+            {
+                allStaffSalaries = allStaffSalaries.Where(u => u.IsPaid == isPaid);
+            }
+            #endregion
+
+            #region Sorting
+            allStaffSalaries = allStaffSalaries.OrderByDescending(u => u.CreateOn);
+            #endregion
+
+            #region Paginated
+            var data = allStaffSalaries.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var total = allStaffSalaries.Count();
+            #endregion
+
+            return new PagedResponse(data, total, page, pageSize);
+        }
         public bool SaveChange()
         {
             return _context.SaveChanges() > 0;

@@ -16,6 +16,7 @@ namespace EnglishCenterManagement.Interfaces
         PagedResponse GetStudentTuitionInformation(bool? isPaidTuition, int page, int pageSize);
         bool UpdateStudentClass(StudentClassModel studentClass);
         PagedResponse GetTeacherSalaries(bool? isPaid, int page, int pageSize, int teacherId);
+        PagedResponse GetStaffSalaries(bool? isPaid, int page, int pageSize, int staffId);
         bool SaveChange();
     }
 }

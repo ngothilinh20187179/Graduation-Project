@@ -17,7 +17,7 @@ import DropdownButton from "components/DropdownButton/DropdownButton";
 import { numberWithCommas } from "helpers/utils.helper";
 import { unwrapResult } from "@reduxjs/toolkit";
 import TextArea from "antd/es/input/TextArea";
-import { TakeNoteTuition } from "features/staff_finance/types/spending.types";
+import { TakeNoteTuition } from "features/staff_finance/types/finance.types";
 
 const StudentTuitionScreen = () => {
   const dispatch = useAppDispatch();

@@ -344,6 +344,30 @@ namespace EnglishCenterManagement.Controllers
             return Ok(new ApiReponse(teacherSalaries));
         }
 
+        [HttpGet("staff-salaries")]
+        [Authorize(Roles = nameof(RoleType.Staff))]
+        public ActionResult<PagedResponse> GetStaffSalaries(bool? isPaid, int page = 1, int pageSize = 20)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
+
+            var staffSalaries = _financeRepository.GetStaffSalaries(isPaid, page, pageSize, user.Id);
+            var mapStaffSalaries = _mapper.Map<List<StaffSalaryDto>>(staffSalaries.Data);
+            staffSalaries.Data = mapStaffSalaries;
+
+            return Ok(new ApiReponse(staffSalaries));
+        }
+
         private UserInfoModel? GetUserByClaim()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;

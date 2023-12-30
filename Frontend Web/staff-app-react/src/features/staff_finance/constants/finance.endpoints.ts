@@ -20,6 +20,12 @@ const FinanceEndpoints = {
   },
   CONFIRM_PAYMENT: () =>  `/confirm-payment`,
   TAKE_NOTE_TUITION: (id: number) =>  `/take-note-student-tuition/${id}`,
+  GET_MY_SALARY: ({ page, pageSize, isPaid }: RequestParams) => {
+    if (isPaid === undefined || isPaid === null) {
+      return `/staff-salaries?page=${page}&pageSize=${pageSize}`;
+    }
+    return `/staff-salaries?isPaid=${isPaid}&page=${page}&pageSize=${pageSize}`;
+  },
 };
 
 export default FinanceEndpoints;

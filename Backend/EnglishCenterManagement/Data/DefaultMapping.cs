@@ -88,6 +88,7 @@ namespace EnglishCenterManagement.Data
             CreateMap<StudentClassModel, MyTuitionDebtInformationDto>();
             CreateMap<StudentClassModel, StudentTuitionInformationDto>();
             CreateMap<TeacherSalaryModel, TeacherSalaryDto>();
+            CreateMap<StaffSalaryModel, StaffSalaryDto>();
         }
     }
 }

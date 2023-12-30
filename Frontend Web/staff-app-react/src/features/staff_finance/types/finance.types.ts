@@ -48,9 +48,26 @@ export type TakeNoteTuition = {
   id: number;
   note: string | null;
 }
+export type Salary = {
+  id: number;
+  month: number;
+  workDaysInMonth: number;
+  totalDaysWorked: number;
+  totalHoursWorked: number;
+  bonus: number;
+  total: number;
+  isPaid: boolean;
+  createOn: string;
+  note: string | null;
+};
+
+export interface GetAllSalaryResponse extends PaginationResponse {
+  data: Salary[];
+}
 
 export interface FinanceState {
   spendings: GetAllSpendingsResponse | null;
   spending: Spending | null;
   studentTuition: GetAllStudentTuitionResponse | null;
+  salary: GetAllSalaryResponse | null;
 }

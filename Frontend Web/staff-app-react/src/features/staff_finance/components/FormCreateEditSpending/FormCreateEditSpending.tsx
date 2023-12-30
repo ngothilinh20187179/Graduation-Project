@@ -7,7 +7,7 @@ import mess from "messages/messages.json";
 import { AxiosResponse } from "axios";
 import TextArea from "antd/es/input/TextArea";
 import { requireRule, requireRules } from "helpers/validations.helper";
-import { CreateEditSpending, Spending } from "features/staff_finance/types/spending.types";
+import { CreateEditSpending, Spending } from "features/staff_finance/types/finance.types";
 import { FinancePaths } from "features/staff_finance/staff_finance";
 
 const FormCreateEditSpending = ({

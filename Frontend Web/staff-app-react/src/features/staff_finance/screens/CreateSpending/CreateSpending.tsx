@@ -6,7 +6,7 @@ import { HomeOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "redux/store";
 import { FinancePaths, createSpending } from "features/staff_finance/staff_finance";
 import FormCreateEditSpending from "features/staff_finance/components/FormCreateEditSpending/FormCreateEditSpending";
-import { CreateEditSpending } from "features/staff_finance/types/spending.types";
+import { CreateEditSpending } from "features/staff_finance/types/finance.types";
 
 const CreateSpending = () => {
   const dispatch = useAppDispatch();
