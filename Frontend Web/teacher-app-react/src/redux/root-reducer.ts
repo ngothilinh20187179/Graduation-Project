@@ -6,6 +6,8 @@ import NOTIFICATION_KEY from "features/teacher_notification/constants/notificati
 import { notificationReducer } from "features/teacher_notification/teacher_notification";
 import SETTING_KEY from "features/teacher_setting/constants/setting.keys";
 import { settingReducer } from "features/teacher_setting/teacher_setting";
+import TEACHING_KEY from "features/teacher_teaching/constants/teaching.keys";
+import { teachingReducer } from "features/teacher_teaching/redux/teaching.slice";
 import USERS_KEY from "features/teacher_users/constants/users.keys";
 import { usersReducer } from "features/teacher_users/redux/users.slice";
 import { combineReducers } from "redux";
@@ -16,6 +18,7 @@ const rootReducer = combineReducers({
   [SETTING_KEY]: settingReducer,
   [USERS_KEY]: usersReducer,
   [FINANCE_KEY]: financeReducer,
+  [TEACHING_KEY]: teachingReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

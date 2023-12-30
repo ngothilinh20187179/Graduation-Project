@@ -2,6 +2,7 @@ import { AUTH_ROUTES } from "features/teacher_auth/teacher_auth";
 import { FINANCE_ROUTES } from "features/teacher_finance/routes/finance.routes";
 import { NOTIFICATION_ROUTES } from "features/teacher_notification/teacher_notification";
 import { SETTING_ROUTES } from "features/teacher_setting/routes/setting.routes";
+import { LEARNING_ROUTES } from "features/teacher_teaching/routes/teaching.routes";
 import { TOP_ROUTES } from "features/teacher_top/routes/top.routes";
 
 export const ROOT_ROUTE = "/";
@@ -13,4 +14,5 @@ export const LIST_PRIVATE_ROUTES = [
   ...NOTIFICATION_ROUTES,
   ...SETTING_ROUTES,
   ...FINANCE_ROUTES,
+  ...LEARNING_ROUTES,
 ];

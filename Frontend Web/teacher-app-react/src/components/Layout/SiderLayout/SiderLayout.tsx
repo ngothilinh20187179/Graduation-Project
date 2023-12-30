@@ -16,6 +16,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { TopPaths } from "features/teacher_top/teacher_top";
 import { NotificationPaths } from "features/teacher_notification/teacher_notification";
 import { FinancePaths } from "features/teacher_finance/teacher_finance";
+import { TeachingPaths } from "features/teacher_teaching/constants/teaching.paths";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -35,7 +36,7 @@ function getItem(
 
 const items: MenuProps["items"] = [
   getItem("My Schedule", "/my-schedule", <ScheduleOutlined />),
-  getItem("Classes", "/classes", <BookOutlined />),
+  getItem("Classes", TeachingPaths.CLASSES(), <BookOutlined />),
   getItem("Create Test", "/test", <FormOutlined />),
   getItem("Enter Transcript", "/transcript", <FileDoneOutlined />),
   getItem("My Salary", FinancePaths.SALARY(), <DollarOutlined />),

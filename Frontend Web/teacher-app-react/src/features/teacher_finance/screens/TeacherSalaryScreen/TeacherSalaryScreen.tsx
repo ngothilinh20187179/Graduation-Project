@@ -1,7 +1,6 @@
 import { Badge, Breadcrumb, Pagination, Table, Typography } from "antd";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "redux/store";
-import { useNavigate } from "react-router-dom";
 import { RequestParams } from "types/param.types";
 import { RootState } from "redux/root-reducer";
 import { HomeOutlined } from "@ant-design/icons";
@@ -12,7 +11,6 @@ import { getTimeUTC, numberWithCommas } from "helpers/utils.helper";
 
 const TeacherSalaryScreen = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
@@ -39,7 +37,7 @@ const TeacherSalaryScreen = () => {
           <Badge status="error" text="Not Paid" />
         ),
     }));
-  }, [salary?.data, navigate]);
+  }, [salary?.data]);
 
   useEffect(() => {
     const params: RequestParams = {

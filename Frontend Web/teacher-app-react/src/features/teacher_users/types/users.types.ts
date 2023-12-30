@@ -1,3 +1,4 @@
+import { PaginationResponse } from "types/pagination.types";
 import { GenderType, UserStatusType } from "../teacher_users";
 import { RoleType } from "features/teacher_auth/teacher_auth";
 
@@ -35,6 +36,14 @@ export type EditInformationRequestBody = {
   location: string | null;
 } & BasicUserInfo;
 
+
+export interface GetAllStudentsInClassResponse extends PaginationResponse {
+  data: (BasicUserInfo & {
+    avatar: UserAvatar | null;
+  }) [];
+}
+
 export interface UsersState {
   avatar: UserAvatar | null;
+  students: GetAllStudentsInClassResponse | null;
 }
