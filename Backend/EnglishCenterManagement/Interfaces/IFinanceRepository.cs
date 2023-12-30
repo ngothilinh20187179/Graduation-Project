@@ -15,6 +15,7 @@ namespace EnglishCenterManagement.Interfaces
         ICollection<StudentClassModel> GetMyTuitionDebtInformation(int studentId);
         PagedResponse GetStudentTuitionInformation(bool? isPaidTuition, int page, int pageSize);
         bool UpdateStudentClass(StudentClassModel studentClass);
+        PagedResponse GetTeacherSalaries(bool? isPaid, int page, int pageSize, int teacherId);
         bool SaveChange();
     }
 }

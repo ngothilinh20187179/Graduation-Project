@@ -8,6 +8,7 @@ using EnglishCenterManagement.Dtos.PositionPermissionDtos;
 using EnglishCenterManagement.Dtos.SubjectRoomDtos;
 using EnglishCenterManagement.Dtos.TeacherStudentStaffDtos;
 using EnglishCenterManagement.Dtos.UserInfoDtos;
+using EnglishCenterManagement.Entities.FinanceDtos;
 using EnglishCenterManagement.Entities.Models;
 
 namespace EnglishCenterManagement.Data
@@ -86,6 +87,7 @@ namespace EnglishCenterManagement.Data
             CreateMap<CreateUpdateSpendingDto, SpendingModel>();
             CreateMap<StudentClassModel, MyTuitionDebtInformationDto>();
             CreateMap<StudentClassModel, StudentTuitionInformationDto>();
+            CreateMap<TeacherSalaryModel, TeacherSalaryDto>();
         }
     }
 }

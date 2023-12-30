@@ -90,6 +90,29 @@ namespace EnglishCenterManagement.Repository
             _context.Update(studentClass);
             return SaveChange();
         }
+        public PagedResponse GetTeacherSalaries(bool? isPaid, int page, int pageSize, int teacherId)
+        {
+            var allTeacherSalaries = _context.TeacherSalaries.AsQueryable();
+            allTeacherSalaries = allTeacherSalaries.Where(u => u.TeacherId == teacherId);
+
+            #region Filtering
+            if (isPaid.HasValue)
+            {
+                allTeacherSalaries = allTeacherSalaries.Where(u => u.IsPaid == isPaid);
+            }
+            #endregion
+
+            #region Sorting
+            allTeacherSalaries = allTeacherSalaries.OrderByDescending(u => u.CreatedOn);
+            #endregion
+
+            #region Paginated
+            var data = allTeacherSalaries.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var total = allTeacherSalaries.Count();
+            #endregion
+
+            return new PagedResponse(data, total, page, pageSize);
+        }
         public bool SaveChange()
         {
             return _context.SaveChanges() > 0;

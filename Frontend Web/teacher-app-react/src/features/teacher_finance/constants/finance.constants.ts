@@ -1,0 +1,55 @@
+export const COLUMNS_TABLE_SALARY = () => [
+  {
+    title: "",
+    dataIndex: "index",
+    key: "index",
+    width: "40px",
+  },
+  {
+    title: "Month",
+    dataIndex: "month",
+    key: "month",
+    ellipsis: true,
+    width: "50px",
+  },
+  {
+    title: "Hours Worked",
+    dataIndex: "totalHoursWorked",
+    key: "totalHoursWorked",
+    ellipsis: true,
+    width: "90px",
+  },
+  {
+    title: "Bonus",
+    dataIndex: "bonus",
+    key: "bonus",
+    ellipsis: true,
+    width: "100px",
+  },
+  {
+    title: "Total",
+    dataIndex: "total",
+    key: "total",
+    ellipsis: true,
+    width: "100px",
+  },
+  {
+    title: "Status",
+    dataIndex: "isPaid",
+    key: "isPaid",
+    ellipsis: true,
+    width: "90px",
+  },
+  {
+    title: "Created On",
+    dataIndex: "createdOn",
+    key: "createdOn",
+    width: "90px",
+  },
+  {
+    title: "Note",
+    dataIndex: "note",
+    key: "note",
+    width: "190px",
+  },
+];

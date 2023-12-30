@@ -5,6 +5,7 @@ using EnglishCenterManagement.Dtos.ClassRoomDtos;
 using EnglishCenterManagement.Dtos.FinanceDtos;
 using EnglishCenterManagement.Dtos.UserInfoDtos;
 using EnglishCenterManagement.Entities.Enumerations;
+using EnglishCenterManagement.Entities.FinanceDtos;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
 using EnglishCenterManagement.Repository;
@@ -317,6 +318,30 @@ namespace EnglishCenterManagement.Controllers
             _financeRepository.UpdateStudentClass(tuition);
 
             return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        [HttpGet("teacher-salaries")]
+        [Authorize(Roles = nameof(RoleType.Teacher))]
+        public ActionResult<PagedResponse> GetTeacherSalaries(bool? isPaid, int page = 1, int pageSize = 20)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
+
+            var teacherSalaries = _financeRepository.GetTeacherSalaries(isPaid, page, pageSize, user.Id);
+            var mapTeacherSalaries = _mapper.Map<List<TeacherSalaryDto>>(teacherSalaries.Data);
+            teacherSalaries.Data = mapTeacherSalaries;
+
+            return Ok(new ApiReponse(teacherSalaries));
         }
 
         private UserInfoModel? GetUserByClaim()

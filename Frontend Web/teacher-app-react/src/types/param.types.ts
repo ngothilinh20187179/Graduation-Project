@@ -3,4 +3,5 @@ export type RequestParams = {
     pageSize?: number;
     search?: string;
     isMarked?: boolean;
+    isPaid?: boolean | null;
 };

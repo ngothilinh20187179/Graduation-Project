@@ -20,6 +20,7 @@ import { AuthPathsEnum } from "features/teacher_auth/teacher_auth";
 import { getMyAvatar } from "features/teacher_users/teacher_users";
 import { logout } from "features/teacher_auth/redux/auth.slice";
 import { TopPaths } from "features/teacher_top/teacher_top";
+import Title from "antd/es/typography/Title";
 
 const HeaderLayout = ({
   collapsed,
@@ -58,6 +59,7 @@ const HeaderLayout = ({
           onClick={() => setCollapsed(!collapsed)}
         />
       )}
+      <Title level={4} className="mb-25">Teacher</Title>
       <DropdownButton
         menuProps={{
           items: [
