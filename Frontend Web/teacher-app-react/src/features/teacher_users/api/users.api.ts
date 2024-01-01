@@ -9,3 +9,7 @@ export const getMyAvatarApi = (): Promise<AxiosResponse> => {
 export const getStudentsInClassApi = (id: number): Promise<AxiosResponse> => {
   return api.get(UsersEndpoints.GET_STUDENTS_IN_CLASS(id));
 };
+
+export const getStudentByIdApi = (id: number): Promise<AxiosResponse> => {
+  return api.get(UsersEndpoints.GET_STUDENT(id));
+};

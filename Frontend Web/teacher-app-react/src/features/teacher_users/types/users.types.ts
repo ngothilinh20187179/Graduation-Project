@@ -12,6 +12,12 @@ export type BasicUserInfo = {
   userStatus: UserStatusType;
 };
 
+export type StudentInfo = {
+  parentsName: string | null;
+  parentPhoneNumber: string | null;
+  note: string | null;
+}
+
 export type PrivateUserInfo = {
   loginName: string;
   email: string | null;
@@ -43,7 +49,13 @@ export interface GetAllStudentsInClassResponse extends PaginationResponse {
   }) [];
 }
 
+export type StudentDetail = BasicUserInfo &
+  PrivateUserInfo & StudentInfo & {
+    avatar: UserAvatar | null;
+};
+
 export interface UsersState {
   avatar: UserAvatar | null;
   students: GetAllStudentsInClassResponse | null;
+  student: StudentDetail | null;
 }

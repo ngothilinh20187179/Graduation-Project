@@ -5,7 +5,6 @@ import {
   Typography,
   Image,
   Avatar,
-  Badge,
 } from "antd";
 import { memo, useEffect, useMemo, useState } from "react";
 import { HomeOutlined, UserOutlined } from "@ant-design/icons";
@@ -17,9 +16,9 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import {
   COLUMNS_TABLE_STUDENTS,
   GenderType,
-  UserStatusType,
 } from "features/teacher_users/constants/users.constants";
 import { getStudentsInClass } from "features/teacher_users/teacher_users";
+import DropdownButton from "components/DropdownButton/DropdownButton";
 
 const ListStudentsInClassScreen = () => {
   const dispatch = useAppDispatch();
@@ -41,7 +40,7 @@ const ListStudentsInClassScreen = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [dispatch, page, pageSize]);
+  }, [dispatch, id, page, pageSize]);
 
   const studentList = useMemo(() => {
     return students?.data?.map((student, index) => ({
@@ -56,20 +55,50 @@ const ListStudentsInClassScreen = () => {
       ) : (
         <Avatar size={40} icon={<UserOutlined />} />
       ),
-      userStatus:
-        student.userStatus === UserStatusType.UnLock ? (
-          <Badge status="success" text="UnLock" />
-        ) : (
-          <Badge status="error" text="Lock" />
-        ),
       gender:
         student.gender === GenderType.Female
           ? "Female"
           : student.gender === GenderType.Male
           ? "Male"
           : "Unknown",
+      action: (
+        <DropdownButton
+          menuProps={{
+            items: [
+              {
+                key: "1",
+                label: (
+                  <>
+                    <Typography>
+                      Online test scores
+                    </Typography>
+                  </>
+                ),
+                onClick: () => {
+                  navigate(TeachingPaths.QUIZ_MARKS(Number(student.id)));
+                },
+              },
+              {
+                key: "2",
+                label: (
+                  <>
+                    <Typography>
+                      Offline test scores
+                    </Typography>
+                  </>
+                ),
+                onClick: () => {
+                  navigate(TeachingPaths.MARKS(Number(student.id)));
+                },
+              },
+            ],
+          }}
+        >
+          Action
+        </DropdownButton>
+      ),
     }));
-  }, [students?.data]);
+  }, [students?.data, navigate]);
 
   return (
     <div className="pt-30 pl-50 pr-50">

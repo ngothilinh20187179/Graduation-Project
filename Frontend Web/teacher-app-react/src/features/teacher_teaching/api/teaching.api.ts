@@ -12,3 +12,15 @@ export const getClassesApi = (
 export const getClassApi = (id: number): Promise<AxiosResponse> => {
   return api.get(TeachingEndpoints.GET_CLASS(id));
 };
+
+export const getAllOnlineTestScoresApi = (
+  params: RequestParams
+): Promise<AxiosResponse> => {
+  return api.get(TeachingEndpoints.GET_MY_ONLINE_TEST_SCORES(params));
+};
+
+export const getAllOfflineTestScoresApi = (
+  params: RequestParams
+): Promise<AxiosResponse> => {
+  return api.get(TeachingEndpoints.GET_MY_OFFLINE_TEST_SCORES(params));
+};

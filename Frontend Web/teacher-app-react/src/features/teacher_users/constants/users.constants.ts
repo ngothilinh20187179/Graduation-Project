@@ -43,13 +43,6 @@ export const COLUMNS_TABLE_STUDENTS = () => [
     width: "100px",
   }, 
   {
-    title: "Status",
-    dataIndex: "userStatus",
-    key: "userStatus",
-    ellipsis: true,
-    width: "80px",
-  }, 
-  {
     title: "Date Of Birth",
     dataIndex: "dateOfBirth",
     key: "dateOfBirth",
@@ -70,4 +63,10 @@ export const COLUMNS_TABLE_STUDENTS = () => [
     ellipsis: true,
     width: "100px",
   },
+  {
+    title: "Action",
+    dataIndex: "action",
+    key: "action",
+    width: "90px",
+  }
 ]

@@ -1,4 +1,5 @@
 export type RequestParams = {
+    id?: number;
     page?: number;
     pageSize?: number;
     search?: string;

@@ -1,11 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RequestParams } from "types/param.types";
-import { TeachingState, getClassApi, getClassesApi } from "../teaching.types";
+import { TeachingState, getAllOfflineTestScoresApi, getAllOnlineTestScoresApi, getClassApi, getClassesApi } from "../teaching.types";
 import TEACHING_KEY from "../constants/teaching.keys";
 
 const initialState: TeachingState = {
   classes: null,
-  classDetail: null
+  classDetail: null,
+  offlineTestScores: null,
+  onlineTestScores: null,
 };
 
 export const getClasses = createAsyncThunk(
@@ -21,6 +23,22 @@ export const getClass = createAsyncThunk(
   async (id: number) => {
     const response = await getClassApi(id);
     return response.data;
+  }
+);
+
+export const getAllOnlineTestScores = createAsyncThunk(
+  `${TEACHING_KEY}/getAllOnlineTestScores`,
+  async (params: RequestParams) => {
+    const response = await getAllOnlineTestScoresApi(params);
+    return response.data.data;
+  }
+);
+
+export const getAllOfflineTestScores = createAsyncThunk(
+  `${TEACHING_KEY}/getAllOfflineTestScores`,
+  async (params: RequestParams) => {
+    const response = await getAllOfflineTestScoresApi(params);
+    return response.data.data;
   }
 );
 
@@ -40,6 +58,18 @@ const teachingSlice = createSlice({
     });
     builder.addCase(getClass.rejected, (state) => {
       state.classDetail = null;
+    });
+    builder.addCase(getAllOfflineTestScores.fulfilled, (state, action) => {
+      state.offlineTestScores = action.payload;
+    });
+    builder.addCase(getAllOfflineTestScores.rejected, (state) => {
+      state.offlineTestScores = null;
+    });
+    builder.addCase(getAllOnlineTestScores.fulfilled, (state, action) => {
+      state.onlineTestScores = action.payload;
+    });
+    builder.addCase(getAllOnlineTestScores.rejected, (state) => {
+      state.onlineTestScores = null;
     });
   },
 });

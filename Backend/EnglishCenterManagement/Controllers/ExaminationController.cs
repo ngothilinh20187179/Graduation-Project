@@ -393,6 +393,57 @@ namespace EnglishCenterManagement.Controllers
             return Ok(new ApiReponse(listMarks));
         }
 
+        [HttpGet("student/{id}/online-test-scores")]
+        [Authorize(Roles = nameof(RoleType.Teacher))]
+        public ActionResult<PagedResponse> GetStudentOnlineTestScores(int id, int page = 1, int pageSize = 20)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
+
+            var listQuizMarks = _examinationRepository.GetQuizMarksByStudentId(id, page, pageSize);
+            var mappedListQuizMarks = _mapper.Map<List<QuizMarkDto>>(listQuizMarks.Data);
+            mappedListQuizMarks.ForEach(item =>
+            {
+                item.NameQuiz = _examinationRepository.GetQuizNameById(item.QuizId);
+            });
+            listQuizMarks.Data = mappedListQuizMarks;
+
+            return Ok(new ApiReponse(listQuizMarks));
+        }
+
+        [HttpGet("student/{id}/offline-test-scores")]
+        [Authorize(Roles = nameof(RoleType.Teacher))]
+        public ActionResult<PagedResponse> GetStudentOfflineTestScores(int id, int page = 1, int pageSize = 20)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize > 20 || pageSize < 1 ? 20 : pageSize;
+
+            var listMarks = _examinationRepository.GetMarksByStudentId(id, page, pageSize);
+            var mappedListMarks = _mapper.Map<List<MarkDto>>(listMarks.Data);
+            listMarks.Data = mappedListMarks;
+            return Ok(new ApiReponse(listMarks));
+        }
+
         [HttpPost("submit-quiz")]
         [Authorize(Roles =nameof(RoleType.Student))]
         public ActionResult SubmitQuiz([FromBody] QuizSubmitDto quizSubmitDto)

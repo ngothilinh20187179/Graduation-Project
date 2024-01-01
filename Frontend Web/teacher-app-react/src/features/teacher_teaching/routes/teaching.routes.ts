@@ -20,8 +20,22 @@ const LIST_STUDENTS_SCREEN: RouteItem = {
   component: lazy(() => import("../screens/ListStudentsInClassScreen/ListStudentsInClassScreen")),
 };
 
+const ONLINE_TEST_SCORES_SCREEN: RouteItem = {
+  id: "student-online-test-score",
+  path: TeachingRoutePaths.QUIZ_MARKS,
+  component: lazy(() => import("../screens/OnlineTestScoresScreen/OnlineTestScoresScreen")),
+}; 
+
+const OFFLINE_TEST_SCORES_SCREEN: RouteItem = {
+  id: "student-offline-test-score",
+  path: TeachingRoutePaths.MARKS,
+  component: lazy(() => import("../screens/OfflineTestScoresScreen/OfflineTestScoresScreen")),
+}; 
+
 export const LEARNING_ROUTES = [
   MY_CLASSES,
   CLASS_DETAIL_SCREEN,
   LIST_STUDENTS_SCREEN,
+  ONLINE_TEST_SCORES_SCREEN,
+  OFFLINE_TEST_SCORES_SCREEN
 ];

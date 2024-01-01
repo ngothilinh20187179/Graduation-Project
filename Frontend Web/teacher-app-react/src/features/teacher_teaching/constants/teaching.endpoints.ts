@@ -8,6 +8,12 @@ const TeachingEndpoints = {
     return `/teacher-classes?search=${search}&page=${page}&pageSize=${pageSize}`;
   },
   GET_CLASS: (id: number) => `/class/${id}`,
+  GET_MY_ONLINE_TEST_SCORES: ({ id, page, pageSize }: RequestParams) => {
+    return `/student/${id}/online-test-scores?page=${page}&pageSize=${pageSize}`;
+  },
+  GET_MY_OFFLINE_TEST_SCORES: ({ id, page, pageSize }: RequestParams) => {
+    return `/student/${id}/offline-test-scores?page=${page}&pageSize=${pageSize}`;
+  },
 };
 
 export default TeachingEndpoints;

@@ -50,7 +50,34 @@ export type GetClassResponse = {
   };
 };
 
+export type OnlineTestScores = {
+  id: number;
+  quizId: string;
+  nameQuiz: string;
+  point: number;
+  totalPoint: number;
+  created: string;
+};
+
+export type OfflineTestScores = {
+  id: number;
+  name: string;
+  point: number;
+  totalPoint: number;
+  created: string;
+};
+
+export interface GetAllOnlineTestScores extends PaginationResponse {
+  data: OnlineTestScores[];
+}
+
+export interface GetAllOfflineTestScores extends PaginationResponse {
+  data: OfflineTestScores[];
+}
+
 export interface TeachingState {
   classes: GetAllClassesResponse | null;
   classDetail: GetClassResponse | null;
+  onlineTestScores: GetAllOnlineTestScores | null;
+  offlineTestScores: GetAllOfflineTestScores | null;
 }
