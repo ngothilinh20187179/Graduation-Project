@@ -112,6 +112,12 @@ app.UseHttpsRedirection();
 
 app.UseCors(policyName);
 
+using (var serviceScope = app.Services.CreateScope())
+{
+	var dbcontext = serviceScope.ServiceProvider.GetRequiredService<DataContext>();
+	dbcontext.Database.Migrate();
+}
+
 // . NOTE: Add UseAuthentication before UseAuthorization
 app.UseAuthentication();
 

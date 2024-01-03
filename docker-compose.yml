@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  englishcentermanagement:
+    image: ${DOCKER_REGISTRY-}englishcentermanagement
+    build:
+      context: .
+      dockerfile: Backend/EnglishCenterManagement/Dockerfile
+    depends_on:
+      - database
+
+  database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+
+  web-admin:
+    image: ${DOCKER_REGISTRY-}web-admin
+    build:
+      context: Frontend Web/admin-app-react
+    depends_on:
+      - englishcentermanagement
+
+  web-staff:
+    image: ${DOCKER_REGISTRY-}web-staff
+    build:
+      context: Frontend Web/staff-app-react
+    depends_on:
+      - web-admin
+
+  web-student:
+    image: ${DOCKER_REGISTRY-}web-student
+    build:
+      context: Frontend Web/student-app-react
+    depends_on:
+      - web-staff
+
+  web-teacher:
+    image: ${DOCKER_REGISTRY-}web-teacher
+    build:
+      context: Frontend Web/teacher-app-react
+    depends_on:
+      - web-student
+      
