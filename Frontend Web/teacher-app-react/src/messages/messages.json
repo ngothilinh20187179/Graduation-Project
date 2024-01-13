@@ -12,5 +12,6 @@
   "fe_10": "Invalid email!",
   "fe_11": "Invalid phone number. Maximum 10 number characters.",
   "fe_12": "Please input your notification's title",
-  "fe_13": "Please input your notification's content"
+  "fe_13": "Please input your notification's content",
+  "fe_14": "Please input point of test"
 }

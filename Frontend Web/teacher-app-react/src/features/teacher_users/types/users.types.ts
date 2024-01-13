@@ -43,10 +43,20 @@ export type EditInformationRequestBody = {
 } & BasicUserInfo;
 
 
-export interface GetAllStudentsInClassResponse extends PaginationResponse {
+export interface GetStudentsInClassResponse extends PaginationResponse {
   data: (BasicUserInfo & {
     avatar: UserAvatar | null;
   }) [];
+}
+
+export type StudentNameAndId = {
+  id: number;
+  firstName: string;
+  lastName: string;
+}
+
+export type GetAllStudentsInClassResponse = {
+  data: StudentNameAndId[];
 }
 
 export type StudentDetail = BasicUserInfo &
@@ -56,6 +66,7 @@ export type StudentDetail = BasicUserInfo &
 
 export interface UsersState {
   avatar: UserAvatar | null;
-  students: GetAllStudentsInClassResponse | null;
+  students: GetStudentsInClassResponse | null;
   student: StudentDetail | null;
+  allStudents: GetAllStudentsInClassResponse | null;
 }

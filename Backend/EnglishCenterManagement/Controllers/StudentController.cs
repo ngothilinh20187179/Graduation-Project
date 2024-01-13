@@ -106,7 +106,7 @@ namespace EnglishCenterManagement.Controllers
         // GET: /class/5/students
         [HttpGet("class/{id}/students")]
         [Authorize(Roles = "Student, Teacher, Staff, Admin")]
-        public ActionResult<PagedResponse> GetAllStudentsInClass(int id, string? search, int page = 1, int pageSize = 20)
+        public ActionResult<PagedResponse> GetStudentsInClass(int id, string? search, int page = 1, int pageSize = 20)
         {
             var user = GetUserByClaim();
             if (user == null)
@@ -144,6 +144,40 @@ namespace EnglishCenterManagement.Controllers
             getListStudentsInClass.Data = mappedStudentsInClass;
 
             return Ok(new ApiReponse(getListStudentsInClass));
+        }
+       
+        // GET: /class/5/all-students
+        [HttpGet("class/{id}/all-students")]
+        [Authorize(Roles = "Student, Teacher, Staff, Admin")]
+        public ActionResult<ICollection<UserNameAndIdDto>> GetAllStudentsInClass(int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+            var getClassById = _classRoomRepository.GetClassById(id);
+            if (getClassById == null)
+            {
+                return NotFound(new ApiReponse(626));
+            }
+
+            // Học sinh hoặc giáo viên ngoài lớp đó không xem được danh sách lớp
+            if ((user.Role == RoleType.Student && (!_teacherStudentRepository.CheckStudentClassExists(id, user.Id))) ||
+                (user.Role == RoleType.Teacher && (!_teacherStudentRepository.CheckTeacherClassExists(id, user.Id))))
+            {
+                return Unauthorized(new ApiReponse(1000));
+            }
+
+            // Students of Class
+            var getListStudentsInClass = _teacherStudentRepository.GetAllStudentsInClass(id);
+            var mappedStudentsInClass = _mapper.Map<List<UserNameAndIdDto>>(getListStudentsInClass);
+
+            return Ok(new ApiReponse(mappedStudentsInClass));
         }
 
         // POST: /create-student

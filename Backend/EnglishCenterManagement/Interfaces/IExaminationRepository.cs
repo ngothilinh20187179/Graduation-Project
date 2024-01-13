@@ -27,7 +27,9 @@ namespace EnglishCenterManagement.Interfaces
         ICollection<AnswerModel> GetAnwsersByQuestionId(int questionId);
         ICollection<int> GetListAnswerIdsTrue(int questionId);
         bool CreateMark(MarkModel mark);
+        bool UpdateMark(MarkModel mark);
         PagedResponse GetQuizMarksByStudentId(int studentId, int page, int pageSize);
+        MarkModel GetMarkById(int id);
         PagedResponse GetMarksByStudentId(int studentId, int page, int pageSize);
     }
 }

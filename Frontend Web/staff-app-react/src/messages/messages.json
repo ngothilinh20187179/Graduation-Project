@@ -26,5 +26,8 @@
   "fe_24": "Please input number of sessions!",
   "fe_25": "Please input credit!",
   "fe_26": "Please input spend on!",
-  "fe_27": "Please input budget!"
+  "fe_27": "Please input budget!",
+  "fe_28": "Please input start date of class",
+  "fe_29": "Please input end date of class",
+  "fe_30": "The end date must be greater than the start date"
 }

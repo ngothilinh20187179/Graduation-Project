@@ -1,4 +1,5 @@
 ﻿using EnglishCenterManagement.Common.Response;
+using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 
 namespace EnglishCenterManagement.Interfaces
@@ -9,6 +10,7 @@ namespace EnglishCenterManagement.Interfaces
         StudentModel GetStudentById(int id);
         PagedResponse GetAllStudents(string? search, int page, int pageSize);
         PagedResponse GetAllStudentsInClass(int id, string? search, int page, int pageSize);
+        ICollection<UserInfoModel> GetAllStudentsInClass(int id);
         bool CreateStudentProfile(StudentModel student);
         bool UpdateStudentProfile(StudentModel student);
 
@@ -26,6 +28,7 @@ namespace EnglishCenterManagement.Interfaces
         bool CheckTeacherStudentInSameClass(int teacherId, int studentId);
         ICollection<TeacherClassModel> GetTeacherClassByClassId(int id);
         bool DeleteTeacherInClass(TeacherClassModel teacherClass);
+        ICollection<ClassModel> GetAllClassOfTeacherByStatus(ClassStatusType status, int id);
         bool AddTeacherClass(TeacherClassModel teacherClass);
     }
 }

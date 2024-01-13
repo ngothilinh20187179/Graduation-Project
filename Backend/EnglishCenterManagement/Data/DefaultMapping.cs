@@ -27,6 +27,7 @@ namespace EnglishCenterManagement.Data
             CreateMap<UserInfoDto, UserInfoModel>();
             CreateMap<UserInfoModel, UserInfoDto>();
             CreateMap<UserInfoModel, BasicUserInfoDto>();
+            CreateMap<UserInfoModel, UserNameAndIdDto>();
             CreateMap<UserInfoModel, UserProfileDetailDto>();
 
             CreateMap<UserInfoModel, StudentProfileDetailDto>().ReverseMap();
@@ -67,6 +68,7 @@ namespace EnglishCenterManagement.Data
             CreateMap<MarkModel, MarkDto>();
             CreateMap<MarkModel, QuizMarkDto>();
             CreateMap<CreateMarkDto, MarkModel>();
+            CreateMap<CreateTranscriptDto, MarkModel>();
             CreateMap<ClassModel, AssignClassDto>();
 
             CreateMap<NotificationModel, ReceivedNotificationDto>();
@@ -89,6 +91,7 @@ namespace EnglishCenterManagement.Data
             CreateMap<StudentClassModel, StudentTuitionInformationDto>();
             CreateMap<TeacherSalaryModel, TeacherSalaryDto>();
             CreateMap<StaffSalaryModel, StaffSalaryDto>();
+            CreateMap<ClassModel, TeachingScheduleDto>();
         }
     }
 }

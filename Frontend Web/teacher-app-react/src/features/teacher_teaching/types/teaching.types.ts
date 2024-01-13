@@ -75,9 +75,77 @@ export interface GetAllOfflineTestScores extends PaginationResponse {
   data: OfflineTestScores[];
 }
 
+export type Mark = {
+  id: number;
+  point: number;
+}
+
+export type TeachingSchedule = {
+  id: number;
+  className: string;
+  schedules: ClassSchedules[]
+}
+
+export interface GetAllMyTeachingSchedule {
+  data: TeachingSchedule[];
+}
+
+export type QuizBasicInfo = {
+  id: number;
+  name: string;
+  duration: string;
+  created: string;
+  status: number;
+};
+
+export interface GetAllQuizzes extends PaginationResponse {
+  data: QuizBasicInfo[];
+}
+
+export type Quiz = {
+  id: number;
+  name: string;
+  duration: string;
+  created: string;
+  totalPoint: number;
+  totalQuestion: number;
+  questions: Questions[];
+};
+
+export type Questions = {
+  id: number;
+  questionText: string;
+  point: number;
+  order: number;
+  answers: Answer[];
+};
+
+export type Answer = {
+  id: number;
+  answerText: string;
+};
+
+export type GetQuizResponse = {
+  data: Quiz;
+};
+
+export type EnterTranscript = {
+  name: string;
+  totalPoint: number;
+  transcripts: Transcript[];
+}
+
+export type Transcript = {
+  studentId: number;
+  point: number | null;
+}
+
 export interface TeachingState {
   classes: GetAllClassesResponse | null;
   classDetail: GetClassResponse | null;
   onlineTestScores: GetAllOnlineTestScores | null;
   offlineTestScores: GetAllOfflineTestScores | null;
+  myTeachingSchedule: GetAllMyTeachingSchedule | null;
+  quizzes: GetAllQuizzes | null;
+  quiz: GetQuizResponse | null;
 }

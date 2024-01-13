@@ -169,6 +169,13 @@ namespace EnglishCenterManagement.Repository
             _context.Add(mark);
             return SaveChange();
         }
+
+        public bool UpdateMark(MarkModel mark)
+        {
+            _context.Update(mark);
+            return SaveChange();
+        }
+
         public PagedResponse GetQuizMarksByStudentId(int studentId, int page, int pageSize)
         {
             var marks = _context.Marks.Where(x => x.StudentId == studentId && x.QuizId != null).AsQueryable();
@@ -199,6 +206,11 @@ namespace EnglishCenterManagement.Repository
             #endregion
 
             return new PagedResponse(data, totalClasses, page, pageSize);
+        }
+
+        public MarkModel GetMarkById(int id)
+        {
+            return _context.Marks.Where(x => x.Id == id).FirstOrDefault();
         }
 
         public bool SaveChange()

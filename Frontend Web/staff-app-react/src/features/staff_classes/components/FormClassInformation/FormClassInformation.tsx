@@ -27,6 +27,7 @@ import { AxiosResponse } from "axios";
 import { useAppDispatch } from "redux/store";
 import {
   BasicSubjects,
+  ClassStatusType,
   ClassesPaths,
   CreateEditClassInfo,
   GetClassResponse,
@@ -112,6 +113,88 @@ const FormClassInformation = ({
               <Input />
             </Form.Item>
           </Col>
+          <Col xs={24} xl={8} style={{ maxWidth: 320 }}>
+            <Form.Item label="Subject:" name="subjectId" required>
+              <Select
+                allowClear
+                placeholder="Please select subject"
+                notFoundContent={loading ? <Spin size="small" /> : null}
+              >
+                {data.map((option) => (
+                  <Select.Option key={option.id} value={option.id}>
+                    Id: {option.id} - {option.subjectName} -{" "}
+                    {option.subjectDescription}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={[60, 0]}>
+          <Col xs={24} xl={8} style={{ maxWidth: 320 }}>
+            <Form.Item
+              label="Start Date:"
+              name="classStartDate"
+              required
+              rules={[...requireRule(mess.fe_28)]}
+            >
+              <DatePicker
+                disabledDate={(current) => {
+                  return current && current.valueOf() < Date.now();
+                }}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} xl={8} style={{ maxWidth: 320 }}>
+            <Form.Item
+              label="End Date:"
+              name="classEndDate"
+              dependencies={["classStartDate"]}
+              rules={[
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (
+                      !value ||
+                      getFieldValue("classStartDate") === value ||
+                      getFieldValue("classStartDate") < value
+                    ) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error(mess.fe_30 as string));
+                  },
+                }),
+              ]}
+            >
+              <DatePicker
+                disabledDate={(current) => {
+                  return current && current.valueOf() < Date.now();
+                }}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} xl={8} style={{ maxWidth: 320 }}>
+            <Form.Item label="Class Status:" name="classStatus" required>
+              <Select
+                allowClear
+                placeholder="Please select status"
+                defaultValue={
+                  classInfo?.data.classStatus === 0
+                    ? "NotStart"
+                    : classInfo?.data.classStatus === 1
+                    ? "InProgress"
+                    : classInfo?.data.classStatus === 2
+                    ? "Stop"
+                    : "End"
+                }
+                options={[
+                  { value: ClassStatusType.NotStart, label: "Not Start" },
+                  { value: ClassStatusType.InProgress, label: "In Progress" },
+                  { value: ClassStatusType.Stop, label: "Stop" },
+                  { value: ClassStatusType.End, label: "End" },
+                ]}
+              />
+            </Form.Item>
+          </Col>
         </Row>
         <Row gutter={[60, 0]}>
           <Col xs={24} xl={8} style={{ maxWidth: 320 }}>
@@ -136,7 +219,7 @@ const FormClassInformation = ({
           </Col>
           <Col xs={24} xl={8} style={{ maxWidth: 320 }}>
             <Form.Item
-              label="Credit:"
+              label="Credit (VNĐ):"
               name="credit"
               required
               rules={[...requireRule(mess.fe_25)]}
@@ -145,75 +228,7 @@ const FormClassInformation = ({
             </Form.Item>
           </Col>
         </Row>
-
-        {/* <Row gutter={[60, 0]}>
-          <Col xs={24} xl={8} style={{ maxWidth: 320 }}>
-            <Form.Item label="Date Of Birth:" name="dateOfBirth">
-              <DatePicker
-                disabledDate={(current) => {
-                  return current && current.valueOf() > Date.now();
-                }}
-              />
-            </Form.Item>
-          </Col>
-        </Row> */}
-        {/* <Row gutter={[60, 0]}>
-          <Col xs={24} xl={8} style={{ maxWidth: 320 }}>
-            <Form.Item
-              label="Graduate At:"
-              name="graduateAt"
-              required
-              rules={[...requireRules(mess.fe_17)]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col xs={24} xl={8} style={{ maxWidth: 320 }}>
-            <Form.Item
-              label="Graduation Time:"
-              name="graduationTime"
-              required
-              rules={[...requireRule(mess.fe_18)]}
-            >
-              <DatePicker
-                disabledDate={(current) => {
-                  return current && current.valueOf() > Date.now();
-                }}
-              />
-            </Form.Item>
-          </Col>
-          <Col xs={24} xl={8} style={{ maxWidth: 320 }}>
-            <Form.Item
-              label="Hire Date:"
-              name="hireDate"
-              required
-              rules={[...requireRule(mess.fe_20)]}
-            >
-              <DatePicker
-                disabledDate={(current) => {
-                  return current && current.valueOf() > Date.now();
-                }}
-              />
-            </Form.Item>
-          </Col>
-        </Row> */}
         <Row gutter={[60, 0]}>
-          <Col xs={24} xl={8} style={{ maxWidth: 320 }}>
-            <Form.Item label="Subject:" name="subjectId" required>
-              <Select
-                allowClear
-                placeholder="Please select subject"
-                notFoundContent={loading ? <Spin size="small" /> : null}
-              >
-                {data.map((option) => (
-                  <Select.Option key={option.id} value={option.id}>
-                    Id: {option.id} - {option.subjectName} -{" "}
-                    {option.subjectDescription}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col>
           <Col xs={24} xl={8} style={{ maxWidth: 320 }}>
             <Form.Item label="Note:" name="note">
               <Input />

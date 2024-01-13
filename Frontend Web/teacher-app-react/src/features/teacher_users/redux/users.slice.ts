@@ -3,15 +3,18 @@ import USERS_KEY from "../constants/users.keys";
 import {
   UserAvatar,
   UsersState,
+  getAllStudentsInClassApi,
   getMyAvatarApi,
   getStudentByIdApi,
   getStudentsInClassApi,
 } from "../teacher_users";
+import { RequestParams } from "types/param.types";
 
 const initialState: UsersState = {
   avatar: null,
   students: null,
   student: null,
+  allStudents: null
 };
 
 export const getMyAvatar = createAsyncThunk(
@@ -24,9 +27,17 @@ export const getMyAvatar = createAsyncThunk(
 
 export const getStudentsInClass = createAsyncThunk(
   `${USERS_KEY}/getStudentsInClass`,
-  async (id: number) => {
-    const response = await getStudentsInClassApi(id);
+  async (params: RequestParams) => {
+    const response = await getStudentsInClassApi(params);
     return response.data.data;
+  }
+);
+
+export const getAllStudentsInClass = createAsyncThunk(
+  `${USERS_KEY}/getAllStudentsInClass`,
+  async (id: number) => {
+    const response = await getAllStudentsInClassApi(id);
+    return response.data;
   }
 );
 
@@ -63,6 +74,12 @@ const usersSlice = createSlice({
     });
     builder.addCase(getStudentById.rejected, (state) => {
       state.student = null;
+    });
+    builder.addCase(getAllStudentsInClass.fulfilled, (state, action) => {
+      state.allStudents = action.payload;
+    });
+    builder.addCase(getAllStudentsInClass.rejected, (state) => {
+      state.allStudents = null;
     });
   },
 });

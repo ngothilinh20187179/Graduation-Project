@@ -10,7 +10,7 @@ import {
   BookOutlined,
   ScheduleOutlined,
   FormOutlined,
-  FileDoneOutlined
+  // FileDoneOutlined
 } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { TopPaths } from "features/teacher_top/teacher_top";
@@ -35,10 +35,10 @@ function getItem(
 }
 
 const items: MenuProps["items"] = [
-  getItem("My Schedule", "/my-schedule", <ScheduleOutlined />),
+  getItem("My Schedule", TeachingPaths.MY_TEACHING_SCHEDULE(), <ScheduleOutlined />),
   getItem("Classes", TeachingPaths.CLASSES(), <BookOutlined />),
-  getItem("Create Test", "/test", <FormOutlined />),
-  getItem("Enter Transcript", "/transcript", <FileDoneOutlined />),
+  getItem("Quizzes", TeachingPaths.QUIZZES(), <FormOutlined />),
+  // getItem("Enter Transcript", "/transcript", <FileDoneOutlined />),
   getItem("My Salary", FinancePaths.SALARY(), <DollarOutlined />),
   getItem("Notifications", NotificationPaths.NOTIFICATION(), <BellOutlined />),
 ];

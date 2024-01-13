@@ -1,4 +1,12 @@
-import { Badge, Breadcrumb, Button, Modal, Pagination, Table, Typography } from "antd";
+import {
+  Badge,
+  Breadcrumb,
+  Button,
+  Modal,
+  Pagination,
+  Table,
+  Typography,
+} from "antd";
 import { TopPaths } from "features/staff_top/staff_top";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -104,7 +112,7 @@ const RoomScreen = () => {
       .finally(() => setIsLoading(false));
   }, [dispatch, triggerReload, page, pageSize, search]);
 
-    const handleDeleteRoom = () => {
+  const handleDeleteRoom = () => {
     if (!roomSelected) return;
     setIsSubmitting(true);
     setIsLoading(true);
@@ -168,18 +176,18 @@ const RoomScreen = () => {
         total={Number(rooms?.totalPages) * 10}
       />
       <Modal
-          centered
-          title="Are you sure you want to delete this room?"
-          open={!!roomSelected}
-          cancelText="Cancel"
-          okText="Delete"
-          okType="danger"
-          onCancel={() => setRoomSelected(null)}
-          onOk={handleDeleteRoom}
-          okButtonProps={{
-            disabled: isSubmitting,
-          }}
-        />
+        centered
+        title="Are you sure you want to delete this room?"
+        open={!!roomSelected}
+        cancelText="Cancel"
+        okText="Delete"
+        okType="danger"
+        onCancel={() => setRoomSelected(null)}
+        onOk={handleDeleteRoom}
+        okButtonProps={{
+          disabled: isSubmitting,
+        }}
+      />
     </div>
   );
 };

@@ -19,6 +19,7 @@ import {
 } from "features/teacher_users/constants/users.constants";
 import { getStudentsInClass } from "features/teacher_users/teacher_users";
 import DropdownButton from "components/DropdownButton/DropdownButton";
+import { RequestParams } from "types/param.types";
 
 const ListStudentsInClassScreen = () => {
   const dispatch = useAppDispatch();
@@ -34,8 +35,13 @@ const ListStudentsInClassScreen = () => {
   } = useAppSelector((state: RootState) => state);
 
   useEffect(() => {
+    const params: RequestParams = {
+      id: Number(id),
+      page,
+      pageSize,
+    };
     setIsLoading(true);
-    dispatch(getStudentsInClass(Number(id)))
+    dispatch(getStudentsInClass(params))
       .then(unwrapResult)
       .finally(() => {
         setIsLoading(false);

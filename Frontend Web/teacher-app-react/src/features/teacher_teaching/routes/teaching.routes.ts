@@ -32,10 +32,38 @@ const OFFLINE_TEST_SCORES_SCREEN: RouteItem = {
   component: lazy(() => import("../screens/OfflineTestScoresScreen/OfflineTestScoresScreen")),
 }; 
 
+const MY_TEACHING_SCHEDULE_SCREEN: RouteItem = {
+  id: "teacher-schedule",
+  path: TeachingRoutePaths.MY_TEACHING_SCHEDULE,
+  component: lazy(() => import("../screens/MyTeachingScheduleScreen/MyTeachingScheduleScreen")),
+}; 
+
+const LIST_QUIZZES_SCREEN: RouteItem = {
+  id: "teacher-quizzes",
+  path: TeachingRoutePaths.QUIZZES,
+  component: lazy(() => import("../screens/ListQuizzesScreen/ListQuizzesScreen")),
+}; 
+
+const QUIZ_DETAIL_SCREEN: RouteItem = {
+  id: "teacher-quiz-detail",
+  path: TeachingRoutePaths.GET_QUIZ,
+  component: lazy(() => import("../screens/QuizDetailScreen/QuizDetailScreen")),
+};
+
+const ENTER_TRANSCRIPT_SCREEN: RouteItem = {
+  id: "teacher-enter-transcript",
+  path: TeachingRoutePaths.ENTER_TRANSCRIPT,
+  component: lazy(() => import("../screens/EnterTranscriptScreen/EnterTranscriptScreen")),
+};
+
 export const LEARNING_ROUTES = [
   MY_CLASSES,
   CLASS_DETAIL_SCREEN,
   LIST_STUDENTS_SCREEN,
   ONLINE_TEST_SCORES_SCREEN,
-  OFFLINE_TEST_SCORES_SCREEN
+  OFFLINE_TEST_SCORES_SCREEN,
+  MY_TEACHING_SCHEDULE_SCREEN,
+  LIST_QUIZZES_SCREEN,
+  QUIZ_DETAIL_SCREEN,
+  ENTER_TRANSCRIPT_SCREEN
 ];

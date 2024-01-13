@@ -1,5 +1,6 @@
 ﻿using EnglishCenterManagement.Common.Response;
 using EnglishCenterManagement.Data;
+using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
 
@@ -63,6 +64,13 @@ namespace EnglishCenterManagement.Repository
             #endregion
 
             return new PagedResponse(data, totalStudents, page, pageSize);
+        }
+        public ICollection<UserInfoModel> GetAllStudentsInClass(int id)
+        {
+            var studentIds = _context.StudentClasses.Where(x => x.ClassId == id).Select(x => x.StudentId).ToList();
+            var allStudents = _context.Users.Where(x => studentIds.Contains(x.Id)).ToList();
+
+            return allStudents;
         }
         public bool CreateStudentProfile(StudentModel student)
         {
@@ -140,6 +148,13 @@ namespace EnglishCenterManagement.Repository
         public ICollection<TeacherClassModel> GetTeacherClassByClassId(int id)
         {
             return _context.TeacherClasses.Where(x => x.ClassId == id).ToList();
+        }
+        public ICollection<ClassModel> GetAllClassOfTeacherByStatus(ClassStatusType status ,int id)
+        {
+            var classIds = _context.TeacherClasses.Where(x => x.TeacherId == id).Select(x => x.ClassId).ToList();
+            var allClasses = _context.Classes.Where(x => classIds.Contains(x.Id)).ToList();
+            allClasses = allClasses.Where(x => x.ClassStatus == status).ToList();
+            return allClasses;
         }
         public bool AddTeacherClass(TeacherClassModel teacherClass)
         {

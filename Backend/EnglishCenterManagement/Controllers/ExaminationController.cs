@@ -7,6 +7,7 @@ using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing;
 using System.Security.Claims;
 
 namespace EnglishCenterManagement.Controllers
@@ -17,14 +18,17 @@ namespace EnglishCenterManagement.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
+        private readonly IClassRoomRepository _classRoomRepository;
         private readonly IExaminationRepository _examinationRepository;
         public ExaminationController (
             IMapper mapper,
             IUserRepository userRepository,
+            IClassRoomRepository classRoomRepository,
             IExaminationRepository examinationRepository)
         {
             _mapper = mapper;
             _userRepository = userRepository;
+            _classRoomRepository = classRoomRepository;
             _examinationRepository = examinationRepository;
         }
         #region Quiz
@@ -444,6 +448,31 @@ namespace EnglishCenterManagement.Controllers
             return Ok(new ApiReponse(listMarks));
         }
 
+        [HttpPut("update-offline-test-score/{id}")]
+        [Authorize(Roles = nameof(RoleType.Teacher))]
+        public ActionResult UpdateOfflineTestScore([FromBody] int point, int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+            var markNeedUpdate = _examinationRepository.GetMarkById(id);
+
+            if (point > markNeedUpdate.TotalPoint)
+            {
+                return BadRequest();
+            }
+            markNeedUpdate.Point = point;
+            _examinationRepository.UpdateMark(markNeedUpdate);
+
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
         [HttpPost("submit-quiz")]
         [Authorize(Roles =nameof(RoleType.Student))]
         public ActionResult SubmitQuiz([FromBody] QuizSubmitDto quizSubmitDto)
@@ -531,6 +560,34 @@ namespace EnglishCenterManagement.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
+
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
+        [HttpPost("enter-transcript")]
+        [Authorize(Roles = nameof(RoleType.Teacher))]
+        public ActionResult EnterTranscript([FromBody] EnterTranscriptDto enterTranscriptDto)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+            var transcript = new CreateTranscriptDto();
+            transcript.Name = enterTranscriptDto.Name;
+            transcript.TotalPoint = enterTranscriptDto.TotalPoint;
+
+            enterTranscriptDto.Transcripts.ForEach(x =>
+            {
+                transcript.Point = x.Point;
+                transcript.StudentId = x.StudentId;
+                var mappedTranscript = _mapper.Map<MarkModel>(transcript);
+                _examinationRepository.CreateMark(mappedTranscript);
+            });
 
             return StatusCode(StatusCodes.Status201Created);
         }
