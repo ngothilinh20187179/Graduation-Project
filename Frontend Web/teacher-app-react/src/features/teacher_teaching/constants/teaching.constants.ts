@@ -186,3 +186,47 @@ export const COLUMNS_TABLE_OFFLINE_TEST_SCORES = () => [
     width: "120px",
   }
 ];
+
+
+export const COLUMNS_TABLE_QUIZZES = () => [
+  {
+    title: "",
+    dataIndex: "index",
+    key: "index",
+    width: "60px",
+  },
+  {
+    title: "Id",
+    dataIndex: "id",
+    key: "id",
+    width: "60px",
+  },
+  {
+    title: "Name",
+    dataIndex: "name",
+    key: "name",
+    ellipsis: true,
+    width: "400px",
+  },
+  {
+    title: "Duration",
+    dataIndex: "duration",
+    key: "duration",
+    ellipsis: true,
+    width: "100px",
+  },
+  {
+    title: "Create On",
+    dataIndex: "created",
+    key: "created",
+    ellipsis: true,
+    width: "120px",
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    key: "action",
+    ellipsis: true,
+    width: "110px",
+  },
+];

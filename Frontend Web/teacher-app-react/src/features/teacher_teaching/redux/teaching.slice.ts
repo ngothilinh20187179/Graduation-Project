@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RequestParams } from "types/param.types";
-import { TeachingState, getAllOfflineTestScoresApi, getAllOnlineTestScoresApi, getClassApi, getClassesApi } from "../teaching.types";
+import { EnterTranscript, Mark, TeachingState, deleteQuizApi, enterTranscriptApi, getAllOfflineTestScoresApi, getAllOnlineTestScoresApi, getClassApi, getClassesApi, getMyTeachingScheduleApi, getQuizApi, getQuizzesApi, updateMarkApi } from "../teaching.types";
 import TEACHING_KEY from "../constants/teaching.keys";
 
 const initialState: TeachingState = {
@@ -8,6 +8,9 @@ const initialState: TeachingState = {
   classDetail: null,
   offlineTestScores: null,
   onlineTestScores: null,
+  myTeachingSchedule: null,
+  quizzes: null,
+  quiz: null
 };
 
 export const getClasses = createAsyncThunk(
@@ -42,6 +45,52 @@ export const getAllOfflineTestScores = createAsyncThunk(
   }
 );
 
+export const updateMark = createAsyncThunk(
+  `${TEACHING_KEY}/updateMark`,
+  async (data: Mark) => {
+    const { id, point } = data;
+    return updateMarkApi(id, point);
+  }
+);
+
+export const getQuizzes = createAsyncThunk(
+  `${TEACHING_KEY}/getQuizzes`,
+  async (params: RequestParams) => {
+    const response = await getQuizzesApi(params);
+    return response.data.data;
+  }
+);
+
+export const getMyTeachingSchedule = createAsyncThunk(
+  `${TEACHING_KEY}/getMyTeachingSchedule`,
+  async () => {
+    const response = await getMyTeachingScheduleApi();
+    return response.data.data;
+  }
+);
+
+export const getQuiz = createAsyncThunk(
+  `${TEACHING_KEY}/getQuiz`,
+  async (id: number) => {
+    const response = await getQuizApi(id);
+    return response.data;
+  }
+);
+
+export const deleteQuiz = createAsyncThunk(
+  `${TEACHING_KEY}/deleteQuiz`,
+  async (id: number) => {
+    return deleteQuizApi(id);
+  }
+);
+
+export const enterTranscript = createAsyncThunk(
+  `${TEACHING_KEY}/enterTranscript`,
+  async (data: EnterTranscript) => {
+    return enterTranscriptApi(data);
+  }
+);
+
 const teachingSlice = createSlice({
   name: TEACHING_KEY,
   initialState,
@@ -70,6 +119,24 @@ const teachingSlice = createSlice({
     });
     builder.addCase(getAllOnlineTestScores.rejected, (state) => {
       state.onlineTestScores = null;
+    });
+    builder.addCase(getMyTeachingSchedule.fulfilled, (state, action) => {
+      state.myTeachingSchedule = action.payload;
+    });
+    builder.addCase(getMyTeachingSchedule.rejected, (state) => {
+      state.myTeachingSchedule = null;
+    });
+    builder.addCase(getQuizzes.fulfilled, (state, action) => {
+      state.quizzes = action.payload;
+    });
+    builder.addCase(getQuizzes.rejected, (state) => {
+      state.quizzes = null;
+    });
+    builder.addCase(getQuiz.fulfilled, (state, action) => {
+      state.quiz = action.payload;
+    });
+    builder.addCase(getQuiz.rejected, (state) => {
+      state.quiz = null;
     });
   },
 });

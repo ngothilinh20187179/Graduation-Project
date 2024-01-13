@@ -6,10 +6,12 @@ import { RootState } from "redux/root-reducer";
 import { HomeOutlined } from "@ant-design/icons";
 import DropdownButton from "components/DropdownButton/DropdownButton";
 import { getTimeUTC, numberWithCommas } from "helpers/utils.helper";
-import { COLUMNS_TABLE_SALARY, getMySalary } from "features/staff_finance/staff_finance";
+import { COLUMNS_TABLE_SALARY, FinancePaths, getMySalary } from "features/staff_finance/staff_finance";
+import { useNavigate } from "react-router-dom";
 
 const MySalaryScreen = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
@@ -56,6 +58,12 @@ const MySalaryScreen = () => {
         <Breadcrumb className="pb-20 font-18">
           <Breadcrumb.Item>
             <HomeOutlined />
+          </Breadcrumb.Item>
+          <Breadcrumb.Item
+            className="cursor-pointer"
+            onClick={() => navigate(FinancePaths.FINANCE())}
+          >
+            Finance
           </Breadcrumb.Item>
           <Breadcrumb.Item>Salary</Breadcrumb.Item>
         </Breadcrumb>

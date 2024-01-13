@@ -46,7 +46,7 @@ const items: MenuProps["items"] = [
     getItem("Rooms", ClassesPaths.ROOMS()),
     getItem("Classes", ClassesPaths.CLASSES()),
   ]),
-  getItem("Schedule", "/schedule", <ScheduleOutlined />),
+  // getItem("Schedule", "/schedule", <ScheduleOutlined />),
   getItem("Finances", FinancePaths.FINANCE(), <DollarOutlined />),
 ];
 

@@ -86,9 +86,6 @@ const OnlineTestScoresScreen = () => {
           </span>
         </Title>
         <Descriptions>
-          <Descriptions.Item className="font-16" label="Id">
-            {student?.id}
-          </Descriptions.Item>
           <Descriptions.Item label="First Name">
             {student?.firstName}
           </Descriptions.Item>
@@ -113,9 +110,6 @@ const OnlineTestScoresScreen = () => {
           </Descriptions.Item>
           <Descriptions.Item label="Parent's Phone Number">
             {student?.parentPhoneNumber}
-          </Descriptions.Item>
-          <Descriptions.Item label="Note">
-            {student?.note}
           </Descriptions.Item>
         </Descriptions>
       </div>

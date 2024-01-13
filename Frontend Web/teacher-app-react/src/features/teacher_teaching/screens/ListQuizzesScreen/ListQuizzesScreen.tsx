@@ -1,53 +1,42 @@
 import {
   HomeOutlined,
   SnippetsOutlined,
-  TeamOutlined,
-  CheckOutlined,
-  FontColorsOutlined
+  ArrowRightOutlined,
+  DeleteOutlined
 } from "@ant-design/icons";
-import { Badge, Breadcrumb, Pagination, Table, Typography } from "antd";
+import { Breadcrumb, Button, Modal, Pagination, Table, Typography } from "antd";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { useNavigate } from "react-router-dom";
 import Search from "antd/es/input/Search";
 import { RootState } from "redux/root-reducer";
 import { RequestParams } from "types/param.types";
-import { numberWithCommas } from "helpers/utils.helper";
-import {
-  COLUMNS_TABLE_CLASSES,
-  ClassStatusType,
-  TeachingPaths,
-} from "features/teacher_teaching/teaching.types";
-import { getClasses } from "features/teacher_teaching/redux/teaching.slice";
+import { getTimeUTC } from "helpers/utils.helper";
+import { COLUMNS_TABLE_QUIZZES, TeachingPaths } from "features/teacher_teaching/teaching.types";
+import { deleteQuiz, getQuizzes } from "features/teacher_teaching/redux/teaching.slice";
 import DropdownButton from "components/DropdownButton/DropdownButton";
+import { unwrapResult } from "@reduxjs/toolkit";
 
-const ClassesScreen = () => {
+const ListQuizzesScreen = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const pageSize = 20;
   const [search, setSearch] = useState<string>();
+  const [quizSelected, setQuizSelected] = useState<number | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [triggerReload, setTriggerReload] = useState<boolean>(false);
 
   const {
-    teaching: { classes },
+    teaching: { quizzes },
   } = useAppSelector((state: RootState) => state);
 
-  const classList = useMemo(() => {
-    return classes?.data?.map((item, index) => ({
+  const quizzesList = useMemo(() => {
+    return quizzes?.data?.map((item, index) => ({
       ...item,
       index: index + 1,
-      credit: `${numberWithCommas(item.credit)} (VNĐ)`,
-      classStatus:
-        item.classStatus === ClassStatusType.InProgress ? (
-          <Badge status="processing" text="In Progress" />
-        ) : item.classStatus === ClassStatusType.End ? (
-          <Badge status="success" text="End" />
-        ) : item.classStatus === ClassStatusType.Stop ? (
-          <Badge status="error" text="Stop" />
-        ) : (
-          <Badge status="default" text="Not Start" />
-        ),
+      created: getTimeUTC(item?.created),
       action: (
         <DropdownButton
           menuProps={{
@@ -65,8 +54,8 @@ const ClassesScreen = () => {
                   </>
                 ),
                 onClick: () => {
-                  navigate(TeachingPaths.GET_CLASS(Number(item.id)));
-                },
+                    navigate(TeachingPaths.GET_QUIZ(Number(item.id)))
+                }
               },
               {
                 key: "2",
@@ -74,15 +63,12 @@ const ClassesScreen = () => {
                   <>
                     <Typography>
                       <span>
-                        <TeamOutlined />
+                        <ArrowRightOutlined />
                       </span>{" "}
-                      List Students
+                      Assign classes
                     </Typography>
                   </>
                 ),
-                onClick: () => {
-                  navigate(TeachingPaths.LIST_STUDENTS(Number(item.id)));
-                },
               },
               {
                 key: "3",
@@ -90,27 +76,14 @@ const ClassesScreen = () => {
                   <>
                     <Typography>
                       <span>
-                        <CheckOutlined />
+                        <DeleteOutlined />
                       </span>{" "}
-                      Take Attendance
-                    </Typography>
-                  </>
-                ),
-              },
-              {
-                key: "4",
-                label: (
-                  <>
-                    <Typography>
-                      <span>
-                        <FontColorsOutlined />
-                      </span>{" "}
-                      Enter Transcript
+                      Delete
                     </Typography>
                   </>
                 ),
                 onClick: () => {
-                  navigate(TeachingPaths.ENTER_TRANSCRIPT(Number(item.id)));
+                  setQuizSelected(Number(item.id));
                 },
               },
             ],
@@ -120,7 +93,7 @@ const ClassesScreen = () => {
         </DropdownButton>
       ),
     }));
-  }, [classes?.data, navigate]);
+  }, [quizzes?.data, navigate]);
 
   useEffect(() => {
     const params: RequestParams = {
@@ -129,10 +102,28 @@ const ClassesScreen = () => {
       search,
     };
     setIsLoading(true);
-    dispatch(getClasses(params))
+    dispatch(getQuizzes(params))
       .unwrap()
       .finally(() => setIsLoading(false));
-  }, [dispatch, page, pageSize, search]);
+  }, [dispatch, page, pageSize, search, triggerReload]);
+
+  
+  const handleDeleteQuiz = () => {
+    if (!quizSelected) return;
+    setIsSubmitting(true);
+    setIsLoading(true);
+    dispatch(deleteQuiz(quizSelected))
+      .then(unwrapResult)
+      .then(() => {
+        setTriggerReload(!triggerReload);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsSubmitting(false);
+        setIsLoading(false);
+        setQuizSelected(null);
+      });
+  };
 
   return (
     <div className="pt-30 pl-40 pr-30">
@@ -140,40 +131,59 @@ const ClassesScreen = () => {
         <Breadcrumb.Item>
           <HomeOutlined />
         </Breadcrumb.Item>
-        <Breadcrumb.Item>Classes</Breadcrumb.Item>
+        <Breadcrumb.Item>Quizzes</Breadcrumb.Item>
       </Breadcrumb>
-      <div className="flex-align-center">
+      <div className="flex-space-between-center">
         <Typography className="mr-150">
-          Total: There are {classes?.totalRecords} classes
+          Total: There are {quizzes?.totalRecords} quizzes
         </Typography>
         <Search
-          placeholder="classname"
+          placeholder="quiz's name"
           allowClear
           enterButton
           size="large"
           onSearch={(value) => setSearch(value)}
           style={{ width: 350 }}
         />
+        <Button
+          type="primary"
+          style={{ height: 40 }}
+        >
+          New Quiz
+        </Button>
       </div>
       <Table
         bordered
         rowKey="id"
         size="small"
         loading={isLoading}
-        columns={COLUMNS_TABLE_CLASSES()}
-        dataSource={classList}
+        columns={COLUMNS_TABLE_QUIZZES()}
+        dataSource={quizzesList}
         pagination={false}
         className="mt-20"
         scroll={{ y: 320, x: 400 }}
       />
       <Pagination
         className="flex-justify-center mt-20"
-        current={classes?.pageNumber}
+        current={quizzes?.pageNumber}
         onChange={(newPage) => setPage(newPage)}
-        total={Number(classes?.totalPages) * 10}
+        total={Number(quizzes?.totalPages) * 10}
+      />
+      <Modal
+        centered
+        title="Are you sure you want to delete this quiz?"
+        open={!!quizSelected}
+        cancelText="Cancel"
+        okText="Delete"
+        okType="danger"
+        onCancel={() => setQuizSelected(null)}
+        onOk={handleDeleteQuiz}
+        okButtonProps={{
+          disabled: isSubmitting,
+        }}
       />
     </div>
   );
 };
 
-export default memo(ClassesScreen);
+export default memo(ListQuizzesScreen);

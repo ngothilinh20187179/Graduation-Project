@@ -1,5 +1,4 @@
 ﻿using EnglishCenterManagement.Dtos.UserInfoDtos;
-using EnglishCenterManagement.Entities.Enumerations;
 
 namespace EnglishCenterManagement.Dtos.TeacherStudentStaffDtos
 {

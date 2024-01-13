@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { getMyAvatar } from "features/admin_users/admin_users";
 import { SettingPaths } from "features/admin_setting/admin_setting";
 import { TopPaths } from "features/admin_top/admin_top";
+import Title from "antd/es/typography/Title";
 
 const HeaderLayout = ({
   collapsed,
@@ -58,6 +59,7 @@ const HeaderLayout = ({
           onClick={() => setCollapsed(!collapsed)}
         />
       )}
+      <Title level={4} className="mb-25">Admin</Title>
       <DropdownButton
         menuProps={{
           items: [

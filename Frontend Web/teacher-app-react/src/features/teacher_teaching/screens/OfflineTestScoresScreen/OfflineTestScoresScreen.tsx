@@ -1,6 +1,18 @@
 import { memo, useEffect, useMemo, useState } from "react";
 import { HomeOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Breadcrumb, Pagination, Table, Image, Descriptions, Button } from "antd";
+import {
+  Avatar,
+  Breadcrumb,
+  Pagination,
+  Table,
+  Image,
+  Descriptions,
+  Button,
+  Modal,
+  Typography,
+  Form,
+  Input,
+} from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { RootState } from "redux/root-reducer";
@@ -8,25 +20,37 @@ import { RequestParams } from "types/param.types";
 import { getTimeUTC } from "helpers/utils.helper";
 import { TeachingPaths } from "features/teacher_teaching/constants/teaching.paths";
 import { COLUMNS_TABLE_OFFLINE_TEST_SCORES } from "features/teacher_teaching/constants/teaching.constants";
-import { getAllOfflineTestScores } from "features/teacher_teaching/redux/teaching.slice";
+import { getAllOfflineTestScores, updateMark } from "features/teacher_teaching/redux/teaching.slice";
 import { getStudentById } from "features/teacher_users/teacher_users";
 import { unwrapResult } from "@reduxjs/toolkit";
 import styles from "./OnlineTestScoresScreen.module.scss";
 import Title from "antd/es/typography/Title";
+import { SubmitButton } from "components/SubmitButton";
+import { useForm } from "antd/es/form/Form";
+import { requireRules } from "helpers/validations.helper";
+import mess from "messages/messages.json";
+import { ToastNotification } from "components/ToastNotification";
 
 const OfflineTestScoresScreen = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
+  const [form] = useForm();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const pageSize = 20;
-  
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [markId, setMarkId] = useState<number | null>(null);
+  const [point, setPoint] = useState<number>(0);
+  const [maxPoint, setMaxPoint] = useState<number>(0);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [triggerReload, setTriggerReload] = useState<boolean>(false);
+
   const {
     teaching: { offlineTestScores },
   } = useAppSelector((state: RootState) => state);
-  
+
   const {
     users: { student },
   } = useAppSelector((state: RootState) => state);
@@ -36,7 +60,18 @@ const OfflineTestScoresScreen = () => {
       ...offlineTestScore,
       index: index + 1,
       created: getTimeUTC(offlineTestScore?.created),
-      action: <Button>Edit Test Score</Button>
+      action: (
+        <Button
+          onClick={() => {
+            setMarkId(offlineTestScore.id);
+            setPoint(offlineTestScore.point);
+            setMaxPoint(offlineTestScore.totalPoint);
+            setIsModalOpen(true);
+          }}
+        >
+          Edit Test Score
+        </Button>
+      ),
     }));
   }, [offlineTestScores?.data]);
 
@@ -44,16 +79,41 @@ const OfflineTestScoresScreen = () => {
     const params: RequestParams = {
       page,
       pageSize,
-      id: Number(id)
+      id: Number(id),
     };
     setIsLoading(true);
-    dispatch(getAllOfflineTestScores(params))
+    dispatch(getAllOfflineTestScores(params));
     dispatch(getStudentById(Number(id)))
       .then(unwrapResult)
       .finally(() => {
         setIsLoading(false);
       });
-  }, [dispatch, id, page, pageSize]);
+  }, [dispatch, id, page, pageSize, triggerReload]);
+
+  const handleEditMark = () => {
+    console.log(form.getFieldValue("point"));
+    var newPoint = form.getFieldValue("point")
+    if (markId === null) return
+    if (newPoint > maxPoint) {
+      return ToastNotification({
+        type: "error",
+        message: "This score is greater than the maximum score",
+      });
+    }
+    setIsSubmitting(true);
+    dispatch(updateMark({ 
+      point: newPoint,
+      id: markId
+     }))
+      .unwrap()
+      .then(() => {
+        setTriggerReload(!triggerReload);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+        setIsModalOpen(false);
+      });
+  };
 
   return (
     <div className="pl-55 pt-30 pr-55 pb-40">
@@ -87,9 +147,6 @@ const OfflineTestScoresScreen = () => {
           </span>
         </Title>
         <Descriptions>
-          <Descriptions.Item className="font-16" label="Id">
-            {student?.id}
-          </Descriptions.Item>
           <Descriptions.Item label="First Name">
             {student?.firstName}
           </Descriptions.Item>
@@ -115,9 +172,6 @@ const OfflineTestScoresScreen = () => {
           <Descriptions.Item label="Parent's Phone Number">
             {student?.parentPhoneNumber}
           </Descriptions.Item>
-          <Descriptions.Item label="Note">
-            {student?.note}
-          </Descriptions.Item>
         </Descriptions>
       </div>
       <Table
@@ -137,6 +191,31 @@ const OfflineTestScoresScreen = () => {
         onChange={(newPage) => setPage(newPage)}
         total={Number(offlineTestScores?.totalPages) * 10}
       />
+      <Modal
+        centered
+        title="Edit offline test score?"
+        open={isModalOpen}
+        footer={null}
+        onCancel={() => {
+          setIsModalOpen(false);
+        }}
+      >
+        <div className="flex-justify-center gap-20 mt-30">
+          <Form form={form} onFinish={handleEditMark}>
+            <Form.Item className="pl-12" name="point" rules={requireRules(mess.fe_14)}>
+              <Input type="number" defaultValue={point}/>
+            </Form.Item>
+            <Form.Item label=" ">
+              <SubmitButton
+                form={form}
+                text="Save"
+                isSubmitting={isSubmitting}
+              />
+            </Form.Item>
+          </Form>
+          <Typography>Max Point: {maxPoint}</Typography>
+        </div>
+      </Modal>
     </div>
   );
 };

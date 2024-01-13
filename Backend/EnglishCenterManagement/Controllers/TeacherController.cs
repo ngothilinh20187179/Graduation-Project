@@ -2,6 +2,7 @@
 using EnglishCenterManagement.Common.Helpers;
 using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Common.Response;
+using EnglishCenterManagement.Dtos.ClassRoomDtos;
 using EnglishCenterManagement.Dtos.TeacherStudentStaffDtos;
 using EnglishCenterManagement.Dtos.UserInfoDtos;
 using EnglishCenterManagement.Entities.Enumerations;
@@ -20,15 +21,21 @@ namespace EnglishCenterManagement.Controllers
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly ITeacherStudentRepository _teacherStudentRepository;
+        private readonly IClassRoomRepository _classRoomRepository;
+        private readonly ISubjectRoomRepository _subjectRoomRepository;
         public TeacherController(
             IMapper mapper,
             IUserRepository userRepository,
-            ITeacherStudentRepository teacherStudentRepository
+            ITeacherStudentRepository teacherStudentRepository,
+            IClassRoomRepository classRoomRepository,
+            ISubjectRoomRepository subjectRoomRepository
             )
         {
             _mapper = mapper;
             _userRepository = userRepository;
             _teacherStudentRepository = teacherStudentRepository;
+            _subjectRoomRepository = subjectRoomRepository;
+            _classRoomRepository = classRoomRepository;
         }
 
         #region TEACHER
@@ -267,6 +274,38 @@ namespace EnglishCenterManagement.Controllers
             _teacherStudentRepository.UpdateTeacherProfile(updatedTeacherProfileMap);
 
             return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        // GET: /my-teaching-schedule
+        [HttpGet("my-teaching-schedule")]
+        [Authorize(Roles = nameof(RoleType.Teacher))]
+        public ActionResult<ICollection<TeachingScheduleDto>> GetMyTeachingSchedule()
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            var allClassInProgress = _teacherStudentRepository.GetAllClassOfTeacherByStatus(ClassStatusType.InProgress, user.Id);
+            var mappedListClass = _mapper.Map<List<TeachingScheduleDto>>(allClassInProgress);
+            mappedListClass.ForEach((x) =>
+            {
+                var schedules = _classRoomRepository.GetAllSchedulesOfClass(x.Id);
+                var scheduleList = _mapper.Map<List<ClassScheduleDto>>(schedules);
+                x.Schedules = scheduleList;
+                scheduleList.ForEach((y) =>
+                {
+                    var room = _subjectRoomRepository.GetRoomById(y.RoomId);
+                    y.RoomName = room.Name;
+                });
+            });
+
+            return mappedListClass;
         }
         #endregion
 
