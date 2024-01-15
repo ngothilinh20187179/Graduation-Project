@@ -129,6 +129,16 @@ export type QuestionResult = {
   answerIds: number[];
 };
 
+export interface GetAllMyLearningSchedule {
+  data: LearningSchedule[];
+}
+
+export type LearningSchedule = {
+  id: number;
+  className: string;
+  schedules: ClassSchedules[]
+}
+
 export interface LearningState {
   onlineTestScores: GetAllOnlineTestScores | null;
   offlineTestScores: GetAllOfflineTestScores | null;
@@ -136,4 +146,5 @@ export interface LearningState {
   classes: GetAllClassesResponse | null;
   classDetail: GetClassResponse | null;
   quiz: GetQuizResponse | null;
+  myLearningSchedule: GetAllMyLearningSchedule | null;
 }

@@ -3,24 +3,24 @@ import { HomeOutlined } from "@ant-design/icons";
 import { Breadcrumb, Descriptions } from "antd";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { getMyTeachingSchedule } from "features/teacher_teaching/redux/teaching.slice";
 import { RootState } from "redux/root-reducer";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import Title from "antd/es/typography/Title";
 import Typography from "antd/es/typography/Typography";
-import { DayOfWeek } from "features/teacher_teaching/constants/teaching.constants";
+import { DayOfWeek } from "features/student_learning/constants/learning.contants";
+import { getMyLearningSchedule } from "features/student_learning/redux/learning.slice";
 
-const MyTeachingScheduleScreen = () => {
+const MyLearningScheduleScreen = () => {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const {
-    teaching: { myTeachingSchedule },
+    learning: { myLearningSchedule },
   } = useAppSelector((state: RootState) => state);
 
   useEffect(() => {
     setIsLoading(true);
-    dispatch(getMyTeachingSchedule())
+    dispatch(getMyLearningSchedule())
       .then(unwrapResult)
       .finally(() => {
         setIsLoading(false);
@@ -35,11 +35,11 @@ const MyTeachingScheduleScreen = () => {
         <Breadcrumb.Item>
           <HomeOutlined />
         </Breadcrumb.Item>
-        <Breadcrumb.Item>My Teaching Schedule</Breadcrumb.Item>
+        <Breadcrumb.Item>My Learning Schedule</Breadcrumb.Item>
       </Breadcrumb>
       <div>
-        {myTeachingSchedule &&
-          myTeachingSchedule?.data.map((schedule) => {
+        {myLearningSchedule &&
+          myLearningSchedule?.data.map((schedule) => {
             return (
               <div key={schedule.id}>
                 <Title level={5}>{schedule.className}</Title>
@@ -61,12 +61,13 @@ const MyTeachingScheduleScreen = () => {
                             ? "(12h-14h)"
                             : classSchedule?.period === 4
                             ? "(14h-16h)"
-                            : classSchedule?.period === 5 
+                            : classSchedule?.period === 5
                             ? "(16h-18h)"
                             : classSchedule?.period === 6
-                            ? "(18h-20h)" 
+                            ? "(18h-20h)"
                             : classSchedule?.period === 7
-                            ? "(20h-22h)" : ""}
+                            ? "(20h-22h)"
+                            : ""}
                         </Descriptions.Item>
                         <Descriptions.Item label="Room Name">
                           {classSchedule?.roomName}
@@ -83,4 +84,4 @@ const MyTeachingScheduleScreen = () => {
   );
 };
 
-export default memo(MyTeachingScheduleScreen);
+export default memo(MyLearningScheduleScreen);

@@ -43,3 +43,7 @@ export const getQuizApi = (
 export const submitExamApi = (data: QuizSubmit): Promise<AxiosResponse> => {
   return api.post(LearningEndpoints.SUBMIT_QUIZ(), data);
 };
+
+export const getMyLearningScheduleApi = (): Promise<AxiosResponse> => {
+  return api.get(LearningEndpoints.MY_LEARNING_SCHEDULE());
+};

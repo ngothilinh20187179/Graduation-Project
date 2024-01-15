@@ -156,6 +156,13 @@ namespace EnglishCenterManagement.Repository
             allClasses = allClasses.Where(x => x.ClassStatus == status).ToList();
             return allClasses;
         }
+        public ICollection<ClassModel> GetAllClassOfStudentByStatus(ClassStatusType status, int id)
+        {
+            var classIds = _context.StudentClasses.Where(x => x.StudentId == id).Select(x => x.ClassId).ToList();
+            var allClasses = _context.Classes.Where(x => classIds.Contains(x.Id)).ToList();
+            allClasses = allClasses.Where(x => x.ClassStatus == status).ToList();
+            return allClasses;
+        }
         public bool AddTeacherClass(TeacherClassModel teacherClass)
         {
             _context.Add(teacherClass);

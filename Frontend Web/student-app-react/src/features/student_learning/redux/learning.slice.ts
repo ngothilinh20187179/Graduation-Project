@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RequestParams } from "types/param.types";
 import LEARNING_KEY from "../constants/learning.keys";
-import { LearningState, QuizSubmit, getAllOfflineTestScoresApi, getAllOnlineTestScoresApi, getClassApi, getClassesApi, getMyTestsApi, getQuizApi, submitExamApi } from "../student_learning";
+import { LearningState, QuizSubmit, getAllOfflineTestScoresApi, getAllOnlineTestScoresApi, getClassApi, getClassesApi, getMyLearningScheduleApi, getMyTestsApi, getQuizApi, submitExamApi } from "../student_learning";
 
 const initialState: LearningState = {
   offlineTestScores: null,
@@ -9,7 +9,8 @@ const initialState: LearningState = {
   myTests: null,
   classes: null,
   classDetail: null,
-  quiz: null
+  quiz: null,
+  myLearningSchedule: null,
 };
 
 export const getAllOnlineTestScores = createAsyncThunk(
@@ -68,6 +69,14 @@ export const submitExam = createAsyncThunk(
   }
 );
 
+export const getMyLearningSchedule = createAsyncThunk(
+  `${LEARNING_KEY}/getMyLearningSchedule`,
+  async () => {
+    const response = await getMyLearningScheduleApi();
+    return response;
+  }
+);
+
 const learningSlice = createSlice({
   name: LEARNING_KEY,
   initialState,
@@ -108,6 +117,12 @@ const learningSlice = createSlice({
     });
     builder.addCase(getQuiz.rejected, (state) => {
       state.quiz = null;
+    });
+    builder.addCase(getMyLearningSchedule.fulfilled, (state, action) => {
+      state.myLearningSchedule = action.payload;
+    });
+    builder.addCase(getMyLearningSchedule.rejected, (state) => {
+      state.myLearningSchedule = null;
     });
   },
 });

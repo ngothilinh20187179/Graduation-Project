@@ -35,7 +35,7 @@ function getItem(
 }
 
 const items: MenuProps["items"] = [
-  getItem("Schedule", "/schedule", <ScheduleOutlined />),
+  getItem("Schedule", LearningPaths.MY_LEARNING_SCHEDULE(), <ScheduleOutlined />),
   getItem("Classes", LearningPaths.CLASSES(), <BookOutlined />),
   getItem("Tests", LearningPaths.MY_TESTS(), <FormOutlined />),
   getItem("Transcript", LearningPaths.TRANSCRIPT(), <FileDoneOutlined />),
