@@ -29,6 +29,7 @@ namespace EnglishCenterManagement.Interfaces
         ICollection<TeacherClassModel> GetTeacherClassByClassId(int id);
         bool DeleteTeacherInClass(TeacherClassModel teacherClass);
         ICollection<ClassModel> GetAllClassOfTeacherByStatus(ClassStatusType status, int id);
+        ICollection<ClassModel> GetAllClassOfStudentByStatus(ClassStatusType status, int id);
         bool AddTeacherClass(TeacherClassModel teacherClass);
     }
 }

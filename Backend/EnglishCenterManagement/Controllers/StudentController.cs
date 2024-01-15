@@ -2,11 +2,13 @@
 using EnglishCenterManagement.Common.Helpers;
 using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Common.Response;
+using EnglishCenterManagement.Dtos.ClassRoomDtos;
 using EnglishCenterManagement.Dtos.TeacherStudentStaffDtos;
 using EnglishCenterManagement.Dtos.UserInfoDtos;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
+using EnglishCenterManagement.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -21,17 +23,20 @@ namespace EnglishCenterManagement.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IClassRoomRepository _classRoomRepository;
         private readonly ITeacherStudentRepository _teacherStudentRepository;
+        private readonly ISubjectRoomRepository _subjectRoomRepository;
         public StudentController(
             IMapper mapper,
             IClassRoomRepository classRoomRepository,
             IUserRepository userRepository,
-            ITeacherStudentRepository teacherStudentRepository
+            ITeacherStudentRepository teacherStudentRepository,
+            ISubjectRoomRepository subjectRoomRepository
             )
         {
             _mapper = mapper;
             _userRepository = userRepository;
             _classRoomRepository = classRoomRepository;
             _teacherStudentRepository = teacherStudentRepository;
+            _subjectRoomRepository = subjectRoomRepository;
         }
 
         #region STUDENT
@@ -375,9 +380,38 @@ namespace EnglishCenterManagement.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
-        // PUT: /restricted-student-class
-        [HttpPut("restricted-student-class/{id}")]
-        [Authorize(Roles = nameof(RoleType.Staff))]
+        // GET: /my-learning-schedule
+        [HttpGet("my-learning-schedule")]
+        [Authorize(Roles = nameof(RoleType.Student))]
+        public ActionResult<ICollection<TeachingScheduleDto>> GetMyLearningSchedule()
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            var allClassInProgress = _teacherStudentRepository.GetAllClassOfStudentByStatus(ClassStatusType.InProgress, user.Id);
+            var mappedListClass = _mapper.Map<List<TeachingScheduleDto>>(allClassInProgress);
+            mappedListClass.ForEach((x) =>
+            {
+                var schedules = _classRoomRepository.GetAllSchedulesOfClass(x.Id);
+                var scheduleList = _mapper.Map<List<ClassScheduleDto>>(schedules);
+                x.Schedules = scheduleList;
+                scheduleList.ForEach((y) =>
+                {
+                    var room = _subjectRoomRepository.GetRoomById(y.RoomId);
+                    y.RoomName = room.Name;
+                });
+            });
+
+            return mappedListClass;
+        }
+
         #endregion
 
         private UserInfoModel? GetUserByClaim()

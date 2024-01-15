@@ -22,6 +22,7 @@ const LearningEndpoints = {
   GET_MY_CLASS_DETAIL: (id: number) => `/class/${id}`,
   GET_THE_TEST: (id: number) => `/quiz/${id}`,
   SUBMIT_QUIZ: () => `/submit-quiz`,
+  MY_LEARNING_SCHEDULE: () =>  `/my-learning-schedule`,
 };
 
 export default LearningEndpoints;

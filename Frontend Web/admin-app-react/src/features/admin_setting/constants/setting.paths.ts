@@ -3,6 +3,7 @@ export const SettingRoutePaths = {
   MY_PROFILE: "/setting/my-profile",
   CHANGE_PASSWORD: "/setting/change-password",
   CHANGE_INFORMATION: "/setting/change-information",
+  STATISTICAL: "/statistical",
 };
 
 export const SettingPaths = {
@@ -10,4 +11,5 @@ export const SettingPaths = {
   MY_PROFILE: () => "/setting/my-profile",
   CHANGE_PASSWORD: () => "/setting/change-password",
   CHANGE_INFORMATION: () => "/setting/change-information",
+  STATISTICAL: () => "/statistical",
 };

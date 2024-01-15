@@ -45,6 +45,12 @@ const GET_THE_TEST: RouteItem = {
   component: lazy(() => import("../screens/TakeTheTestScreen/TakeTheTestScreen")),
 }; 
 
+const MY_LEARNING_SCHEDULE: RouteItem = {
+  id: "student-schedule",
+  path: LearningRoutePaths.MY_LEARNING_SCHEDULE,
+  component: lazy(() => import("../screens/MyLearningScheduleScreen/MyLearningScheduleScreen")),
+}; 
+
 export const LEARNING_ROUTES = [
   LEARNING_SCREEN,
   ONLINE_TEST_SCORES_SCREEN,
@@ -52,5 +58,6 @@ export const LEARNING_ROUTES = [
   MY_TEST_SCREEN,
   MY_CLASSES,
   MY_CLASS_DETAIL,
-  GET_THE_TEST
+  GET_THE_TEST,
+  MY_LEARNING_SCHEDULE
 ];

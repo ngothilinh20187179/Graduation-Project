@@ -65,7 +65,7 @@ export const getMyTeachingSchedule = createAsyncThunk(
   `${TEACHING_KEY}/getMyTeachingSchedule`,
   async () => {
     const response = await getMyTeachingScheduleApi();
-    return response.data.data;
+    return response;
   }
 );
 
