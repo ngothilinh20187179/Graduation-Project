@@ -1,16 +1,19 @@
 import { memo, useEffect, useState } from "react";
 import { HomeOutlined } from "@ant-design/icons";
-import { Breadcrumb } from "antd";
+import { Breadcrumb, Descriptions } from "antd";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { getMyTeachingSchedule } from "features/teacher_teaching/redux/teaching.slice";
 import { RootState } from "redux/root-reducer";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
+import Title from "antd/es/typography/Title";
+import Typography from "antd/es/typography/Typography";
+import { DayOfWeek } from "features/teacher_teaching/constants/teaching.constants";
 
 const MyTeachingScheduleScreen = () => {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  
+
   const {
     teaching: { myTeachingSchedule },
   } = useAppSelector((state: RootState) => state);
@@ -25,6 +28,7 @@ const MyTeachingScheduleScreen = () => {
   }, [dispatch]);
 
   if (isLoading) return <LoadingSpinner />;
+  console.log(myTeachingSchedule);
 
   return (
     <div className="pl-55 pt-30 pr-55 pb-40">
@@ -34,17 +38,48 @@ const MyTeachingScheduleScreen = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item>My Teaching Schedule</Breadcrumb.Item>
       </Breadcrumb>
-      {/* <Table
-        bordered
-        rowKey="id"
-        size="small"
-        loading={isLoading}
-        columns={COLUMNS_TABLE_OFFLINE_TEST_SCORES()}
-        dataSource={offlineTestScoreList}
-        pagination={false}
-        className="mt-20"
-        scroll={{ y: 320, x: 400 }}
-      /> */}
+      <div>
+        {myTeachingSchedule &&
+          myTeachingSchedule?.data.map((schedule) => {
+            return (
+              <div key={schedule.id}>
+                <Title level={5}>{schedule.className}</Title>
+                <Typography className="ml-7 mb-10">Class Schedules:</Typography>
+                {schedule.schedules.map((classSchedule) => {
+                  return (
+                    <>
+                      <Descriptions className="ml-20">
+                        <Descriptions.Item label="Day Of Week">
+                          {DayOfWeek[Number(classSchedule?.dayOfWeek)]}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Period">
+                          {classSchedule?.period}{" "}
+                          {classSchedule?.period === 1
+                            ? "(8h-10h)"
+                            : classSchedule?.period === 2
+                            ? "(10h-12h)"
+                            : classSchedule?.period === 3
+                            ? "(12h-14h)"
+                            : classSchedule?.period === 4
+                            ? "(14h-16h)"
+                            : classSchedule?.period === 5 
+                            ? "(16h-18h)"
+                            : classSchedule?.period === 6
+                            ? "(18h-20h)" 
+                            : classSchedule?.period === 7
+                            ? "(20h-22h)" : ""}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Room Name">
+                          {classSchedule?.roomName}
+                        </Descriptions.Item>
+                      </Descriptions>
+                    </>
+                  );
+                })}
+              </div>
+            );
+          })}
+      </div>
     </div>
   );
 };

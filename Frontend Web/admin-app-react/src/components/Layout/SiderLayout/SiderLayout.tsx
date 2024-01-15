@@ -19,6 +19,7 @@ import { ClassesPaths } from "features/admin_classes/admin_classes";
 import { NotificationPaths } from "features/admin_notification/admin_notification";
 import { PositionPaths } from "features/admin_position/admin_position";
 import { SpendingPaths } from "features/admin_spending/admin_spending";
+import { SettingPaths } from "features/admin_setting/admin_setting";
 
 // TODO: còn 1 vđ là khi navigate ở các screen khác thì sider ko update
 
@@ -51,7 +52,7 @@ const items: MenuProps["items"] = [
     getItem("Rooms", ClassesPaths.ROOMS()),
     getItem("Classes", ClassesPaths.CLASSES()),
   ]),
-  getItem("Statistical", "statisticalKey", <BarChartOutlined />),
+  getItem("Statistical", SettingPaths.STATISTICAL(), <BarChartOutlined />),
   getItem("Position", PositionPaths.POSITIONS(), <ApartmentOutlined />),
   getItem("Spending", SpendingPaths.SPENDING(), <DollarOutlined />),
   // getItem("Settings", SettingPaths.SETTING(), <SettingOutlined />),

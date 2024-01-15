@@ -30,9 +30,17 @@ const EDIT_PROFILE: RouteItem = {
   ),
 };
 
+const STATISTICAL_SCREEN: RouteItem = {
+  id: "admin-statistical",
+  path: SettingRoutePaths.STATISTICAL,
+  component: lazy(() => import("../screens/StatisticalScreen/StatisticalScreen")),
+};
+
+
 export const SETTING_ROUTES = [
   SETTING_SCREEN,
   CHANGE_PASSWORD_SCREEN,
   MY_PROFILE_SCREEN,
   EDIT_PROFILE,
+  STATISTICAL_SCREEN
 ];

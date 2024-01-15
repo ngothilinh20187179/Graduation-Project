@@ -135,7 +135,7 @@ namespace EnglishCenterManagement.Controllers
             // check status user
             if (user.UserStatus == UserStatusType.Lock)
             {
-                return Unauthorized(new ApiReponse(999));
+                return BadRequest(new ApiReponse(999));
             }
 
             // generate token
