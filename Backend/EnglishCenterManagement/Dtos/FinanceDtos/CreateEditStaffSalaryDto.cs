@@ -1,8 +1,9 @@
-﻿namespace EnglishCenterManagement.Entities.FinanceDtos
+﻿using EnglishCenterManagement.Entities.Models;
+
+namespace EnglishCenterManagement.Entities.FinanceDtos
 {
-    public class StaffSalaryDto
+    public class CreateEditStaffSalaryDto
     {
-        public int Id { get; set; }
         public int Month { get; set; }
         public int WorkDaysInMonth { get; set; }
         public int TotalDaysWorked { get; set; }
@@ -10,10 +11,7 @@
         public int Bonus { get; set; }
         public int Total { get; set; }
         public bool IsPaid { get; set; }
-        public DateTime CreateOn { get; set; } = DateTime.Now;
-        public string? Note { get; set; }
         public int StaffId { get; set; }
-        public string StaffName { get; set; }
-
+        public string? Note { get; set; }
     }
 }

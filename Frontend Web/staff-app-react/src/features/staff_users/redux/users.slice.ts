@@ -10,11 +10,13 @@ import {
   getMyAvatarApi,
   getStaffByIdApi,
   getStaffsApi,
+  getStaffsListApi,
   getStudentByIdApi,
   getStudentsApi,
   getStudentsInClassApi,
   getTeacherByIdApi,
   getTeachersApi,
+  getTeachersListApi,
   updateStudentInfoApi,
   updateTeacherInfoApi,
 } from "../staff_users";
@@ -28,6 +30,8 @@ const initialState: UsersState = {
   teacher: null,
   students: null,
   student: null,
+  teacherList: null,
+  staffList: null,
 };
 
 export const getMyAvatar = createAsyncThunk(
@@ -46,6 +50,14 @@ export const getStaffs = createAsyncThunk(
   }
 );
 
+export const getStaffsList = createAsyncThunk(
+  `${USERS_KEY}/getStaffsList`,
+  async () => {
+    const response = await getStaffsListApi();
+    return response.data;
+  }
+);
+
 export const getStaffById = createAsyncThunk(
   `${USERS_KEY}/getStaffById`,
   async (id: number) => {
@@ -59,6 +71,14 @@ export const getTeachers = createAsyncThunk(
   async (params: RequestParams) => {
     const response = await getTeachersApi(params);
     return response.data.data;
+  }
+);
+
+export const getTeachersList = createAsyncThunk(
+  `${USERS_KEY}/getTeachersList`,
+  async () => {
+    const response = await getTeachersListApi();
+    return response.data;
   }
 );
 
@@ -147,6 +167,12 @@ const usersSlice = createSlice({
     builder.addCase(getStaffById.fulfilled, (state, action) => {
       state.staff = action.payload;
     });
+    builder.addCase(getStaffsList.fulfilled, (state, action) => {
+      state.staffList = action.payload;
+    });
+    builder.addCase(getStaffsList.rejected, (state) => {
+      state.staffList = null;
+    });
     builder.addCase(getStaffById.rejected, (state) => {
       state.staff = null;
     });
@@ -155,6 +181,12 @@ const usersSlice = createSlice({
     });
     builder.addCase(getTeachers.rejected, (state) => {
       state.teachers = null;
+    });
+    builder.addCase(getTeachersList.fulfilled, (state, action) => {
+      state.teacherList = action.payload;
+    });
+    builder.addCase(getTeachersList.rejected, (state) => {
+      state.teacherList = null;
     });
     builder.addCase(getTeacherById.fulfilled, (state, action) => {
       state.teacher = action.payload;

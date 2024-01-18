@@ -38,6 +38,10 @@ namespace EnglishCenterManagement.Repository
 
             return new PagedResponse(data, totalStudents, page, pageSize);
         }
+        public ICollection<UserInfoModel> GetAllStaffs()
+        {
+            return _context.Users.Where(x => x.Role == RoleType.Staff).ToList();
+        }
         public bool CreateStaffProfile(StaffModel newStaff)
         {
             _context.Staffs.Add(newStaff);

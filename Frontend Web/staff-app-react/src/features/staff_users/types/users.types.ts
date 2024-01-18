@@ -104,6 +104,20 @@ export interface GetAllStaffsResponse extends PaginationResponse {
   }) [];
 }
 
+export type UserIdAndName = {
+  id: number;
+  firstName: string;
+  lastName: string;
+}
+
+export interface GetTeacherListResponse {
+  data: UserIdAndName [];
+}
+
+export interface GetStaffListResponse {
+  data: UserIdAndName [];
+}
+
 export interface UsersState {
   avatar: UserAvatar | null;
   staffs: GetAllStaffsResponse | null;
@@ -112,4 +126,6 @@ export interface UsersState {
   teacher: TeacherDetail | null;
   students: GetAllAdminsResponse | null;
   student: StudentDetail | null;
+  teacherList: GetTeacherListResponse | null;
+  staffList: GetStaffListResponse | null;
 }

@@ -73,6 +73,8 @@
             [651] = "Position already exists",
             [652] = "Permission not exists",
             [653] = "Spending not exist",
+            [654] = "Teacher's Salary not exist",
+            [655] = "Staff's Salary not exist",
 
             [999] = "Your account has been locked",
             [1000] = "You don't have permission to access"

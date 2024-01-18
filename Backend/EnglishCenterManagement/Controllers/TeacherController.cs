@@ -69,6 +69,27 @@ namespace EnglishCenterManagement.Controllers
             return Ok(new ApiReponse(listTeachers));
         }
 
+        // GET: /teacher-list
+        [HttpGet("teacher-list")]
+        [Authorize(Roles = nameof(RoleType.Staff))]
+        public ActionResult<ICollection<UserNameAndIdDto>> GetBasicTeacherList()
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            var teacherList = _teacherStudentRepository.GetAllTeachers();
+            var mapTeacherList = _mapper.Map<List<UserNameAndIdDto>>(teacherList);
+
+            return Ok(new ApiReponse(mapTeacherList));
+        }
+
         // GET: /teacher/5
         [HttpGet("teacher/{id}")]
         [Authorize(Roles = "Student, Teacher, Staff, Admin")]

@@ -11,12 +11,26 @@ namespace EnglishCenterManagement.Interfaces
         bool CreateSpending(SpendingModel spending);
         bool UpdateSpending(SpendingModel spending);
         bool DeleteSpending(SpendingModel spending);
+
         StudentClassModel GetStudentClassById(int id);
         ICollection<StudentClassModel> GetMyTuitionDebtInformation(int studentId);
         PagedResponse GetStudentTuitionInformation(bool? isPaidTuition, int page, int pageSize);
         bool UpdateStudentClass(StudentClassModel studentClass);
+       
+        PagedResponse GetAllTeacherSalaries(bool? isPaid, int page, int pageSize);
         PagedResponse GetTeacherSalaries(bool? isPaid, int page, int pageSize, int teacherId);
-        PagedResponse GetStaffSalaries(bool? isPaid, int page, int pageSize, int staffId);
+        TeacherSalaryModel GetTeacherSalaryById(int id);
+        bool UpdateTeacherSalary(TeacherSalaryModel teacherSalary);
+        bool CreateTeacherSalary(TeacherSalaryModel teacherSalary);
+        bool DeleteTeacherSalary(TeacherSalaryModel teacherSalary); 
+        
+        PagedResponse GetStaffSalaries(bool? isPaid, int page, int pageSize, int? staffId);
+        PagedResponse GetAllStaffSalaries(bool? isPaid, int page, int pageSize);
+        StaffSalaryModel GetStaffSalaryById(int id);
+        bool UpdateStaffSalary(StaffSalaryModel staffSalary);
+        bool CreateStaffSalary(StaffSalaryModel staffSalary);
+        bool DeleteStaffSalary(StaffSalaryModel staffSalary);
+        
         bool SaveChange();
     }
 }
