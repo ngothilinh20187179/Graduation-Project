@@ -26,6 +26,26 @@ const FinanceEndpoints = {
     }
     return `/staff-salaries?isPaid=${isPaid}&page=${page}&pageSize=${pageSize}`;
   },
+  GET_STAFF_SALARY: ({ page, pageSize, isPaid }: RequestParams) => {
+    if (isPaid === undefined || isPaid === null) {
+      return `/all-staff-salaries?page=${page}&pageSize=${pageSize}`;
+    }
+    return `/all-staff-salaries?isPaid=${isPaid}&page=${page}&pageSize=${pageSize}`;
+  },
+  GET_STAFF_SALARY_BY_ID: (id: number) => `/staff-salary/${id}`,
+  GET_TEACHER_SALARY: ({ page, pageSize, isPaid }: RequestParams) => {
+    if (isPaid === undefined || isPaid === null) {
+      return `/all-teacher-salaries?page=${page}&pageSize=${pageSize}`;
+    }
+    return `/all-teacher-salaries?isPaid=${isPaid}&page=${page}&pageSize=${pageSize}`;
+  },
+  CREATE_TEACHER_SALARY: () => `/create-teacher-salary`,
+  GET_TEACHER_SALARY_BY_ID: (id: number) => `/teacher-salary/${id}`,
+  UPDATE_TEACHER_SALARY: (id: number) =>  `/update-teacher-salary/${id}`,
+  DELETE_TEACHER_SALARY: (id: number) => `/remove-teacher-salary/${id}`,
+  DELETE_STAFF_SALARY: (id: number) => `/remove-staff-salary/${id}`,
+  CREATE_STAFF_SALARY: () => `/create-staff-salary`,
+  UPDATE_STAFF_SALARY: (id: number) =>  `/update-staff-salary/${id}`,
 };
 
 export default FinanceEndpoints;

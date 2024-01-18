@@ -16,6 +16,7 @@ namespace EnglishCenterManagement.Interfaces
 
         // teacher
         PagedResponse GetAllTeachers(string? search, int page, int pageSize);
+        ICollection<UserInfoModel> GetAllTeachers();
         ICollection<UserInfoModel> GetAllTeachersInClass(int id);
         TeacherModel GetTeacherById(int id);
         bool CreateTeacherProfile(TeacherModel teacher);

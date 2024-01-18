@@ -46,7 +46,7 @@ const FinanceScreen = () => {
         </li>
         <li className="pb-20">
           <Link
-            to={FinancePaths.SPENDING()}
+            to={FinancePaths.TEACHER_SALARY()}
             className="text-link-blue"
           >
             Teacher Salary
@@ -54,7 +54,7 @@ const FinanceScreen = () => {
         </li>
         <li className="pb-20">
           <Link
-            to={FinancePaths.SPENDING()}
+            to={FinancePaths.STAFF_SALARY()}
             className="text-link-blue"
           >
             Staff Salary

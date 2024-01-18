@@ -92,6 +92,8 @@ namespace EnglishCenterManagement.Data
             CreateMap<TeacherSalaryModel, TeacherSalaryDto>();
             CreateMap<StaffSalaryModel, StaffSalaryDto>();
             CreateMap<ClassModel, TeachingScheduleDto>();
+            CreateMap<CreateEditTeacherSalaryDto, TeacherSalaryModel>();
+            CreateMap<CreateEditStaffSalaryDto, StaffSalaryModel>();
         }
     }
 }

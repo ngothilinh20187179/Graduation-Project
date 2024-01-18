@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import { api } from "api/api";
 import { RequestParams } from "types/param.types";
 import { SpendingStatusType } from "../staff_finance";
-import { CreateEditSpending } from "../types/finance.types";
+import { CreateEditSpending, CreateEditStaffSalary, CreateEditTeacherSalary } from "../types/finance.types";
 import FinanceEndpoints from "../constants/finance.endpoints";
 
 export const getSpendingsApi = (
@@ -58,4 +58,54 @@ export const takeNoteTuitionApi = (
 
 export const getMySalaryApi = (params: RequestParams): Promise<AxiosResponse> => {
   return api.get(FinanceEndpoints.GET_MY_SALARY(params));
+};
+
+export const getAllStaffSalariesApi = (params: RequestParams): Promise<AxiosResponse> => {
+  return api.get(FinanceEndpoints.GET_STAFF_SALARY(params));
+};
+
+export const getAllTeacherSalariesApi = (params: RequestParams): Promise<AxiosResponse> => {
+  return api.get(FinanceEndpoints.GET_TEACHER_SALARY(params));
+};
+
+export const getStaffSalaryByIdApi = (id: number): Promise<AxiosResponse> => {
+  return api.get(FinanceEndpoints.GET_STAFF_SALARY_BY_ID(id));
+};
+
+export const createStaffSalaryApi = (
+  data: CreateEditStaffSalary
+): Promise<AxiosResponse> => {
+  return api.post(FinanceEndpoints.CREATE_STAFF_SALARY(), data);
+};
+
+export const createTeacherSalaryApi = (
+  data: CreateEditTeacherSalary
+): Promise<AxiosResponse> => {
+  return api.post(FinanceEndpoints.CREATE_TEACHER_SALARY(), data);
+};
+
+export const getTeacherSalaryByIdApi = (id: number): Promise<AxiosResponse> => {
+  return api.get(FinanceEndpoints.GET_TEACHER_SALARY_BY_ID(id));
+};
+
+export const editTeacherSalaryApi = (
+  id: number,
+  data: CreateEditTeacherSalary
+): Promise<AxiosResponse> => {
+  return api.put(FinanceEndpoints.UPDATE_TEACHER_SALARY(id), data);
+};
+
+export const deleteTeacherSalaryApi = (id: number): Promise<AxiosResponse> => {
+  return api.delete(FinanceEndpoints.DELETE_TEACHER_SALARY(id));
+};
+
+export const deleteStaffSalaryApi = (id: number): Promise<AxiosResponse> => {
+  return api.delete(FinanceEndpoints.DELETE_STAFF_SALARY(id));
+};
+
+export const editStaffSalaryApi = (
+  id: number,
+  data: CreateEditStaffSalary
+): Promise<AxiosResponse> => {
+  return api.put(FinanceEndpoints.UPDATE_STAFF_SALARY(id), data);
 };

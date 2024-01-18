@@ -54,7 +54,7 @@ const MySalaryScreen = () => {
 
   return (
     <>
-      <div className="pt-20 pl-55 pr-20">
+      <div className="pt-30 pl-55 pr-20">
         <Breadcrumb className="pb-20 font-18">
           <Breadcrumb.Item>
             <HomeOutlined />

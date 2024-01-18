@@ -14,9 +14,6 @@ import {
 import { useForm } from "antd/es/form/Form";
 import { SubmitButton } from "components/SubmitButton";
 import {
-  emailRules,
-  passwordRules,
-  phoneNumberRules,
   requireRule,
   requireRules,
 } from "helpers/validations.helper";
@@ -58,7 +55,6 @@ const FormClassInformation = ({
       dispatch(getOpenSubjects())
         .unwrap()
         .then((body) => {
-          console.log(body);
           setData(body.data);
           setLoading(false);
         })

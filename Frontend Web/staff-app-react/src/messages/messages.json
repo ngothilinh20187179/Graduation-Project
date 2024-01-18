@@ -29,5 +29,12 @@
   "fe_27": "Please input budget!",
   "fe_28": "Please input start date of class",
   "fe_29": "Please input end date of class",
-  "fe_30": "The end date must be greater than the start date"
+  "fe_30": "The end date must be greater than the start date",
+  "fe_31": "Please input month",
+  "fe_32": "Please input total hours",
+  "fe_33": "Please input total bonus salary",
+  "fe_34": "Please input total salary",
+  "fe_35": "Please select teacher",
+  "fe_36": "Please select work days in month",
+  "fe_37": "Please select total worked days of staff"
 }

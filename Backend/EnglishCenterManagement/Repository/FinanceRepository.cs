@@ -55,6 +55,7 @@ namespace EnglishCenterManagement.Repository
             _context.Remove(spending);
             return SaveChange();
         }
+        
         public StudentClassModel GetStudentClassById(int id)
         {
             return _context.StudentClasses.Where(x => x.Id == id).FirstOrDefault();
@@ -90,6 +91,29 @@ namespace EnglishCenterManagement.Repository
             _context.Update(studentClass);
             return SaveChange();
         }
+       
+        public PagedResponse GetAllTeacherSalaries(bool? isPaid, int page, int pageSize)
+        {
+            var allTeacherSalaries = _context.TeacherSalaries.AsQueryable();
+
+            #region Filtering
+            if (isPaid.HasValue)
+            {
+                allTeacherSalaries = allTeacherSalaries.Where(u => u.IsPaid == isPaid);
+            }
+            #endregion
+
+            #region Sorting
+            allTeacherSalaries = allTeacherSalaries.OrderByDescending(u => u.CreatedOn);
+            #endregion
+
+            #region Paginated
+            var data = allTeacherSalaries.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var total = allTeacherSalaries.Count();
+            #endregion
+
+            return new PagedResponse(data, total, page, pageSize);
+        }
         public PagedResponse GetTeacherSalaries(bool? isPaid, int page, int pageSize, int teacherId)
         {
             var allTeacherSalaries = _context.TeacherSalaries.AsQueryable();
@@ -113,7 +137,27 @@ namespace EnglishCenterManagement.Repository
 
             return new PagedResponse(data, total, page, pageSize);
         }
-        public PagedResponse GetStaffSalaries(bool? isPaid, int page, int pageSize, int staffId)
+        public TeacherSalaryModel GetTeacherSalaryById(int id)
+        {
+            return _context.TeacherSalaries.Where(x => x.Id == id).FirstOrDefault();
+        }
+        public bool CreateTeacherSalary(TeacherSalaryModel teacherSalary)
+        {
+            _context.Add(teacherSalary);
+            return SaveChange();
+        }
+        public bool UpdateTeacherSalary(TeacherSalaryModel teacherSalary)
+        {
+            _context.Update(teacherSalary);
+            return SaveChange();
+        }
+        public bool DeleteTeacherSalary(TeacherSalaryModel teacherSalary)
+        {
+            _context.Remove(teacherSalary);
+            return SaveChange();
+        }
+        
+        public PagedResponse GetStaffSalaries(bool? isPaid, int page, int pageSize, int? staffId)
         {
             var allStaffSalaries = _context.StaffSalaries.AsQueryable();
             allStaffSalaries = allStaffSalaries.Where(u => u.StaffId == staffId);
@@ -135,6 +179,47 @@ namespace EnglishCenterManagement.Repository
             #endregion
 
             return new PagedResponse(data, total, page, pageSize);
+        }
+        public PagedResponse GetAllStaffSalaries(bool? isPaid, int page, int pageSize)
+        {
+            var allStaffSalaries = _context.StaffSalaries.AsQueryable();
+
+            #region Filtering
+            if (isPaid.HasValue)
+            {
+                allStaffSalaries = allStaffSalaries.Where(u => u.IsPaid == isPaid);
+            }
+            #endregion
+
+            #region Sorting
+            allStaffSalaries = allStaffSalaries.OrderByDescending(u => u.CreateOn);
+            #endregion
+
+            #region Paginated
+            var data = allStaffSalaries.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var total = allStaffSalaries.Count();
+            #endregion
+
+            return new PagedResponse(data, total, page, pageSize);
+        }
+        public StaffSalaryModel GetStaffSalaryById(int id)
+        {
+            return _context.StaffSalaries.Where(x => x.Id == id).FirstOrDefault();
+        }
+        public bool CreateStaffSalary(StaffSalaryModel staffSalary)
+        {
+            _context.Add(staffSalary);
+            return SaveChange();
+        }
+        public bool UpdateStaffSalary(StaffSalaryModel staffSalary)
+        {
+            _context.Update(staffSalary);
+            return SaveChange();
+        }
+        public bool DeleteStaffSalary(StaffSalaryModel staffSalary)
+        {
+            _context.Remove(staffSalary);
+            return SaveChange();
         }
         public bool SaveChange()
         {

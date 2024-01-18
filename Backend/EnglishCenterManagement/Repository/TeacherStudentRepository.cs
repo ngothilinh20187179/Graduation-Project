@@ -89,6 +89,10 @@ namespace EnglishCenterManagement.Repository
             var teacherIds = _context.TeacherClasses.Where(x => x.ClassId == id).Select(x => x.TeacherId).ToList();
             return _context.Users.Where(x => teacherIds.Contains(x.Id)).ToList();
         }
+        public ICollection<UserInfoModel> GetAllTeachers()
+        {
+            return _context.Users.Where(x => x.Role == RoleType.Teacher).ToList();
+        }
         public PagedResponse GetAllTeachers(string? search, int page, int pageSize)
         {
             var allTeacherIds = _context.Teachers.Select(x => x.Id).ToList();

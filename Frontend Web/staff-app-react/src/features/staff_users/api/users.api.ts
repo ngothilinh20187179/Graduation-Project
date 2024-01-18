@@ -12,12 +12,20 @@ export const getStaffsApi = (params: RequestParams): Promise<AxiosResponse> => {
   return api.get(UsersEndpoints.GET_STAFFS(params));
 };
 
+export const getStaffsListApi = (): Promise<AxiosResponse> => {
+  return api.get(UsersEndpoints.GET_STAFFS_LIST());
+};
+
 export const getStaffByIdApi = (id: number): Promise<AxiosResponse> => {
   return api.get(UsersEndpoints.GET_STAFF(id));
 };
 
 export const getTeachersApi = (params: RequestParams): Promise<AxiosResponse> => {
   return api.get(UsersEndpoints.GET_TEACHERS(params));
+};
+
+export const getTeachersListApi = (): Promise<AxiosResponse> => {
+  return api.get(UsersEndpoints.GET_TEACHERS_LIST());
 };
 
 export const getTeacherByIdApi = (id: number): Promise<AxiosResponse> => {
