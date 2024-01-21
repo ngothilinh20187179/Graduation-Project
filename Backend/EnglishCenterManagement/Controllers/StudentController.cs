@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using EnglishCenterManagement.Common.Helpers;
 using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Common.Response;
@@ -410,6 +410,26 @@ namespace EnglishCenterManagement.Controllers
             });
 
             return mappedListClass;
+        }
+
+        // GET: /gender-statistical
+        [HttpGet("gender-statistical")]
+        [Authorize(Roles = "Admin, Staff")]
+        public ActionResult<GenderStatistical> GetGenderStudentStatistical()
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            var genderStatistical = _teacherStudentRepository.GenderStudentStatistical();
+
+            return Ok(new ApiReponse(genderStatistical));
         }
 
         #endregion
