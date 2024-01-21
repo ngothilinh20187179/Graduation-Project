@@ -1,4 +1,5 @@
 ﻿using EnglishCenterManagement.Common.Response;
+using EnglishCenterManagement.Dtos.UserInfoDtos;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 
@@ -13,6 +14,7 @@ namespace EnglishCenterManagement.Interfaces
         ICollection<UserInfoModel> GetAllStudentsInClass(int id);
         bool CreateStudentProfile(StudentModel student);
         bool UpdateStudentProfile(StudentModel student);
+        GenderStatistical GenderStudentStatistical();
 
         // teacher
         PagedResponse GetAllTeachers(string? search, int page, int pageSize);

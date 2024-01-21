@@ -31,3 +31,7 @@ export const changeInformationApi = (
 ): Promise<AxiosResponse> => {
   return api.put(AdminSettingEndpoints.CHANGE_INFORMATION(), data);
 };
+
+export const getGenderStudentStatisticalApi = (): Promise<AxiosResponse> => {
+  return api.get(AdminSettingEndpoints.GET_GENDER_STUDENT_STATISTICAL());
+};
