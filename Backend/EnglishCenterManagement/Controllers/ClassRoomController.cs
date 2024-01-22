@@ -258,10 +258,7 @@ namespace EnglishCenterManagement.Controllers
                 return Conflict(new ApiReponse(645));
             }
 
-            // TODO: check date end > start
-
             var mappedClass = _mapper.Map<ClassModel>(createClassDto);
-            _classRoomRepository.CreateClass(mappedClass);
            
             // check room + period + dayofweek có bị trùng với class nào đó có status NotStart || InProgress (nếu status là Stop/End thì ok
             var mappedSchedule = _mapper.Map<List<ClassScheduleModel>>(createClassDto.ClassSchedules);
@@ -279,10 +276,46 @@ namespace EnglishCenterManagement.Controllers
                 item.ClassId = mappedClass.Id;
             });
 
+            _classRoomRepository.CreateClass(mappedClass);
+
             return StatusCode(StatusCodes.Status201Created);
         }
-       
+
         // TODO PUT: edit-class/id
+
+        // DELETE: /remove-class/5
+        [HttpDelete("remove-class/{id}")]
+        [Authorize(Roles = "Admin, Staff")]
+        public ActionResult DeleteDelete(int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            var getClassById = _classRoomRepository.GetClassById(id);
+            if (getClassById == null)
+            {
+                return NotFound(new ApiReponse(626));
+            }
+
+            if (getClassById.ClassStatus != ClassStatusType.NotStart)
+            {
+                return BadRequest(new ApiReponse(656));
+            }
+
+            if (!_classRoomRepository.DeleteClass(getClassById))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return NoContent();
+        }
         #endregion
 
         #region CLASS - REFERENCE
@@ -334,7 +367,6 @@ namespace EnglishCenterManagement.Controllers
         }
         
         // TODO: sắp xếp tkb
-        // TODO: => cần API get room trống tại period và dayofweek nào đó (ko tính các class đã end hay stop)
         // TODO DELETE: /remove-student/5
         // TODO POST: /add-student-class
         #endregion
