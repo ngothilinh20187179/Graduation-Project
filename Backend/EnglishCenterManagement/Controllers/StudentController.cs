@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using EnglishCenterManagement.Common.Helpers;
 using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Common.Response;

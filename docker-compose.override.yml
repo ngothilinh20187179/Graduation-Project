@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  englishcentermanagement:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=database;Database=englishcenter;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True;
+      - Jwt__Issuer=englishcentermanagement
+      - Jwt__Audience=englishcentermanagement
+      - Jwt__Key=key@englishcentermanagement123456789
+    ports:
+      - "12915:80"
+
+  database:
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=yourStrong(!)Password
+    volumes:
+      - englistcentermanagement-database:/var/opt/mssql
+  
+  web-admin:
+    ports:
+      - "12916:80"
+  web-staff:
+    ports:
+      - "12917:80"
+  web-student:
+    ports:
+      - "12918:80"
+  web-teacher:
+    ports:
+      - "12919:80"
+
+volumes:
+  englistcentermanagement-database:
+    external: true

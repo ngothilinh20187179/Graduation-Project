@@ -85,7 +85,7 @@ const refreshAuthLogic = async () => {
 };
 
 export const api = axios.create({
-  baseURL: `https://localhost:7054/api/`,
+  baseURL: `http://localhost:12915/api/`,
   headers: {
     "Content-Type": "application/json",
   },
