@@ -83,3 +83,11 @@ export const updateRoomApi = (
 export const deleteRoomApi = (id: number): Promise<AxiosResponse> => {
   return api.delete(ClassesEndpoints.DELETE_ROOM(id));
 };
+
+export const getOpenRoomsApi = (): Promise<AxiosResponse> => {
+  return api.get(ClassesEndpoints.GET_OPEN_ROOMS());
+};
+
+export const deleteClassRoomApi = (id: number): Promise<AxiosResponse> => {
+  return api.delete(ClassesEndpoints.DELETE_CLASS_ROOM(id));
+};

@@ -8,10 +8,12 @@ import {
   createClassInfoApi,
   createRoomApi,
   createSubjectApi,
+  deleteClassRoomApi,
   deleteRoomApi,
   deleteSubjectApi,
   getClassApi,
   getClassesApi,
+  getOpenRoomsApi,
   getOpenSubjectsApi,
   getRoomApi,
   getRoomsApi,
@@ -93,6 +95,14 @@ export const getRoom = createAsyncThunk(
   }
 );
 
+export const getOpenRooms = createAsyncThunk(
+  `${CLASSES_KEY}/getOpenRooms`,
+  async () => {
+    const response = await getOpenRoomsApi();
+    return response.data;
+  }
+);
+
 export const createRoom = createAsyncThunk(
   `${CLASSES_KEY}/createRoom`,
   async (data: Room) => {
@@ -135,6 +145,13 @@ export const createClassInfo = createAsyncThunk(
   `${CLASSES_KEY}/createClassInfo`,
   async (data: CreateEditClassInfo) => {
     return createClassInfoApi(data);
+  }
+);
+
+export const deleteClassRoom = createAsyncThunk(
+  `${CLASSES_KEY}/deleteClassRoom`,
+  async (id: number) => {
+    return deleteClassRoomApi(id);
   }
 );
 

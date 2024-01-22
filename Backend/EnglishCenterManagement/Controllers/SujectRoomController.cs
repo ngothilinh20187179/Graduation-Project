@@ -205,6 +205,16 @@ namespace EnglishCenterManagement.Controllers
             return Ok(new ApiReponse(listRooms));
         }
 
+        // GET: /open-rooms
+        [HttpGet("open-rooms")]
+        public ActionResult<ICollection<RoomDto>> GetOpenRooms()
+        {
+            var listRooms = _subjectRoomRepository.GetOpenRooms();
+            var mappedListRooms = _mapper.Map<List<RoomDto>>(listRooms);
+
+            return Ok(new ApiReponse(mappedListRooms));
+        }
+
         [HttpGet("room/{id}")]
         [Authorize(Roles = "Admin, Staff")]
         public ActionResult<RoomDto> GetRoomById(int id)
