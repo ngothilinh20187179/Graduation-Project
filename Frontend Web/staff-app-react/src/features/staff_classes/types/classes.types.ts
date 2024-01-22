@@ -50,6 +50,19 @@ export type Class = {
   credit: number;
 };
 
+export type CreateClassSchedules = {
+  period: ClassPeriodType;
+  dayOfWeek: DayOfWeek;
+  roomId: number;
+}
+
+export type CreateEditClassInfo = Class & {
+  note: string | null;
+  classStatus: ClassStatusType;
+  subjectId: number;
+  classSchedules: CreateClassSchedules[];
+} 
+
 export interface GetAllClassesResponse extends PaginationResponse {
   data: Class[];
 }
@@ -75,11 +88,6 @@ export type GetClassResponse = {
     teachers?: BasicTeacherInfo[];
   };
 }
-
-export type CreateEditClassInfo = Class & {
-  note: string | null;
-  classStatus: ClassStatusType;
-} 
 
 export interface ClassesState {
   classes: GetAllClassesResponse | null;

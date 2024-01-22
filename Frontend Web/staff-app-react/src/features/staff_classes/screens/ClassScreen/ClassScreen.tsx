@@ -2,9 +2,9 @@ import {
   HomeOutlined,
   SnippetsOutlined,
   DeleteOutlined,
-  EditOutlined,
+  UsergroupAddOutlined
 } from "@ant-design/icons";
-import { Breadcrumb, Button, Pagination, Table, Typography } from "antd";
+import { Breadcrumb, Button, Modal, Pagination, Table, Typography } from "antd";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "redux/store";
 import { useNavigate } from "react-router-dom";
@@ -15,9 +15,11 @@ import { RequestParams } from "types/param.types";
 import {
   COLUMNS_TABLE_CLASSES,
   ClassesPaths,
+  deleteClassRoom,
   getClasses,
 } from "features/staff_classes/staff_classes";
 import DropdownButton from "components/DropdownButton/DropdownButton";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const ClassScreen = () => {
   const dispatch = useAppDispatch();
@@ -26,6 +28,9 @@ const ClassScreen = () => {
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(20);
   const [search, setSearch] = useState<string>();
+  const [classSelected, setClassSelected] = useState<number | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [triggerReload, setTriggerReload] = useState<boolean>(false);
 
   const {
     classes: { classes },
@@ -60,12 +65,28 @@ const ClassScreen = () => {
                   <>
                     <Typography>
                       <span>
-                        <EditOutlined />
+                        <UsergroupAddOutlined />
                       </span>{" "}
-                      Edit
+                      Add Student
                     </Typography>
                   </>
                 ),
+              },
+              {
+                key: "3",
+                label: (
+                  <>
+                    <Typography>
+                      <span>
+                        <DeleteOutlined />
+                      </span>{" "}
+                      Delete
+                    </Typography>
+                  </>
+                ),
+                onClick: () => {
+                  setClassSelected(Number(item.id));
+                },
               },
             ],
           }}
@@ -86,7 +107,24 @@ const ClassScreen = () => {
     dispatch(getClasses(params))
       .unwrap()
       .finally(() => setIsLoading(false));
-  }, [dispatch, page, pageSize, search]);
+  }, [dispatch, page, pageSize, search, triggerReload]);
+
+  const handleDeleteClassRoom = () => {
+    if (!classSelected) return;
+    setIsSubmitting(true);
+    setIsLoading(true);
+    dispatch(deleteClassRoom(classSelected))
+      .then(unwrapResult)
+      .then(() => {
+        setTriggerReload(!triggerReload);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsSubmitting(false);
+        setIsLoading(false);
+        setClassSelected(null);
+      });
+  };
 
   return (
     <div className="pt-30 pl-55 pr-55">
@@ -135,6 +173,19 @@ const ClassScreen = () => {
         current={classes?.pageNumber}
         onChange={(newPage) => setPage(newPage)}
         total={Number(classes?.totalPages) * 10}
+      />
+      <Modal
+        centered
+        title="Are you sure you want to delete this class room?"
+        open={!!classSelected}
+        cancelText="Cancel"
+        okText="Delete"
+        okType="danger"
+        onCancel={() => setClassSelected(null)}
+        onOk={handleDeleteClassRoom}
+        okButtonProps={{
+          disabled: isSubmitting,
+        }}
       />
     </div>
   );

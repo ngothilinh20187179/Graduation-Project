@@ -119,6 +119,11 @@ namespace EnglishCenterManagement.Repository
         {
             return _context.Classes.Any(x => x.ClassName == className);
         }
+        public bool DeleteClass(ClassModel classRoom)
+        {
+            _context.Remove(classRoom);
+            return SaveChange();
+        }
 
         // schedule
         public ICollection<ClassScheduleModel> GetAllSchedulesOfClass(int id)
@@ -135,6 +140,8 @@ namespace EnglishCenterManagement.Repository
             var getAllClassIdSameSchedule = _context.ClassSchedules
                 .Where(x => x.RoomId == schedule.RoomId && x.DayOfWeek == schedule.DayOfWeek && x.Period == schedule.Period)
                 .Select(x => x.ClassId).Distinct().ToList();
+
+            Console.WriteLine(getAllClassIdSameSchedule);
 
             if (getAllClassIdSameSchedule.IsNullOrEmpty())
             {

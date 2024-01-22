@@ -30,6 +30,8 @@ const ClassesEndpoints = {
   CREATE_ROOM: () => `create-room`,
   UPDATE_ROOM: (id: number) =>  `update-room/${id}`,
   DELETE_ROOM: (id: number) => `/remove-room/${id}`,
+  GET_OPEN_ROOMS: () => `/open-rooms`,
+  DELETE_CLASS_ROOM: (id: number) => `/remove-class/${id}`,
 };
 
 export default ClassesEndpoints;
