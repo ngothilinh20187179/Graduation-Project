@@ -6,6 +6,7 @@ import {
   changeInformationApi,
   changePasswordApi,
   deleteAvatarApi,
+  getGenderStudentStatisticalApi,
   getMyProfileApi,
 } from "../admin_setting";
 import SETTING_KEY from "../constants/setting.keys";
@@ -16,6 +17,7 @@ import {
 
 const initialState: SettingState = {
   myProfile: null,
+  genderStudentStatistical: null,
 };
 
 export const changePassword = createAsyncThunk(
@@ -54,6 +56,14 @@ export const deleteAvatar = createAsyncThunk(
   }
 );
 
+export const getGenderStudentStatistical = createAsyncThunk(
+  `${SETTING_KEY}/getGenderStudentStatistical`,
+  async () => {
+    const response = await getGenderStudentStatisticalApi();
+    return response.data.data;
+  }
+);
+
 const settingSlice = createSlice({
   name: SETTING_KEY,
   initialState,
@@ -67,6 +77,13 @@ const settingSlice = createSlice({
     );
     builder.addCase(getMyProfile.rejected, (state) => {
       state.myProfile = null;
+    });
+    builder.addCase(getGenderStudentStatistical.fulfilled, (state, action) => {
+        state.genderStudentStatistical = action.payload;
+      }
+    );
+    builder.addCase(getGenderStudentStatistical.rejected, (state) => {
+      state.genderStudentStatistical = null;
     });
   },
 });

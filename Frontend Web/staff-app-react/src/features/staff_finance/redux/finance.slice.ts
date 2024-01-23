@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RequestParams } from "types/param.types";
-import { AcceptOrRejectSpending, CreateEditSpending, FinanceState, TakeNoteTuition } from "../types/finance.types";
-import { acceptOrRejectSpendingApi, confirmPaymentApi, createSpendingApi, deleteSpendingApi, getMySalaryApi, getSpendingByIdApi, getSpendingsApi, getStudentTuitionInformationApi, takeNoteTuitionApi, updateSpendingApi } from "../api/finance.api";
+import { AcceptOrRejectSpending, CreateEditSpending, CreateEditStaffSalary, CreateEditTeacherSalary, FinanceState, TakeNoteTuition } from "../types/finance.types";
+import { acceptOrRejectSpendingApi, confirmPaymentApi, createSpendingApi, createStaffSalaryApi, createTeacherSalaryApi, deleteSpendingApi, deleteStaffSalaryApi, deleteTeacherSalaryApi, editStaffSalaryApi, editTeacherSalaryApi, getAllStaffSalariesApi, getAllTeacherSalariesApi, getMySalaryApi, getSpendingByIdApi, getSpendingsApi, getStaffSalaryByIdApi, getStudentTuitionInformationApi, getTeacherSalaryByIdApi, takeNoteTuitionApi, updateSpendingApi } from "../api/finance.api";
 import FINANCE_KEY from "../constants/finance.keys";
 
 const initialState: FinanceState = {
@@ -9,6 +9,10 @@ const initialState: FinanceState = {
   spending: null,
   studentTuition: null,
   salary: null,
+  staffSalaries: null,
+  teacherSalaries: null,
+  teacherSalaryDetail: null,
+  staffSalaryDetail: null
 };
 
 export const getSpendings = createAsyncThunk(
@@ -23,7 +27,6 @@ export const getSpendingById = createAsyncThunk(
   `${FINANCE_KEY}/getSpendingById`,
   async (id: number) => {
     const response = await getSpendingByIdApi(id);
-    console.log(response.data.data)
     return response.data.data;
   }
 );
@@ -89,6 +92,82 @@ export const getMySalary = createAsyncThunk(
   }
 );
 
+export const getAllStaffSalaries = createAsyncThunk(
+  `${FINANCE_KEY}/getAllStaffSalaries`,
+  async (params: RequestParams) => {
+    const response = await getAllStaffSalariesApi(params);
+    return response.data.data;
+  }
+);
+
+export const getStaffSalaryById = createAsyncThunk(
+  `${FINANCE_KEY}/getStaffSalaryById`,
+  async (id: number) => {
+    const response = await getStaffSalaryByIdApi(id);
+    return response.data.data;
+  }
+);
+
+export const createStaffSalary = createAsyncThunk(
+  `${FINANCE_KEY}/createStaffSalary`,
+  async (data: CreateEditStaffSalary) => {
+    return createStaffSalaryApi(data);
+  }
+);
+
+export const editStaffSalary = createAsyncThunk(
+  `${FINANCE_KEY}/editStaffSalary`,
+  async (data: CreateEditStaffSalary) => {
+    const { id, ...fields } = data;
+    return editStaffSalaryApi(Number(id), fields);
+  }
+);
+
+export const getAllTeacherSalaries = createAsyncThunk(
+  `${FINANCE_KEY}/getAllTeacherSalaries`,
+  async (params: RequestParams) => {
+    const response = await getAllTeacherSalariesApi(params);
+    return response.data.data;
+  }
+);
+
+export const getTeacherSalaryById = createAsyncThunk(
+  `${FINANCE_KEY}/getTeacherSalaryById`,
+  async (id: number) => {
+    const response = await getTeacherSalaryByIdApi(id);
+    return response.data.data;
+  }
+);
+
+export const createTeacherSalary = createAsyncThunk(
+  `${FINANCE_KEY}/createTeacherSalary`,
+  async (data: CreateEditTeacherSalary) => {
+    return createTeacherSalaryApi(data);
+  }
+);
+
+export const editTeacherSalary = createAsyncThunk(
+  `${FINANCE_KEY}/editTeacherSalary`,
+  async (data: CreateEditTeacherSalary) => {
+    const { id, ...fields } = data;
+    return editTeacherSalaryApi(Number(id), fields);
+  }
+);
+
+export const deleteTeacherSalary = createAsyncThunk(
+  `${FINANCE_KEY}/deleteTeacherSalary`,
+  async (id: number) => {
+    return deleteTeacherSalaryApi(id);
+  }
+);
+
+export const deleteStaffSalary = createAsyncThunk(
+  `${FINANCE_KEY}/deleteStaffSalary`,
+  async (id: number) => {
+    return deleteStaffSalaryApi(id);
+  }
+);
+
 const financeSlice = createSlice({
   name: FINANCE_KEY,
   initialState,
@@ -117,6 +196,30 @@ const financeSlice = createSlice({
     });
     builder.addCase(getMySalary.rejected, (state) => {
       state.salary = null;
+    });
+    builder.addCase(getAllStaffSalaries.fulfilled, (state, action) => {
+      state.staffSalaries = action.payload;
+    });
+    builder.addCase(getAllStaffSalaries.rejected, (state) => {
+      state.staffSalaries = null;
+    });
+    builder.addCase(getAllTeacherSalaries.fulfilled, (state, action) => {
+      state.teacherSalaries = action.payload;
+    });
+    builder.addCase(getAllTeacherSalaries.rejected, (state) => {
+      state.teacherSalaries = null;
+    });
+    builder.addCase(getTeacherSalaryById.fulfilled, (state, action) => {
+      state.teacherSalaryDetail = action.payload;
+    });
+    builder.addCase(getTeacherSalaryById.rejected, (state) => {
+      state.teacherSalaryDetail = null;
+    });
+    builder.addCase(getStaffSalaryById.fulfilled, (state, action) => {
+      state.staffSalaryDetail = action.payload;
+    });
+    builder.addCase(getStaffSalaryById.rejected, (state) => {
+      state.staffSalaryDetail = null;
     });
   },
 });

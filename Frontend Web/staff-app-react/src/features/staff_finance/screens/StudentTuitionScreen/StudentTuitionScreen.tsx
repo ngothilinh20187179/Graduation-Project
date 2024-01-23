@@ -132,7 +132,7 @@ const StudentTuitionScreen = () => {
         </DropdownButton>
       ),
     }));
-  }, [studentTuition?.data, navigate]);
+  }, [studentTuition?.data]);
 
   const handleConfirm = () => {
     if (!tuitionId) return;
@@ -161,7 +161,6 @@ const StudentTuitionScreen = () => {
       id: Number(tuitionId),
       note: note,
     };
-    console.log(data);
     dispatch(takeNoteTuition(data))
       .then(unwrapResult)
       .then(() => {

@@ -4,6 +4,7 @@ const AdminSettingEndpoints = {
   CHANGE_AVATAR: () => `/change-avatar`,
   DELETE_AVATAR: () => `/remove-myavatar`,
   CHANGE_INFORMATION: () => `/change-information`,
+  GET_GENDER_STUDENT_STATISTICAL: () => `/gender-statistical`
 };
 
 export default AdminSettingEndpoints;

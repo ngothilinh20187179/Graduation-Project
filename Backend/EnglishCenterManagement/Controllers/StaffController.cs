@@ -8,6 +8,7 @@ using EnglishCenterManagement.Dtos.UserInfoDtos;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
+using EnglishCenterManagement.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -59,6 +60,27 @@ namespace EnglishCenterManagement.Controllers
             listStaffs.Data = mappedListStaffs;
 
             return Ok(new ApiReponse(listStaffs));
+        }
+
+        // GET: /staff-list
+        [HttpGet("staff-list")]
+        [Authorize(Roles = nameof(RoleType.Staff))]
+        public ActionResult<ICollection<UserNameAndIdDto>> GetBasicStaffList()
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            var staffList = _staffRepository.GetAllStaffs();
+            var mapStaffList = _mapper.Map<List<UserNameAndIdDto>>(staffList);
+
+            return Ok(new ApiReponse(mapStaffList));
         }
 
         // GET: /staff/5

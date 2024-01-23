@@ -1,4 +1,5 @@
 import {
+  Button,
   Col,
   DatePicker,
   Form,
@@ -13,13 +14,7 @@ import {
 } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { SubmitButton } from "components/SubmitButton";
-import {
-  emailRules,
-  passwordRules,
-  phoneNumberRules,
-  requireRule,
-  requireRules,
-} from "helpers/validations.helper";
+import { requireRule, requireRules } from "helpers/validations.helper";
 import { memo, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import mess from "messages/messages.json";
@@ -27,12 +22,18 @@ import { AxiosResponse } from "axios";
 import { useAppDispatch } from "redux/store";
 import {
   BasicSubjects,
+  ClassPeriodType,
   ClassStatusType,
   ClassesPaths,
   CreateEditClassInfo,
+  DayOfWeek,
   GetClassResponse,
+  Room,
+  getOpenRooms,
   getOpenSubjects,
 } from "features/staff_classes/staff_classes";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { getTimeUTC } from "helpers/utils.helper";
 
 const FormClassInformation = ({
   isEditScreen = false,
@@ -50,19 +51,28 @@ const FormClassInformation = ({
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [data, setData] = useState<BasicSubjects[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loadingSubject, setLoadingSubject] = useState(false);
+  const [roomList, setRoomList] = useState<Room[]>([]);
+  const [loadingRoom, setLoadingRoom] = useState(false);
 
   useEffect(() => {
     if (!isEditScreen) {
-      setLoading(true);
+      setLoadingSubject(true);
+      setLoadingRoom(true);
       dispatch(getOpenSubjects())
         .unwrap()
         .then((body) => {
-          console.log(body);
           setData(body.data);
-          setLoading(false);
+        });
+      dispatch(getOpenRooms())
+        .unwrap()
+        .then((body) => {
+          setRoomList(body.data);
         })
-        .finally(() => setLoading(false));
+        .finally(() => {
+          setLoadingRoom(false);
+          setLoadingSubject(false);
+        });
     }
     form.setFieldsValue({
       ...classInfo,
@@ -71,8 +81,12 @@ const FormClassInformation = ({
 
   const handleSubmit = () => {
     setIsSubmitting(true);
+    
+  console.log(form.getFieldValue("classSchedules"));
     onSubmit({
       ...form.getFieldsValue(),
+      classStartDate: getTimeUTC(form.getFieldValue("classStartDate")),
+      classEndDate: getTimeUTC(form.getFieldValue("classEndDate")),
     })
       .then(() => {
         if (isEditScreen) {
@@ -118,7 +132,7 @@ const FormClassInformation = ({
               <Select
                 allowClear
                 placeholder="Please select subject"
-                notFoundContent={loading ? <Spin size="small" /> : null}
+                notFoundContent={loadingSubject ? <Spin size="small" /> : null}
               >
                 {data.map((option) => (
                   <Select.Option key={option.id} value={option.id}>
@@ -235,6 +249,378 @@ const FormClassInformation = ({
             </Form.Item>
           </Col>
         </Row>
+        {/* <Form.List
+          name="classSchedules"
+          rules={[
+            {
+              validator: async (_, classSchedules) => {
+                if (!classSchedules || classSchedules.length < 1) {
+                  return Promise.reject(new Error("At least 1 schedule"));
+                }
+              },
+            },
+          ]}
+        >
+          {(fields, { add, remove }, { errors }) => (
+            <>
+              {fields.map((field, index) => (
+                <Form.Item
+                  label={index === 0 ? "Schedules" : ""}
+                  required={false}
+                  key={field.key}
+                  className="flex"
+                >
+                  <Row gutter={[160, 0]}>
+                    <Col xs={24} xl={8} style={{ maxWidth: 320 }}>
+                      <Form.Item label="Period:" name="period" required>
+                        <Select
+                          allowClear
+                          placeholder="Please select period"
+                          defaultValue={
+                            classInfo?.data.classSchedules[index].period === 1
+                              ? "Period 1 (8h-10h)"
+                              : classInfo?.data.classSchedules[index].period ===
+                                2
+                              ? "Period 2 (10h-12h)"
+                              : classInfo?.data.classSchedules[index].period ===
+                                3
+                              ? "Period 3 (12h-14h)"
+                              : classInfo?.data.classSchedules[index].period ===
+                                4
+                              ? "Period 4 (14h-16h)"
+                              : classInfo?.data.classSchedules[index].period ===
+                                5
+                              ? "Period 5 (16h-18h)"
+                              : classInfo?.data.classSchedules[index].period ===
+                                6
+                              ? "Period 6 (18h-20h)"
+                              : classInfo?.data.classSchedules[index].period ===
+                                7
+                              ? "Period 7 (20h-22h)"
+                              : ""
+                          }
+                          options={[
+                            {
+                              value: ClassPeriodType.Period1,
+                              label: "Period 1 (8h-10h)",
+                            },
+                            {
+                              value: ClassPeriodType.Period2,
+                              label: "Period 2 (10h-12h)",
+                            },
+                            {
+                              value: ClassPeriodType.Period3,
+                              label: "Period 3 (12h-14h)",
+                            },
+                            {
+                              value: ClassPeriodType.Period4,
+                              label: "Period 4 (14h-16h)",
+                            },
+                            {
+                              value: ClassPeriodType.Period5,
+                              label: "Period 5 (16h-18h)",
+                            },
+                            {
+                              value: ClassPeriodType.Period6,
+                              label: "Period 6 (18h-20h)",
+                            },
+                            {
+                              value: ClassPeriodType.Period7,
+                              label: "Period 7 (20h-22h)",
+                            },
+                          ]}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} xl={8} style={{ maxWidth: 320 }}>
+                      <Form.Item label="Day of week:" name="dayOfWeek" required>
+                        <Select
+                          allowClear
+                          placeholder="Please select day of week"
+                          defaultValue={
+                            classInfo?.data.classSchedules[index].dayOfWeek ===
+                            0
+                              ? "Sunday"
+                              : classInfo?.data.classSchedules[index]
+                                  .dayOfWeek === 1
+                              ? "Monday"
+                              : classInfo?.data.classSchedules[index]
+                                  .dayOfWeek === 2
+                              ? "Tuesday"
+                              : classInfo?.data.classSchedules[index]
+                                  .dayOfWeek === 3
+                              ? "Wednesday"
+                              : classInfo?.data.classSchedules[index]
+                                  .dayOfWeek === 4
+                              ? "Thursday"
+                              : classInfo?.data.classSchedules[index]
+                                  .dayOfWeek === 5
+                              ? "Friday"
+                              : classInfo?.data.classSchedules[index]
+                                  .dayOfWeek === 6
+                              ? "Saturday"
+                              : ""
+                          }
+                          options={[
+                            {
+                              value: DayOfWeek.Sunday,
+                              label: "Sunday",
+                            },
+                            {
+                              value: DayOfWeek.Monday,
+                              label: "Monday",
+                            },
+                            {
+                              value: DayOfWeek.Tuesday,
+                              label: "Tuesday",
+                            },
+                            {
+                              value: DayOfWeek.Wednesday,
+                              label: "Wednesday",
+                            },
+                            {
+                              value: DayOfWeek.Thursday,
+                              label: "Thursday",
+                            },
+                            {
+                              value: DayOfWeek.Sunday,
+                              label: "Sunday",
+                            },
+                            {
+                              value: DayOfWeek.Saturday,
+                              label: "Saturday",
+                            },
+                          ]}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} xl={8} style={{ maxWidth: 320 }}>
+                      <Form.Item label="Room:" name="roomId" required>
+                        <Select
+                          allowClear
+                          placeholder="Please select room"
+                          notFoundContent={
+                            loadingRoom ? <Spin size="small" /> : null
+                          }
+                        >
+                          {roomList.map((option) => (
+                            <Select.Option value={option.id}>
+                              {option.name} - Size {option.size}
+                            </Select.Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  {fields.length > 1 ? (
+                    <MinusCircleOutlined
+                      className="dynamic-delete-button"
+                      onClick={() => remove(field.name)}
+                    />
+                  ) : null}
+                </Form.Item>
+              ))}
+              <Form.Item>
+                <Button
+                  type="dashed"
+                  onClick={() => add()}
+                  icon={<PlusOutlined />}
+                >
+                  Add schedule
+                </Button>
+                <Form.ErrorList errors={errors} />
+              </Form.Item>
+            </>
+          )}
+        </Form.List> */}
+        <Form.List
+          name="classSchedules"
+          rules={[
+            {
+              validator: async (_, classSchedules) => {
+                if (!classSchedules || classSchedules.length < 1) {
+                  return Promise.reject(new Error("At least 1 schedule"));
+                }
+              },
+            },
+          ]}
+        >
+          {(fields, { add, remove }, { errors }) => (
+            <>
+              {fields.map(({ key, name, ...restField }) => (
+                <Space
+                  key={key}
+                  style={{ display: "flex" , alignItems: "center", flexWrap: "wrap", justifyContent: "space-between", paddingRight: "100px"}}
+                  align="baseline"
+                >
+                  <Form.Item
+                    {...restField}
+                    name={[name, "period"]}
+                    rules={[{ required: true, message: "Missing period" }]}
+                    label="Period"
+                  >
+                    <Select
+                      allowClear
+                      placeholder="Please select period"
+                      // defaultValue={
+                      //   classInfo?.data.classSchedules[index].period === 1
+                      //     ? "Period 1 (8h-10h)"
+                      //     : classInfo?.data.classSchedules[index].period ===
+                      //       2
+                      //     ? "Period 2 (10h-12h)"
+                      //     : classInfo?.data.classSchedules[index].period ===
+                      //       3
+                      //     ? "Period 3 (12h-14h)"
+                      //     : classInfo?.data.classSchedules[index].period ===
+                      //       4
+                      //     ? "Period 4 (14h-16h)"
+                      //     : classInfo?.data.classSchedules[index].period ===
+                      //       5
+                      //     ? "Period 5 (16h-18h)"
+                      //     : classInfo?.data.classSchedules[index].period ===
+                      //       6
+                      //     ? "Period 6 (18h-20h)"
+                      //     : classInfo?.data.classSchedules[index].period ===
+                      //       7
+                      //     ? "Period 7 (20h-22h)"
+                      //     : ""
+                      // }
+                      options={[
+                        {
+                          value: ClassPeriodType.Period1,
+                          label: "Period 1 (8h-10h)",
+                        },
+                        {
+                          value: ClassPeriodType.Period2,
+                          label: "Period 2 (10h-12h)",
+                        },
+                        {
+                          value: ClassPeriodType.Period3,
+                          label: "Period 3 (12h-14h)",
+                        },
+                        {
+                          value: ClassPeriodType.Period4,
+                          label: "Period 4 (14h-16h)",
+                        },
+                        {
+                          value: ClassPeriodType.Period5,
+                          label: "Period 5 (16h-18h)",
+                        },
+                        {
+                          value: ClassPeriodType.Period6,
+                          label: "Period 6 (18h-20h)",
+                        },
+                        {
+                          value: ClassPeriodType.Period7,
+                          label: "Period 7 (20h-22h)",
+                        },
+                      ]}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    {...restField}
+                    name={[name, "dayOfWeek"]}
+                    rules={[{ required: true, message: "Missing day of week" }]}
+                    label="Day Of Week"
+                  >
+                    <Select
+                      allowClear
+                      placeholder="Please select day of week"
+                      // defaultValue={
+                      //   classInfo?.data.classSchedules[index].dayOfWeek ===
+                      //   0
+                      //     ? "Sunday"
+                      //     : classInfo?.data.classSchedules[index]
+                      //         .dayOfWeek === 1
+                      //     ? "Monday"
+                      //     : classInfo?.data.classSchedules[index]
+                      //         .dayOfWeek === 2
+                      //     ? "Tuesday"
+                      //     : classInfo?.data.classSchedules[index]
+                      //         .dayOfWeek === 3
+                      //     ? "Wednesday"
+                      //     : classInfo?.data.classSchedules[index]
+                      //         .dayOfWeek === 4
+                      //     ? "Thursday"
+                      //     : classInfo?.data.classSchedules[index]
+                      //         .dayOfWeek === 5
+                      //     ? "Friday"
+                      //     : classInfo?.data.classSchedules[index]
+                      //         .dayOfWeek === 6
+                      //     ? "Saturday"
+                      //     : ""
+                      // }
+                      options={[
+                        {
+                          value: DayOfWeek.Sunday,
+                          label: "Sunday",
+                        },
+                        {
+                          value: DayOfWeek.Monday,
+                          label: "Monday",
+                        },
+                        {
+                          value: DayOfWeek.Tuesday,
+                          label: "Tuesday",
+                        },
+                        {
+                          value: DayOfWeek.Wednesday,
+                          label: "Wednesday",
+                        },
+                        {
+                          value: DayOfWeek.Thursday,
+                          label: "Thursday",
+                        },
+                        {
+                          value: DayOfWeek.Friday,
+                          label: "Friday",
+                        },
+                        {
+                          value: DayOfWeek.Saturday,
+                          label: "Saturday",
+                        },
+                      ]}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    {...restField}
+                    name={[name, "roomId"]}
+                    rules={[{ required: true, message: "Missing room" }]}
+                    label="Room"
+                  >
+                    <Select
+                      allowClear
+                      placeholder="Please select room"
+                      notFoundContent={
+                        loadingRoom ? <Spin size="small" /> : null
+                      }
+                    >
+                      {roomList.map((option) => (
+                        <Select.Option value={option.id}>
+                          {option.name} - Size {option.size}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                  <MinusCircleOutlined
+                    className="pl-10"
+                    onClick={() => remove(name)}
+                  />
+                </Space>
+              ))}
+              <Form.Item>
+                <Button
+                  type="dashed"
+                  onClick={() => add()}
+                  icon={<PlusOutlined />}
+                >
+                  Add schedule
+                </Button>
+                <Form.ErrorList errors={errors} />
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
         <Row>
           <Form.Item>
             <Space>

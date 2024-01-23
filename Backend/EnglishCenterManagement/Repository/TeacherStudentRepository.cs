@@ -1,5 +1,6 @@
 ﻿using EnglishCenterManagement.Common.Response;
 using EnglishCenterManagement.Data;
+using EnglishCenterManagement.Dtos.UserInfoDtos;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
@@ -82,12 +83,36 @@ namespace EnglishCenterManagement.Repository
             _context.Students.Update(student);
             return SaveChange();
         }
+        public GenderStatistical GenderStudentStatistical()
+        {
+            var allStudents = _context.Users.Where(x => x.Role == RoleType.Student && x.UserStatus == UserStatusType.UnLock);
+            int totalNumberOfStudents = allStudents.Count();
+            int numberOfGirls = allStudents.Where(x => x.Gender == GenderType.Female).Count();
+            int numberOfBoys = allStudents.Where(x => x.Gender == GenderType.Male).Count();
+            float girlPercents = (numberOfGirls / (float)totalNumberOfStudents) * 100;
+            float boyPercents = (numberOfBoys / (float)totalNumberOfStudents) * 100;
+
+            GenderStatistical genderStatistical = new()
+            {
+                TotalNumberOfStudents = totalNumberOfStudents,
+                NumberOfGirls = numberOfGirls,
+                NumberOfBoys = numberOfBoys,
+                GirlPercents = girlPercents,
+                BoyPercents = boyPercents,
+            };
+
+            return genderStatistical;
+        }
 
         // teacher
         public ICollection<UserInfoModel> GetAllTeachersInClass(int id)
         {
             var teacherIds = _context.TeacherClasses.Where(x => x.ClassId == id).Select(x => x.TeacherId).ToList();
             return _context.Users.Where(x => teacherIds.Contains(x.Id)).ToList();
+        }
+        public ICollection<UserInfoModel> GetAllTeachers()
+        {
+            return _context.Users.Where(x => x.Role == RoleType.Teacher).ToList();
         }
         public PagedResponse GetAllTeachers(string? search, int page, int pageSize)
         {
@@ -149,7 +174,7 @@ namespace EnglishCenterManagement.Repository
         {
             return _context.TeacherClasses.Where(x => x.ClassId == id).ToList();
         }
-        public ICollection<ClassModel> GetAllClassOfTeacherByStatus(ClassStatusType status ,int id)
+        public ICollection<ClassModel> GetAllClassOfTeacherByStatus(ClassStatusType status, int id)
         {
             var classIds = _context.TeacherClasses.Where(x => x.TeacherId == id).Select(x => x.ClassId).ToList();
             var allClasses = _context.Classes.Where(x => classIds.Contains(x.Id)).ToList();

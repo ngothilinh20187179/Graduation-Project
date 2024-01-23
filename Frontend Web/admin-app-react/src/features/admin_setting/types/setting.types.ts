@@ -6,6 +6,15 @@ export type ChangePasswordRequestBody = {
   confirmPassword: string;
 };
 
+export type GenderStatistical = {
+  totalNumberOfStudents: number;
+  numberOfGirls: number;
+  numberOfBoys: number;
+  girlPercents: number;
+  boyPercents: number;
+};
+
 export interface SettingState {
   myProfile: UserProfile | null;
+  genderStudentStatistical: GenderStatistical | null;
 }

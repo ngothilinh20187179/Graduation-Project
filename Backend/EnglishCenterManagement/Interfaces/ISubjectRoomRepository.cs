@@ -8,6 +8,7 @@ namespace EnglishCenterManagement.Interfaces
     {
         // subject
         PagedResponse GetAllSubjects(string? search, SubjectStatusType? subjectStatus, int page, int pageSize);
+        ICollection<RoomModel> GetOpenRooms();
         SubjectModel GetSubjectById(int id);
         bool CheckSubjectExists(string name);
         bool CheckSubjectExists(int id, string name);

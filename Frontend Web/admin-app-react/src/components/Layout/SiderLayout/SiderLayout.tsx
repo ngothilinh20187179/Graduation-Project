@@ -40,6 +40,7 @@ function getItem(
 }
 
 const items: MenuProps["items"] = [
+  getItem("Statistical", SettingPaths.STATISTICAL(), <BarChartOutlined />),
   getItem("Notifications", NotificationPaths.NOTIFICATION(), <BellOutlined />),
   getItem("Users", "manageUsersKey", <UserOutlined />, [
     getItem("Admins", UserPaths.GET_ADMINS()),
@@ -52,7 +53,6 @@ const items: MenuProps["items"] = [
     getItem("Rooms", ClassesPaths.ROOMS()),
     getItem("Classes", ClassesPaths.CLASSES()),
   ]),
-  getItem("Statistical", SettingPaths.STATISTICAL(), <BarChartOutlined />),
   getItem("Position", PositionPaths.POSITIONS(), <ApartmentOutlined />),
   getItem("Spending", SpendingPaths.SPENDING(), <DollarOutlined />),
   // getItem("Settings", SettingPaths.SETTING(), <SettingOutlined />),

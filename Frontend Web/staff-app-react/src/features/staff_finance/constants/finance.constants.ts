@@ -179,3 +179,159 @@ export const COLUMNS_TABLE_SALARY = () => [
     width: "130px",
   },
 ];
+
+
+export const COLUMNS_TABLE_STAFF_SALARY = () => [
+  {
+    title: "",
+    dataIndex: "index",
+    key: "index",
+    width: "35px",
+  },
+  {
+    title: "Staff Name",
+    dataIndex: "staffName",
+    key: "staffName",
+    ellipsis: true,
+    width: "130px",
+  },
+  {
+    title: "Month",
+    dataIndex: "month",
+    key: "month",
+    ellipsis: true,
+    width: "50px",
+  },
+  {
+    title: "Days",
+    dataIndex: "totalDaysWorked",
+    key: "totalDaysWorked",
+    ellipsis: true,
+    width: "80px",
+  },
+  // {
+  //   title: "Days/Month",
+  //   dataIndex: "workDaysInMonth",
+  //   key: "workDaysInMonth",
+  //   ellipsis: true,
+  //   width: "80px",
+  // },
+  {
+    title: "Hours",
+    dataIndex: "totalHoursWorked",
+    key: "totalHoursWorked",
+    ellipsis: true,
+    width: "50px",
+  },
+  {
+    title: "Bonus",
+    dataIndex: "bonus",
+    key: "bonus",
+    ellipsis: true,
+    width: "80px",
+  },
+  {
+    title: "Total",
+    dataIndex: "total",
+    key: "total",
+    ellipsis: true,
+    width: "95px",
+  },
+  {
+    title: "Status",
+    dataIndex: "isPaid",
+    key: "isPaid",
+    ellipsis: true,
+    width: "70px",
+  },
+  // {
+  //   title: "Created On",
+  //   dataIndex: "createOn",
+  //   key: "createOn",
+  //   width: "75px",
+  // },
+  {
+    title: "Note",
+    dataIndex: "note",
+    key: "note",
+    ellipsis: true,
+    width: "110px",
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    key: "action",
+    width: "90px",
+  },
+];
+
+
+export const COLUMNS_TABLE_TEACHER_SALARY = () => [
+  {
+    title: "",
+    dataIndex: "index",
+    key: "index",
+    width: "35px",
+  },
+  {
+    title: "Teacher Name",
+    dataIndex: "teacherName",
+    key: "teacherName",
+    ellipsis: true,
+    width: "130px",
+  },
+  {
+    title: "Month",
+    dataIndex: "month",
+    key: "month",
+    ellipsis: true,
+    width: "50px",
+  },
+  {
+    title: "Hours",
+    dataIndex: "totalHoursWorked",
+    key: "totalHoursWorked",
+    ellipsis: true,
+    width: "50px",
+  },
+  {
+    title: "Bonus",
+    dataIndex: "bonus",
+    key: "bonus",
+    ellipsis: true,
+    width: "80px",
+  },
+  {
+    title: "Total",
+    dataIndex: "total",
+    key: "total",
+    ellipsis: true,
+    width: "95px",
+  },
+  {
+    title: "Status",
+    dataIndex: "isPaid",
+    key: "isPaid",
+    ellipsis: true,
+    width: "70px",
+  },
+  {
+    title: "Created On",
+    dataIndex: "createdOn",
+    key: "createdOn",
+    width: "75px",
+  },
+  {
+    title: "Note",
+    dataIndex: "note",
+    key: "note",
+    ellipsis: true,
+    width: "110px",
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    key: "action",
+    width: "90px",
+  },
+];

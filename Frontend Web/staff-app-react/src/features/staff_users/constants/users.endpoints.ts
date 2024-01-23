@@ -18,6 +18,7 @@ const UsersEndpoints = {
     }
     return `/staffs?search=${search}&page=${page}&pageSize=${pageSize}`;
   },
+  GET_STAFFS_LIST: () => "/staff-list",
   GET_STAFF: (id: number) => `/staff/${id}`,
   CREATE_STAFF: () => `/create-staff`,
   GET_LIST_POSITION: () => `position_list`,
@@ -28,6 +29,7 @@ const UsersEndpoints = {
     }
     return `/teachers?search=${search}&page=${page}&pageSize=${pageSize}`;
   },
+  GET_TEACHERS_LIST: () => "/teacher-list",
   GET_TEACHER: (id: number) => `/teacher/${id}`,
   EDIT_TEACHER: (id: number) => `/edit-teacher/${id}`,
   CREATE_TEACHER: () => `/create-teacher`,

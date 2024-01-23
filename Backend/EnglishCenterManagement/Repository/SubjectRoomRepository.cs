@@ -40,6 +40,10 @@ namespace EnglishCenterManagement.Repository
 
             return new PagedResponse(data, totalRooms, page, pageSize);
         }
+        public ICollection<RoomModel> GetOpenRooms()
+        {
+            return _context.Rooms.Where(x => x.RoomStatus == RoomStatusType.CanUse).ToList();
+        }
         public RoomModel GetRoomById(int id)
         {
             return _context.Rooms.Where(x => x.Id == id).FirstOrDefault();
@@ -101,7 +105,7 @@ namespace EnglishCenterManagement.Repository
         }
         public ICollection<SubjectModel> GetOpenSubjects()
         {
-            return _context.Subjects.ToList();
+            return _context.Subjects.Where(x => x.SubjectStatus == SubjectStatusType.Open).ToList();
         }
         public SubjectModel GetSubjectById(int id)
         {

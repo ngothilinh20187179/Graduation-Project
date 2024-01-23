@@ -64,10 +64,62 @@ export type Salary = {
 export interface GetAllSalaryResponse extends PaginationResponse {
   data: Salary[];
 }
+export type StaffSalary = Salary & {
+  staffId: number;
+  staffName?: string;
+}
+
+export interface GetAllStaffSalaryResponse extends PaginationResponse {
+  data: StaffSalary [];
+}
+
+export type CreateEditStaffSalary = {
+  id?: number;
+  month: number;
+  workDaysInMonth: number;
+  totalDaysWorked: number;
+  totalHoursWorked: number;
+  bonus: number;
+  total: number;
+  isPaid: boolean;
+  note: string | null;
+};
+
+export type TeacherSalary = {
+  id: number;
+  month: number;
+  totalHoursWorked: number;
+  bonus: number;
+  total: number;
+  isPaid: boolean;
+  createdOn: string;
+  note: string | null;  
+  teacherId: number;
+  teacherName?: string;
+};
+
+export type CreateEditTeacherSalary = {
+  id?: number;
+  month: number;
+  totalHoursWorked: number;
+  bonus: number;
+  total: number;
+  isPaid: boolean;
+  note: string | null;  
+  teacherId: number;
+};
+
+export interface GetAllTeacherSalaryResponse extends PaginationResponse {
+  data: TeacherSalary [];
+}
 
 export interface FinanceState {
   spendings: GetAllSpendingsResponse | null;
   spending: Spending | null;
   studentTuition: GetAllStudentTuitionResponse | null;
   salary: GetAllSalaryResponse | null;
+  staffSalaries: GetAllStaffSalaryResponse | null;
+  staffSalaryDetail: StaffSalary | null;
+  teacherSalaries: GetAllTeacherSalaryResponse | null;
+  teacherSalaryDetail: TeacherSalary | null;
 }

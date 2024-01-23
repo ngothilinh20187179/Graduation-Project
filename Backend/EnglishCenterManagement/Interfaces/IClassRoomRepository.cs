@@ -13,6 +13,7 @@ namespace EnglishCenterManagement.Interfaces
         PagedResponse GetAllClassesOfStudent(string? search, int id, int page, int pageSize);
         PagedResponse GetAllClassesOfTeacher(string? search, int id, int page, int pageSize);
         bool CheckClassNameExists(string className);
+        bool DeleteClass(ClassModel classRoom);
 
         // schedules
         bool CreatesShedules(ClassScheduleModel schedules);
