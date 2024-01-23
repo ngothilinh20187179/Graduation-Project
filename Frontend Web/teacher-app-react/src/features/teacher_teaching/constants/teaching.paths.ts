@@ -7,7 +7,8 @@ export const TeachingRoutePaths = {
   MY_TEACHING_SCHEDULE: "/my-teaching-schedule",
   QUIZZES: "/quizzes",
   GET_QUIZ: "/quizzes/:id",
-  ENTER_TRANSCRIPT: "/classes/:id/enter-transcript"
+  ENTER_TRANSCRIPT: "/classes/:id/enter-transcript",
+  CREATE_QUIZ: "/create-quiz"
 };
 
 export const TeachingPaths = {
@@ -20,4 +21,5 @@ export const TeachingPaths = {
   QUIZZES: () => "/quizzes",
   GET_QUIZ: (id: number) => `/quizzes/${id}`,
   ENTER_TRANSCRIPT: (id: number) => `/classes/${id}/enter-transcript`,
+  CREATE_QUIZ: () => "/create-quiz"
 };

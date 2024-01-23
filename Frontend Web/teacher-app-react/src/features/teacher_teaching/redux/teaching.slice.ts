@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RequestParams } from "types/param.types";
-import { EnterTranscript, Mark, TeachingState, deleteQuizApi, enterTranscriptApi, getAllOfflineTestScoresApi, getAllOnlineTestScoresApi, getClassApi, getClassesApi, getMyTeachingScheduleApi, getQuizApi, getQuizzesApi, updateMarkApi } from "../teaching.types";
+import { CreateQuiz, EnterTranscript, Mark, TeachingState, createQuizApi, deleteQuizApi, enterTranscriptApi, getAllOfflineTestScoresApi, getAllOnlineTestScoresApi, getClassApi, getClassesApi, getMyTeachingScheduleApi, getQuizApi, getQuizzesApi, updateMarkApi } from "../teaching.types";
 import TEACHING_KEY from "../constants/teaching.keys";
 
 const initialState: TeachingState = {
@@ -88,6 +88,13 @@ export const enterTranscript = createAsyncThunk(
   `${TEACHING_KEY}/enterTranscript`,
   async (data: EnterTranscript) => {
     return enterTranscriptApi(data);
+  }
+);
+
+export const createQuiz = createAsyncThunk(
+  `${TEACHING_KEY}/createQuiz`,
+  async (data: CreateQuiz) => {
+    return createQuizApi(data);
   }
 );
 

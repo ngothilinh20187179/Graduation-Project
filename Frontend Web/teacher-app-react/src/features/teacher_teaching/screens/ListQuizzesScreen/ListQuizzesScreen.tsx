@@ -148,6 +148,7 @@ const ListQuizzesScreen = () => {
         <Button
           type="primary"
           style={{ height: 40 }}
+          onClick={() => navigate(TeachingPaths.CREATE_QUIZ())}
         >
           New Quiz
         </Button>

@@ -2,7 +2,7 @@ import { api } from "api/api";
 import { AxiosResponse } from "axios";
 import { RequestParams } from "types/param.types";
 import TeachingEndpoints from "../constants/teaching.endpoints";
-import { EnterTranscript } from "../teaching.types";
+import { CreateQuiz, EnterTranscript } from "../teaching.types";
 
 export const getClassesApi = (
   params: RequestParams
@@ -57,4 +57,10 @@ export const enterTranscriptApi = (
   data: EnterTranscript
 ): Promise<AxiosResponse> => {
   return api.post(TeachingEndpoints.ENTER_TRANSCRIPT(), data);
+};
+
+export const createQuizApi= (
+  data: CreateQuiz
+): Promise<AxiosResponse> => {
+  return api.post(TeachingEndpoints.CREATE_QUIZ(), data);
 };

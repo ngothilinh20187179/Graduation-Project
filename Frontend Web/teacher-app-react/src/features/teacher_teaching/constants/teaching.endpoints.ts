@@ -24,7 +24,8 @@ const TeachingEndpoints = {
   },
   GET_QUIZZ: (id: number) => `/quiz/${id}`,
   DELETE_QUIZ: (id: number) => `/delete-quiz/${id}`,
-  ENTER_TRANSCRIPT: () => `/enter-transcript`
+  ENTER_TRANSCRIPT: () => `/enter-transcript`,
+  CREATE_QUIZ: () => `/create-quiz`
 };
 
 export default TeachingEndpoints;

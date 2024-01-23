@@ -3,7 +3,12 @@ import {
   BasicUserInfo,
   UserAvatar,
 } from "features/teacher_users/teacher_users";
-import { ClassPeriodType, ClassStatusType, DayOfWeek, SubjectStatusType } from "../teaching.types";
+import {
+  ClassPeriodType,
+  ClassStatusType,
+  DayOfWeek,
+  SubjectStatusType,
+} from "../teaching.types";
 
 export type Subject = {
   id?: number;
@@ -78,13 +83,13 @@ export interface GetAllOfflineTestScores extends PaginationResponse {
 export type Mark = {
   id: number;
   point: number;
-}
+};
 
 export type TeachingSchedule = {
   id: number;
   className: string;
-  schedules: ClassSchedules[]
-}
+  schedules: ClassSchedules[];
+};
 
 export interface GetAllMyTeachingSchedule {
   data: TeachingSchedule[];
@@ -133,12 +138,29 @@ export type EnterTranscript = {
   name: string;
   totalPoint: number;
   transcripts: Transcript[];
-}
+};
 
 export type Transcript = {
   studentId: number;
   point: number | null;
+};
+
+export type CreateAnwer = {
+  answerText: string;
+  isCorrect: boolean;
 }
+
+export type CreateQuestion = {
+  questionText: string;
+  point: number;
+  answers: CreateAnwer[];
+}
+
+export type CreateQuiz = {
+  name: string;
+  duration: string;
+  questions: CreateQuestion[];
+};
 
 export interface TeachingState {
   classes: GetAllClassesResponse | null;
