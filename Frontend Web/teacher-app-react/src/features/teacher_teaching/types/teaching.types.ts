@@ -162,6 +162,16 @@ export type CreateQuiz = {
   questions: CreateQuestion[];
 };
 
+export type ClassNameAndId = {
+  id: number;
+  className: string;
+}
+
+export type AssignClasses = {
+  quizId: number;
+  classId: number[];
+}
+
 export interface TeachingState {
   classes: GetAllClassesResponse | null;
   classDetail: GetClassResponse | null;

@@ -62,6 +62,12 @@ const CREATE_QUIZ_SCREEN: RouteItem = {
   component: lazy(() => import("../screens/CreateQuizScreen/CreateQuizScreen")),
 };
 
+const ASSIGN_QUIZ_TO_CLASS_SCREEN: RouteItem = {
+  id: "teacher-assign-class",
+  path: TeachingRoutePaths.ASSIGN_CLASS,
+  component: lazy(() => import("../screens/AssignQuizToClassScreen/AssignQuizToClassScreen")),
+};
+
 export const LEARNING_ROUTES = [
   MY_CLASSES,
   CLASS_DETAIL_SCREEN,
@@ -72,5 +78,6 @@ export const LEARNING_ROUTES = [
   LIST_QUIZZES_SCREEN,
   QUIZ_DETAIL_SCREEN,
   ENTER_TRANSCRIPT_SCREEN,
-  CREATE_QUIZ_SCREEN
+  CREATE_QUIZ_SCREEN,
+  ASSIGN_QUIZ_TO_CLASS_SCREEN
 ];

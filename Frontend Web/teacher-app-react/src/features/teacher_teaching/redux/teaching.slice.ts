@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RequestParams } from "types/param.types";
-import { CreateQuiz, EnterTranscript, Mark, TeachingState, createQuizApi, deleteQuizApi, enterTranscriptApi, getAllOfflineTestScoresApi, getAllOnlineTestScoresApi, getClassApi, getClassesApi, getMyTeachingScheduleApi, getQuizApi, getQuizzesApi, updateMarkApi } from "../teaching.types";
+import { AssignClasses, CreateQuiz, EnterTranscript, Mark, TeachingState, assignClassesApi, createQuizApi, deleteQuizApi, enterTranscriptApi, getAllOfflineTestScoresApi, getAllOnlineTestScoresApi, getAssignableClassesApi, getAssignedClassesApi, getClassApi, getClassesApi, getMyTeachingScheduleApi, getQuizApi, getQuizzesApi, updateMarkApi } from "../teaching.types";
 import TEACHING_KEY from "../constants/teaching.keys";
 
 const initialState: TeachingState = {
@@ -10,7 +10,7 @@ const initialState: TeachingState = {
   onlineTestScores: null,
   myTeachingSchedule: null,
   quizzes: null,
-  quiz: null
+  quiz: null,
 };
 
 export const getClasses = createAsyncThunk(
@@ -95,6 +95,29 @@ export const createQuiz = createAsyncThunk(
   `${TEACHING_KEY}/createQuiz`,
   async (data: CreateQuiz) => {
     return createQuizApi(data);
+  }
+);
+
+export const getAssignedClasses = createAsyncThunk(
+  `${TEACHING_KEY}/getAssignedClasses`,
+  async (id: number) => {
+    const response = await getAssignedClassesApi(id);
+    return response.data;
+  }
+);
+
+export const getAssignableClasses = createAsyncThunk(
+  `${TEACHING_KEY}/getAssignableClasses`,
+  async (id: number) => {
+    const response = await getAssignableClassesApi(id);
+    return response.data;
+  }
+);
+
+export const assignClasses = createAsyncThunk(
+  `${TEACHING_KEY}/assignClasses`,
+  async (data: AssignClasses) => {
+    return assignClassesApi(data);
   }
 );
 

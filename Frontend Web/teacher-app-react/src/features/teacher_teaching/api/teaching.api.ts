@@ -2,7 +2,8 @@ import { api } from "api/api";
 import { AxiosResponse } from "axios";
 import { RequestParams } from "types/param.types";
 import TeachingEndpoints from "../constants/teaching.endpoints";
-import { CreateQuiz, EnterTranscript } from "../teaching.types";
+import { CreateQuiz, AssignClasses, EnterTranscript } from "../teaching.types";
+
 
 export const getClassesApi = (
   params: RequestParams
@@ -63,4 +64,22 @@ export const createQuizApi= (
   data: CreateQuiz
 ): Promise<AxiosResponse> => {
   return api.post(TeachingEndpoints.CREATE_QUIZ(), data);
+};
+
+export const getAssignedClassesApi = (
+  id: number
+): Promise<AxiosResponse> => {
+  return api.get(TeachingEndpoints.GET_ASSIGNED_CLASSES_BY_QUIZID(id));
+};
+
+export const getAssignableClassesApi = (
+  id: number
+): Promise<AxiosResponse> => {
+  return api.get(TeachingEndpoints.GET_ASSIGNABLE_CLASSES_BY_QUIZID(id));
+};
+
+export const assignClassesApi = (
+  data: AssignClasses
+): Promise<AxiosResponse> => {
+  return api.post(TeachingEndpoints.ASSIGN_CLASSES(), data);
 };

@@ -25,7 +25,10 @@ const TeachingEndpoints = {
   GET_QUIZZ: (id: number) => `/quiz/${id}`,
   DELETE_QUIZ: (id: number) => `/delete-quiz/${id}`,
   ENTER_TRANSCRIPT: () => `/enter-transcript`,
-  CREATE_QUIZ: () => `/create-quiz`
+  CREATE_QUIZ: () => `/create-quiz`,
+  GET_ASSIGNED_CLASSES_BY_QUIZID: (id: number) => `/assiged-classes/${id}`,
+  GET_ASSIGNABLE_CLASSES_BY_QUIZID: (id: number) => `/assignable-classes/${id}`,
+  ASSIGN_CLASSES: () => `/assign-quiz-class`
 };
 
 export default TeachingEndpoints;

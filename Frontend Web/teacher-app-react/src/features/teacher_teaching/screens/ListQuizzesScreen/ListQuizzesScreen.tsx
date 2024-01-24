@@ -2,7 +2,8 @@ import {
   HomeOutlined,
   SnippetsOutlined,
   ArrowRightOutlined,
-  DeleteOutlined
+  DeleteOutlined,
+  CheckOutlined
 } from "@ant-design/icons";
 import { Breadcrumb, Button, Modal, Pagination, Table, Typography } from "antd";
 import { memo, useEffect, useMemo, useState } from "react";
@@ -12,8 +13,8 @@ import Search from "antd/es/input/Search";
 import { RootState } from "redux/root-reducer";
 import { RequestParams } from "types/param.types";
 import { getTimeUTC } from "helpers/utils.helper";
-import { COLUMNS_TABLE_QUIZZES, TeachingPaths } from "features/teacher_teaching/teaching.types";
-import { deleteQuiz, getQuizzes } from "features/teacher_teaching/redux/teaching.slice";
+import { COLUMNS_TABLE_QUIZZES, ClassNameAndId, TeachingPaths } from "features/teacher_teaching/teaching.types";
+import { deleteQuiz, getAssignedClasses, getQuizzes } from "features/teacher_teaching/redux/teaching.slice";
 import DropdownButton from "components/DropdownButton/DropdownButton";
 import { unwrapResult } from "@reduxjs/toolkit";
 
@@ -27,6 +28,9 @@ const ListQuizzesScreen = () => {
   const [quizSelected, setQuizSelected] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [triggerReload, setTriggerReload] = useState<boolean>(false);
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+  const [isModalAssignedOpen, setIsModalAssignedOpen] = useState(false);
+  const [assignedClasses, setAssignedClasses] = useState<ClassNameAndId[] | null>(null);
 
   const {
     teaching: { quizzes },
@@ -69,9 +73,29 @@ const ListQuizzesScreen = () => {
                     </Typography>
                   </>
                 ),
+                onClick: () => {
+                    navigate(TeachingPaths.ASSIGN_CLASS(Number(item.id)))
+                }
               },
               {
                 key: "3",
+                label: (
+                  <>
+                    <Typography>
+                      <span>
+                        <CheckOutlined />
+                      </span>{" "}
+                      Assigned classes
+                    </Typography>
+                  </>
+                ),
+                onClick: () => {
+                  handleGetListAssignedClass(Number(item.id))
+                  setIsModalAssignedOpen(true);
+                },
+              },
+              {
+                key: "4",
                 label: (
                   <>
                     <Typography>
@@ -84,6 +108,7 @@ const ListQuizzesScreen = () => {
                 ),
                 onClick: () => {
                   setQuizSelected(Number(item.id));
+                  setIsModalDeleteOpen(true);
                 },
               },
             ],
@@ -124,6 +149,26 @@ const ListQuizzesScreen = () => {
         setQuizSelected(null);
       });
   };
+
+  const handleGetListAssignedClass = (id: number) => {
+    dispatch(getAssignedClasses(id))
+    .then(unwrapResult)
+    .then((body) => {
+      setAssignedClasses(body.data)
+    })
+    .catch((err) => console.log(err))
+  }
+
+  const assignedClassesList = useMemo(() => {
+    if(assignedClasses?.length === 0) {
+      return <Typography>There are no classes assigned to this quiz yet</Typography>
+    }
+    return assignedClasses?.map((item) => (
+      <>
+        <Typography key={item.id}>Id: {item.id} - Class Name: {item.className}</Typography>
+      </>
+    ));
+  }, [assignedClasses]);
 
   return (
     <div className="pt-30 pl-40 pr-30">
@@ -173,16 +218,33 @@ const ListQuizzesScreen = () => {
       <Modal
         centered
         title="Are you sure you want to delete this quiz?"
-        open={!!quizSelected}
+        open={isModalDeleteOpen}
         cancelText="Cancel"
         okText="Delete"
         okType="danger"
-        onCancel={() => setQuizSelected(null)}
+        onCancel={() => {
+          setQuizSelected(null)
+          setIsModalDeleteOpen(false);
+        }}
         onOk={handleDeleteQuiz}
         okButtonProps={{
           disabled: isSubmitting,
         }}
       />
+      <Modal
+        centered
+        title="These are the classes assigned to the test"
+        open={isModalAssignedOpen}
+        footer={false}
+        onCancel={() => {
+          setAssignedClasses(null)
+          setIsModalAssignedOpen(false);
+        }}
+      >
+        <div className="pt-10 pl-20 pb-10">
+          {assignedClassesList}
+        </div>
+      </Modal>
     </div>
   );
 };
