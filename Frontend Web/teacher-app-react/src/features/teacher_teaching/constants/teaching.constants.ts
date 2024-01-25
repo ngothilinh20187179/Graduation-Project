@@ -31,6 +31,11 @@ export enum SubjectStatusType {
   Open,
 }
 
+export enum AttendanceStatusType
+{
+  Timely, Late, Absent
+}
+
 export const COLUMNS_TABLE_CLASSES = () => [
   {
     title: "",

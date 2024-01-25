@@ -96,6 +96,9 @@ const ClassesScreen = () => {
                     </Typography>
                   </>
                 ),
+                onClick: () => {
+                  navigate(TeachingPaths.TAKE_ATTENDANCE(Number(item.id)));
+                },
               },
               {
                 key: "4",

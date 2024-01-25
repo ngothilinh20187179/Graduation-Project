@@ -3,12 +3,7 @@ import {
   BasicUserInfo,
   UserAvatar,
 } from "features/teacher_users/teacher_users";
-import {
-  ClassPeriodType,
-  ClassStatusType,
-  DayOfWeek,
-  SubjectStatusType,
-} from "../teaching.types";
+import { AttendanceStatusType, ClassPeriodType, ClassStatusType, DayOfWeek, SubjectStatusType } from "../teaching.types";
 
 export type Subject = {
   id?: number;
@@ -170,6 +165,19 @@ export type ClassNameAndId = {
 export type AssignClasses = {
   quizId: number;
   classId: number[];
+}
+
+export type StudentAttendance = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  status: AttendanceStatusType;
+  reason: string | null;
+}
+
+export type TakeStudentAttendance = {
+  classId: number;
+  data: StudentAttendance[];
 }
 
 export interface TeachingState {

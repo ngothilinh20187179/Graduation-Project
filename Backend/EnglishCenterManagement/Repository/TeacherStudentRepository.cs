@@ -103,6 +103,11 @@ namespace EnglishCenterManagement.Repository
 
             return genderStatistical;
         }
+        public bool CreateStudentAttendance(StudentAttendanceModel studentAttendance)
+        {
+            _context.StudentAttendances.Add(studentAttendance);
+            return SaveChange();
+        }
 
         // teacher
         public ICollection<UserInfoModel> GetAllTeachersInClass(int id)
@@ -164,6 +169,10 @@ namespace EnglishCenterManagement.Repository
         public bool CheckStudentClassExists(int classId, int studentId)
         {
             return _context.StudentClasses.Any(x => x.ClassId == classId && x.StudentId == studentId);
+        }
+        public StudentClassModel GetStudentClassId(int classId, int studentId)
+        {
+            return _context.StudentClasses.Where(x => x.ClassId == classId && x.StudentId == studentId).FirstOrDefault();
         }
         public bool CheckTeacherStudentInSameClass(int teacherId, int studentId)
         {

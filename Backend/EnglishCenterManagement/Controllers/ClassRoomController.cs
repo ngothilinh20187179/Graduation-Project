@@ -2,6 +2,7 @@
 using EnglishCenterManagement.Common.Messages;
 using EnglishCenterManagement.Common.Response;
 using EnglishCenterManagement.Dtos.ClassRoomDtos;
+using EnglishCenterManagement.Dtos.ExaminationDtos;
 using EnglishCenterManagement.Dtos.SubjectRoomDtos;
 using EnglishCenterManagement.Dtos.UserInfoDtos;
 using EnglishCenterManagement.Entities.Enumerations;
@@ -365,10 +366,47 @@ namespace EnglishCenterManagement.Controllers
 
             return StatusCode(StatusCodes.Status201Created);
         }
-        
+
         // TODO: sắp xếp tkb
         // TODO DELETE: /remove-student/5
         // TODO POST: /add-student-class
+
+
+        [HttpPost("take-student-attendance")]
+        [Authorize(Roles = nameof(RoleType.Teacher))]
+        public ActionResult EnterTranscript([FromBody] TakeStudentAttendanceDto takeStudentAttendanceDto)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            var getClassById = _classRoomRepository.GetClassById(takeStudentAttendanceDto.ClassId);
+            if (getClassById == null)
+            {
+                return NotFound(new ApiReponse(626));
+            }
+
+            takeStudentAttendanceDto.Data.ForEach(x =>
+            {
+                var studentClassId = _teacherStudentRepository.GetStudentClassId(takeStudentAttendanceDto.ClassId, x.Id);
+                var studentAttendance = new StudentAttendanceDto
+                {
+                    Status = x.Status,
+                    Reason = x.Reason,
+                    StudentClassId = studentClassId.Id
+                };
+                var mappedstudentAttendance = _mapper.Map<StudentAttendanceModel>(studentAttendance);
+                _teacherStudentRepository.CreateStudentAttendance(mappedstudentAttendance);
+            });
+
+            return StatusCode(StatusCodes.Status201Created);
+        }
         #endregion
 
         private UserInfoModel? GetUserByClaim()

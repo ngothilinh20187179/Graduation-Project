@@ -15,6 +15,7 @@ namespace EnglishCenterManagement.Interfaces
         bool CreateStudentProfile(StudentModel student);
         bool UpdateStudentProfile(StudentModel student);
         GenderStatistical GenderStudentStatistical();
+        bool CreateStudentAttendance(StudentAttendanceModel studentAttendance);
 
         // teacher
         PagedResponse GetAllTeachers(string? search, int page, int pageSize);
@@ -28,6 +29,7 @@ namespace EnglishCenterManagement.Interfaces
         // class - reference
         bool CheckStudentClassExists(int classId, int studentId);
         bool CheckTeacherClassExists(int classId, int teacherId);
+        StudentClassModel GetStudentClassId(int classId, int studentId);
         bool CheckTeacherStudentInSameClass(int teacherId, int studentId);
         ICollection<TeacherClassModel> GetTeacherClassByClassId(int id);
         bool DeleteTeacherInClass(TeacherClassModel teacherClass);
