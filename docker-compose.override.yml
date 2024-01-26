@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  englishcentermanagement:
+  api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=database;Database=englishcenter;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True;
@@ -19,20 +19,28 @@ services:
       - MSSQL_SA_PASSWORD=yourStrong(!)Password
     volumes:
       - englistcentermanagement-database:/var/opt/mssql
-  
+ 
   web-admin:
+    environment:
+      - REACT_APP_ENP=http://api/api/
     ports:
       - "12916:80"
   web-staff:
+    environment:
+      - REACT_APP_ENP=http://api/api/
     ports:
       - "12917:80"
   web-student:
+    environment:
+      - REACT_APP_ENP=http://api/api/
     ports:
       - "12918:80"
   web-teacher:
+    environment:
+      - REACT_APP_ENP=http://api/api/
     ports:
       - "12919:80"
 
 volumes:
-  englistcentermanagement-database:
+  englishcentermanagement-database:
     external: true

@@ -1,8 +1,9 @@
 version: '3.8'
+name: englishcentermanagement
 
 services:
-  englishcentermanagement:
-    image: ${DOCKER_REGISTRY-}englishcentermanagement
+  api:
+    image: ${DOCKER_REGISTRY-}api
     build:
       context: .
       dockerfile: Backend/EnglishCenterManagement/Dockerfile
@@ -39,4 +40,3 @@ services:
       context: Frontend Web/teacher-app-react
     depends_on:
       - web-student
-      

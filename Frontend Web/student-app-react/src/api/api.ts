@@ -85,7 +85,7 @@ const refreshAuthLogic = async () => {
 };
 
 export const api = axios.create({
-  baseURL: `http://localhost:12915/api/`,
+  baseURL: process.env.REACT_APP_ENP,
   headers: {
     "Content-Type": "application/json",
   },
