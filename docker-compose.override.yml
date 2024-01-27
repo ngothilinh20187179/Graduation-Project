@@ -1,45 +1,64 @@
 version: '3.8'
+name: engcenmgr
 
 services:
-  api:
+  webapi:
+    container_name: engcenmgr-webapi
+    restart: on-failure:2
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=database;Database=englishcenter;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True;
       - Jwt__Issuer=englishcentermanagement
       - Jwt__Audience=englishcentermanagement
       - Jwt__Key=key@englishcentermanagement123456789
+      - TZ=Asia/Ho_Chi_Minh
     ports:
-      - "12915:80"
+      - "12915:8080"
 
   database:
+    container_name: engcenmgr-database
     ports:
-      - "1433:1433"
+      - "12916:1433"
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=yourStrong(!)Password
     volumes:
-      - englistcentermanagement-database:/var/opt/mssql
- 
+      - englishcentermanagement-database:/var/opt/mssql
+
   web-admin:
-    environment:
-      - REACT_APP_ENP=http://api/api/
-    ports:
-      - "12916:80"
-  web-staff:
-    environment:
-      - REACT_APP_ENP=http://api/api/
+    container_name: engcenmgr-webadmin
+    restart: on-failure:2
+    build:
+      args:
+        - REACT_APP_ENP=https://ecm-api.corn207.top/api/
     ports:
       - "12917:80"
-  web-student:
-    environment:
-      - REACT_APP_ENP=http://api/api/
+
+  web-staff:
+    container_name: engcenmgr-webstaff
+    restart: on-failure:2
+    build:
+      args:
+        - REACT_APP_ENP=https://ecm-api.corn207.top/api/
     ports:
       - "12918:80"
-  web-teacher:
-    environment:
-      - REACT_APP_ENP=http://api/api/
+
+  web-student:
+    container_name: engcenmgr-webstudent
+    restart: on-failure:2
+    build:
+      args:
+        - REACT_APP_ENP=https://ecm-api.corn207.top/api/
     ports:
       - "12919:80"
+
+  web-teacher:
+    container_name: engcenmgr-webteacher
+    restart: on-failure:2
+    build:
+      args:
+        - REACT_APP_ENP=https://ecm-api.corn207.top/api/
+    ports:
+      - "12920:80"
 
 volumes:
   englishcentermanagement-database:

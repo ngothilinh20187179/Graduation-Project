@@ -1,9 +1,8 @@
 version: '3.8'
-name: englishcentermanagement
 
 services:
-  api:
-    image: ${DOCKER_REGISTRY-}api
+  webapi:
+    image: engcenmgr-webapi:latest
     build:
       context: .
       dockerfile: Backend/EnglishCenterManagement/Dockerfile
@@ -14,29 +13,29 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
 
   web-admin:
-    image: ${DOCKER_REGISTRY-}web-admin
+    image: engcenmgr-webadmin:latest
     build:
       context: Frontend Web/admin-app-react
     depends_on:
-      - englishcentermanagement
+      - webapi
 
   web-staff:
-    image: ${DOCKER_REGISTRY-}web-staff
+    image: engcenmgr-webstaff:latest
     build:
       context: Frontend Web/staff-app-react
     depends_on:
-      - web-admin
+      - webapi
 
   web-student:
-    image: ${DOCKER_REGISTRY-}web-student
+    image: engcenmgr-webstudent:latest
     build:
       context: Frontend Web/student-app-react
     depends_on:
-      - web-staff
+      - webapi
 
   web-teacher:
-    image: ${DOCKER_REGISTRY-}web-teacher
+    image: engcenmgr-webteacher:latest
     build:
       context: Frontend Web/teacher-app-react
     depends_on:
-      - web-student
+      - webapi

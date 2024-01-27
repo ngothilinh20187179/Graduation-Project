@@ -7,10 +7,11 @@ ENV NODE_ENV production
 COPY package*.json .
 RUN npm install
 COPY . .
+ARG REACT_APP_ENP
+ENV REACT_APP_ENP=$REACT_APP_ENP
 RUN npm run build
 
 FROM base AS publish
-ENV NODE_ENV production
 RUN npm install -g serve
 COPY --from=build /app/build .
-ENTRYPOINT [ "serve", "-s", ".", "-l", "80" ]
+ENTRYPOINT [ "serve", "-l", "80" ]
