@@ -4,6 +4,7 @@ using EnglishCenterManagement.Common.Response;
 using EnglishCenterManagement.Dtos.ClassRoomDtos;
 using EnglishCenterManagement.Dtos.ExaminationDtos;
 using EnglishCenterManagement.Dtos.SubjectRoomDtos;
+using EnglishCenterManagement.Dtos.TeacherStudentStaffDtos;
 using EnglishCenterManagement.Dtos.UserInfoDtos;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
@@ -368,9 +369,62 @@ namespace EnglishCenterManagement.Controllers
         }
 
         // TODO: sắp xếp tkb
-        // TODO DELETE: /remove-student/5
-        // TODO POST: /add-student-class
 
+        //POST: /add-students-to-class
+        [HttpPost("add-students-to-class")]
+        [Authorize(Roles = nameof(RoleType.Staff))]
+        public ActionResult AddStudetnsToClass([FromBody] AddStudentsClassDto studentsClassDto)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+
+            var getClassById = _classRoomRepository.GetClassById(studentsClassDto.ClassId);
+            if (getClassById == null)
+            {
+                return NotFound(new ApiReponse(626));
+            }
+
+            // lấy tất cả TKB của lớp cần thêm hs
+            var allSchedulesOfClass = _classRoomRepository.GetAllSchedulesOfClass(studentsClassDto.ClassId);
+            var mappedSchedules = _mapper.Map<List<ScheduleDto>>(allSchedulesOfClass);
+
+            for (var i = 0; i < studentsClassDto.StudentId.Count; i++)
+            {
+                // với mỗi student -> lấy ra các lớp đang học/ chưa học
+                var allClassInProgress = _teacherStudentRepository.GetAllClassInProgressOrNotStartOfStudent(studentsClassDto.StudentId[i]);
+                var test = allClassInProgress.ToList();
+                if (test != null)
+                {
+                    for (var x = 0; x < test.Count; x++)
+                    {
+                        var studentSchedules = _classRoomRepository.GetAllSchedulesOfClass(test[x].Id);
+                        var mappedStudentSchedules = _mapper.Map<List<ScheduleDto>>(studentSchedules);
+                        if (!mappedStudentSchedules.Where(mappedSchedules.Contains).Any())
+                        {
+                            return BadRequest(new ApiReponse($"Student id {studentsClassDto.StudentId[i]} has a duplicate class schedule"));
+                        }
+                    }
+                }
+                var studentClass = new StudentClassDto
+                {
+                    ClassId = studentsClassDto.ClassId,
+                    StudentId = studentsClassDto.StudentId[i],
+                };
+                var mappedstudentClass = _mapper.Map<StudentClassModel>(studentClass);
+                _teacherStudentRepository.AddStudentClass(mappedstudentClass);
+            }
+
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
+        // TODO DELETE: /remove-student/5
 
         [HttpPost("take-student-attendance")]
         [Authorize(Roles = nameof(RoleType.Teacher))]
@@ -407,6 +461,7 @@ namespace EnglishCenterManagement.Controllers
 
             return StatusCode(StatusCodes.Status201Created);
         }
+
         #endregion
 
         private UserInfoModel? GetUserByClaim()

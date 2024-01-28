@@ -43,6 +43,7 @@ const UsersEndpoints = {
   EDIT_STUDENT: (id: number) => `/edit-student/${id}`,
   CREATE_STUDENT: () => `/create-student`,
   GET_STUDENTS_IN_CLASS: (id: number) => `/class/${id}/students`,
+  GET_STUDENTS_NOT_IN_CLASS: (id: number) => `/class/${id}/students-not-in`,
 };
 
 export default UsersEndpoints;

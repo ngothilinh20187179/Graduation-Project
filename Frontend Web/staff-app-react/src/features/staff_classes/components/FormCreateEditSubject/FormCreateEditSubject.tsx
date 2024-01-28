@@ -85,7 +85,7 @@ const FormCreateEditSubject = ({
         </Form.Item>
         <Form.Item label="Subject Status:" name="subjectStatus" required>
           <Select
-            defaultValue={SubjectStatusType.Open}
+            defaultValue={SubjectStatusType.Close}
             options={[
               { value: SubjectStatusType.Close, label: "Disable" },
               { value: SubjectStatusType.Open, label: "Enable" },

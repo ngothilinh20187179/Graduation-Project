@@ -1,10 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import CLASSES_KEY from "../constants/classes.keys";
 import {
+  AddStudentsToClass,
   ClassesState,
   CreateEditClassInfo,
   Room,
   Subject,
+  addStudentsToClassApi,
   createClassInfoApi,
   createRoomApi,
   createSubjectApi,
@@ -152,6 +154,13 @@ export const deleteClassRoom = createAsyncThunk(
   `${CLASSES_KEY}/deleteClassRoom`,
   async (id: number) => {
     return deleteClassRoomApi(id);
+  }
+);
+
+export const addStudentsToClass = createAsyncThunk(
+  `${CLASSES_KEY}/addStudentsToClass`,
+  async (data: AddStudentsToClass) => {
+    return addStudentsToClassApi(data);
   }
 );
 

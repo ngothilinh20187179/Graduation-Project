@@ -213,7 +213,7 @@ const CreateQuizScreen = () => {
             </Typography>
           )}
         </Form.Item> */}
-        <Row>
+        <Row className="pt-20">
           <Form.Item>
             <Space>
               <SubmitButton

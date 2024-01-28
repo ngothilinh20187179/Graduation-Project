@@ -30,7 +30,13 @@ import {
 } from "features/staff_classes/staff_classes";
 import Title from "antd/es/typography/Title";
 import DropdownButton from "components/DropdownButton/DropdownButton";
-import { COLUMNS_TABLE_ADMINS, GenderType, UserPaths, UserStatusType, getStudentsInClass } from "features/staff_users/staff_users";
+import {
+  COLUMNS_TABLE_ADMINS,
+  GenderType,
+  UserPaths,
+  UserStatusType,
+  getStudentsInClass,
+} from "features/staff_users/staff_users";
 
 const ClassDetailScreen = () => {
   const navigate = useNavigate();
@@ -120,9 +126,29 @@ const ClassDetailScreen = () => {
     return classSchedules?.map((classSchedule) => (
       <>
         <Descriptions className="ml-20">
-          <Descriptions.Item label="Day Of Week">{DayOfWeek[Number(classSchedule?.dayOfWeek)]}</Descriptions.Item>
-          <Descriptions.Item label="Period">{classSchedule?.period}</Descriptions.Item>
-          <Descriptions.Item label="Room Name">{classSchedule?.roomName}</Descriptions.Item>
+          <Descriptions.Item label="Day Of Week">
+            {DayOfWeek[Number(classSchedule?.dayOfWeek)]}
+          </Descriptions.Item>
+          <Descriptions.Item label="Period">
+            {classSchedule?.period === 1
+              ? "Period 1 (8h-10h)"
+              : classSchedule?.period === 2
+              ? "Period 2 (10h-12h)"
+              : classSchedule?.period === 3
+              ? "Period 3 (12h-14h)"
+              : classSchedule?.period === 4
+              ? "Period 4 (14h-16h)"
+              : classSchedule?.period === 5
+              ? "Period 5 (16h-18h)"
+              : classSchedule?.period === 6
+              ? "Period 6 (18h-20h)"
+              : classSchedule?.period === 7
+              ? "Period 7 (20h-22h)"
+              : ""}
+          </Descriptions.Item>
+          <Descriptions.Item label="Room Name">
+            {classSchedule?.roomName}
+          </Descriptions.Item>
         </Descriptions>
       </>
     ));
@@ -134,17 +160,19 @@ const ClassDetailScreen = () => {
         <div>
           {teacher?.avatar ? (
             <Image
-            width={40}
-            preview={false}
-            src={`data:${teacher.avatar.mediaType};base64,${teacher.avatar.data}`}
-          />
+              width={40}
+              preview={false}
+              src={`data:${teacher.avatar.mediaType};base64,${teacher.avatar.data}`}
+            />
           ) : (
             <Avatar size={40} icon={<UserOutlined />} />
           )}
         </div>
         <div>
           <Typography className="font-14">Id: {teacher.id}</Typography>
-          <Typography className="font-14">{teacher.lastName} {teacher.firstName}</Typography>
+          <Typography className="font-14">
+            {teacher.lastName} {teacher.firstName}
+          </Typography>
         </div>
       </div>
     ));
@@ -240,9 +268,7 @@ const ClassDetailScreen = () => {
         <Title className="ml-20 mt-20 pb-10" level={5}>
           Teachers In Class
         </Title>
-        <div className="flex gap-190">
-        {teachersList}
-        </div>
+        <div className="flex gap-190">{teachersList}</div>
       </div>
       <div className="ml-20 mt-20 mr-30">
         <Title level={5}>Students In Class</Title>

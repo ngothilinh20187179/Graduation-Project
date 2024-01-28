@@ -4,6 +4,7 @@ using EnglishCenterManagement.Dtos.UserInfoDtos;
 using EnglishCenterManagement.Entities.Enumerations;
 using EnglishCenterManagement.Entities.Models;
 using EnglishCenterManagement.Interfaces;
+using System.Linq;
 
 namespace EnglishCenterManagement.Repository
 {
@@ -108,6 +109,13 @@ namespace EnglishCenterManagement.Repository
             _context.StudentAttendances.Add(studentAttendance);
             return SaveChange();
         }
+        public ICollection<UserInfoModel> GetAllStudentsNotInClass(int id)
+        {
+            var studentIds = _context.StudentClasses.Where(x => x.ClassId == id).Select(x => x.StudentId).ToList();
+            var allStudents = _context.Users.Where(x => (!studentIds.Contains(x.Id)) && x.Role == RoleType.Student).ToList();
+
+            return allStudents;
+        }
 
         // teacher
         public ICollection<UserInfoModel> GetAllTeachersInClass(int id)
@@ -205,6 +213,19 @@ namespace EnglishCenterManagement.Repository
         public bool DeleteTeacherInClass(TeacherClassModel teacherClass)
         {
             _context.Remove(teacherClass);
+            return SaveChange();
+        }
+
+        public ICollection<ClassModel> GetAllClassInProgressOrNotStartOfStudent(int id)
+        {
+            var classIds = _context.StudentClasses.Where(x => x.StudentId == id).Select(x => x.ClassId).ToList();
+            var allClasses = _context.Classes.Where(x => classIds.Contains(x.Id)).ToList();
+            allClasses = allClasses.Where(x => x.ClassStatus == ClassStatusType.InProgress || x.ClassStatus == ClassStatusType.NotStart).ToList();
+            return allClasses;
+        }
+        public bool AddStudentClass(StudentClassModel studentClass)
+        {
+            _context.Add(studentClass);
             return SaveChange();
         }
         public bool SaveChange()

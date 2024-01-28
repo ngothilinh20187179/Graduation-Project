@@ -66,6 +66,14 @@ const CREATE_CLASS_SCREEN: RouteItem = {
   ),
 };
 
+const ADD_STUDENT_TO_CLASS_SCREEN: RouteItem = {
+  id: "staff-add-students-to-class",
+  path: ClassesRoutePaths.ADD_STUDENTS_TO_CLASS,
+  component: lazy(
+    () => import("../screens/AddStudentsToClassScreen/AddStudentsToClassScreen")
+  ),
+};
+
 export const CLASSES_ROUTES = [
   SUBJECTS_SCREEN,
   EDIT_SUBJECT_SCREEN,
@@ -76,4 +84,5 @@ export const CLASSES_ROUTES = [
   CLASSES_SCREEN,
   CLASS_DETAIL_SCREEN,
   CREATE_CLASS_SCREEN,
+  ADD_STUDENT_TO_CLASS_SCREEN,
 ];

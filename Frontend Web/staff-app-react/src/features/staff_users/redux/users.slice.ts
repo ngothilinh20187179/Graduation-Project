@@ -13,6 +13,7 @@ import {
   getStaffsListApi,
   getStudentByIdApi,
   getStudentsApi,
+  getStudentsAvailableApi,
   getStudentsInClassApi,
   getTeacherByIdApi,
   getTeachersApi,
@@ -141,6 +142,14 @@ export const createStudentInfo = createAsyncThunk(
   `${USERS_KEY}/createStudentInfo`,
   async (data: CreateEditStudentInfo) => {
     return createStudentInfoApi(data);
+  }
+);
+
+export const getStudentsAvailable = createAsyncThunk(
+  `${USERS_KEY}/getStudentsAvailable`,
+  async (id: Number) => {
+    const response = await getStudentsAvailableApi(Number(id));
+    return response.data;
   }
 );
 

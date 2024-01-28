@@ -16,6 +16,7 @@ namespace EnglishCenterManagement.Interfaces
         bool UpdateStudentProfile(StudentModel student);
         GenderStatistical GenderStudentStatistical();
         bool CreateStudentAttendance(StudentAttendanceModel studentAttendance);
+        ICollection<UserInfoModel> GetAllStudentsNotInClass(int id);
 
         // teacher
         PagedResponse GetAllTeachers(string? search, int page, int pageSize);
@@ -35,6 +36,8 @@ namespace EnglishCenterManagement.Interfaces
         bool DeleteTeacherInClass(TeacherClassModel teacherClass);
         ICollection<ClassModel> GetAllClassOfTeacherByStatus(ClassStatusType status, int id);
         ICollection<ClassModel> GetAllClassOfStudentByStatus(ClassStatusType status, int id);
+        ICollection<ClassModel> GetAllClassInProgressOrNotStartOfStudent(int id);
+        bool AddStudentClass(StudentClassModel studentClass);
         bool AddTeacherClass(TeacherClassModel teacherClass);
     }
 }

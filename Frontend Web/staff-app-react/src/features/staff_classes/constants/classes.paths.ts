@@ -8,6 +8,7 @@ export const ClassesRoutePaths = {
   CLASSES: "/classes",
   GET_CLASS: "/class/:id",
   CREATE_CLASS: "/classes/create",
+  ADD_STUDENTS_TO_CLASS: "/class/:id/add-student",
 };
 
 export const ClassesPaths = {
@@ -20,4 +21,5 @@ export const ClassesPaths = {
   CLASSES: () => "/classes",
   GET_CLASS: (id: number) => `/class/${id}`,
   CREATE_CLASS: () => "/classes/create",
+  ADD_STUDENTS_TO_CLASS: (id: number) =>  `/class/${id}/add-student`,
 };

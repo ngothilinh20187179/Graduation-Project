@@ -70,6 +70,9 @@ namespace EnglishCenterManagement.Data
             CreateMap<CreateMarkDto, MarkModel>();
             CreateMap<CreateTranscriptDto, MarkModel>();
             CreateMap<ClassModel, AssignClassDto>();
+            CreateMap<StudentClassDto, StudentClassModel>();
+            CreateMap<ScheduleDto, ClassScheduleModel>();
+            CreateMap<ClassScheduleModel, ScheduleDto>();
 
             CreateMap<NotificationModel, ReceivedNotificationDto>();
             CreateMap<NotificationModel, ReceivedNotificationDetailDto>();

@@ -5,6 +5,10 @@
         public string? Message { get; set; }
         public string? Code { get; set; }
         public object? Data { get; set; }
+        public ApiReponse(string mess)
+        {
+            Message = mess;
+        }
         public ApiReponse(int code)
         {
             Code = code.ToString();

@@ -177,7 +177,7 @@ const FormTeacherInformation = ({
             </Form.Item>
           </Col>
           <Col xs={24} xl={8} style={{ maxWidth: 320 }}>
-            <Form.Item label="Gender:" name="gender">
+            <Form.Item label="Gender:" name="gender" initialValue={0}>
               <Select
                 defaultValue={teacherInfo?.gender === 1 ? "Female" : "Male"}
                 options={[

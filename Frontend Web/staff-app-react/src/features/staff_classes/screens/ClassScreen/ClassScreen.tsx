@@ -71,6 +71,7 @@ const ClassScreen = () => {
                     </Typography>
                   </>
                 ),
+                onClick: () => navigate(ClassesPaths.ADD_STUDENTS_TO_CLASS(Number(item.id))),
               },
               {
                 key: "3",

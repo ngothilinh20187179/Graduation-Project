@@ -432,6 +432,32 @@ namespace EnglishCenterManagement.Controllers
             return Ok(new ApiReponse(genderStatistical));
         }
 
+        // GET: /class/5/students-not-in
+        [HttpGet("class/{id}/students-not-in")]
+        [Authorize(Roles = "Teacher, Staff, Admin")]
+        public ActionResult<ICollection<UserNameAndIdDto>> GetStudentsNotInClass(int id)
+        {
+            var user = GetUserByClaim();
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            if (user.UserStatus == UserStatusType.Lock)
+            {
+                return Unauthorized(new ApiReponse(999));
+            }
+            var getClassById = _classRoomRepository.GetClassById(id);
+            if (getClassById == null)
+            {
+                return NotFound(new ApiReponse(626));
+            }
+
+            var getListStudentsNotInClass = _teacherStudentRepository.GetAllStudentsNotInClass(id);
+            var mappedStudentsNotInClass = _mapper.Map<List<UserNameAndIdDto>>(getListStudentsNotInClass);
+
+            return Ok(new ApiReponse(mappedStudentsNotInClass));
+        }
+
         #endregion
 
         private UserInfoModel? GetUserByClaim()

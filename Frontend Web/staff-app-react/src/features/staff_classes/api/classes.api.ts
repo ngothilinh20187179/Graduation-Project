@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import { api } from "api/api";
 import ClassesEndpoints from "../constants/classes.endpoints";
 import { RequestParams } from "types/param.types";
-import { CreateEditClassInfo, Room, Subject } from "../staff_classes";
+import { AddStudentsToClass, CreateEditClassInfo, Room, Subject } from "../staff_classes";
 
 export const getClassesApi = (
   params: RequestParams
@@ -90,4 +90,10 @@ export const getOpenRoomsApi = (): Promise<AxiosResponse> => {
 
 export const deleteClassRoomApi = (id: number): Promise<AxiosResponse> => {
   return api.delete(ClassesEndpoints.DELETE_CLASS_ROOM(id));
+};
+
+export const addStudentsToClassApi = (
+  data: AddStudentsToClass
+): Promise<AxiosResponse> => {
+  return api.post(ClassesEndpoints.ADD_STUDENTS_TO_CLASS(), data);
 };

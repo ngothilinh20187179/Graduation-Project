@@ -24,6 +24,11 @@ import { getMyTuitionDebtInformations } from "features/student_finance/redux/fin
     } = useAppSelector((state: RootState) => state);
   
     const tuitionDebtList = useMemo(() => {
+      var totalTuitionDebt = 0;
+      tuitionDebts?.data.forEach((item) => {
+        totalTuitionDebt = totalTuitionDebt + item.classInfo.credit;
+        setTotal(totalTuitionDebt);
+      })
       return tuitionDebts?.data?.map((tuitionDebt, index) => ({
         ...tuitionDebts,
         ...tuitionDebt.classInfo,
@@ -39,11 +44,11 @@ import { getMyTuitionDebtInformations } from "features/student_finance/redux/fin
         .finally(() => setIsLoading(false));
     }, [dispatch]);
 
-    useEffect(() => {
-        tuitionDebts?.data.forEach((item) => {
-            setTotal(total + item.classInfo.credit)
-        })
-      }, [tuitionDebts]);
+    // useEffect(() => {
+    //     tuitionDebts?.data.forEach((item) => {
+    //         setTotal(total + item.classInfo.credit)
+    //     })
+    //   }, [tuitionDebts]);
   
     return (
       <>

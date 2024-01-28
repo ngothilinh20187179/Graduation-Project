@@ -32,6 +32,7 @@ const ClassesEndpoints = {
   DELETE_ROOM: (id: number) => `/remove-room/${id}`,
   GET_OPEN_ROOMS: () => `/open-rooms`,
   DELETE_CLASS_ROOM: (id: number) => `/remove-class/${id}`,
+  ADD_STUDENTS_TO_CLASS: () => `/add-students-to-class`,
 };
 
 export default ClassesEndpoints;

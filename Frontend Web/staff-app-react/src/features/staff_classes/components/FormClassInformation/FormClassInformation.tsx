@@ -81,8 +81,6 @@ const FormClassInformation = ({
 
   const handleSubmit = () => {
     setIsSubmitting(true);
-    
-  console.log(form.getFieldValue("classSchedules"));
     onSubmit({
       ...form.getFieldsValue(),
       classStartDate: getTimeUTC(form.getFieldValue("classStartDate")),

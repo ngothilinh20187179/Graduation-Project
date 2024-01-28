@@ -69,3 +69,7 @@ export const createStudentInfoApi = (
 ): Promise<AxiosResponse> => {
   return api.post(UsersEndpoints.CREATE_STUDENT(), data);
 };
+
+export const getStudentsAvailableApi = (id: number): Promise<AxiosResponse> => {
+  return api.get(UsersEndpoints.GET_STUDENTS_NOT_IN_CLASS(id));
+};

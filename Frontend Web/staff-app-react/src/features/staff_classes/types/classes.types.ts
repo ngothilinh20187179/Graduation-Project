@@ -40,6 +40,11 @@ export interface GetRoomResponse {
   data: Room
 }
 
+export type AddStudentsToClass = {
+  classId: number;
+  studentId: number[];
+}
+
 export type Class = {
   id?: number;
   className: string;

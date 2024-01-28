@@ -74,7 +74,7 @@ const FormCreateEditRoom = ({
         </Form.Item>
         <Form.Item label="Room Status:" name="roomStatus" required>
           <Select
-            defaultValue={RoomStatusType.CanUse}
+            defaultValue={RoomStatusType.CanNotUse}
             options={[
               { value: RoomStatusType.CanUse, label: "Can Use" },
               { value: RoomStatusType.CanNotUse, label: "Can Not Use" },
